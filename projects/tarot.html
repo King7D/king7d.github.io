@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Tarot Card</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <style>
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(270deg, #0f172a, #1e3a8a, #3b82f6, #2d95c2);
+            background-size: 400% 400%;
+            animation: gradientShift 90s ease-in-out infinite;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            opacity: 0; /* Set initial opacity to 0 */
+            transition: opacity 0.5s ease-in-out; /* Smooth transition */
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            25% {
+                background-position: 50% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            75% {
+                background-position: 50% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .content {
+            max-width: 800px;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            margin-bottom: 1rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 10px 20px;
+            border: 2px solid #f39c12;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #f39c12;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="content">
+        <h1 style="font-size: 2.5rem">Cyber Tarot Card</h1>
+        <p>
+            Cyber Tarot Card is a modern, web-based Tarot card reading application designed to provide insightful and personalized tarot 
+            interpretations. Leveraging the power of Flask, Bootstrap, and a comprehensive Tarot card database, Cyber Tarot Card offers 
+            users a seamless and engaging experience to explore the mystical world of tarot.
+        </p>
+
+        <h2 style="font-size: 2rem">Features</h2>
+            <li><strong>Multiple Spread Types </strong>Choose from various tarot spreads, including Single-Card Draw, Three-Card Spread, 
+                Five-Card Spread, and the traditional Celtic Cross Spread.</li>
+            <li><strong>Comprehensive Interpretation</strong> Receive detailed readings that incorporate card meanings, keyword analysis,
+                 elemental balance, numerology, astrology, and synergy between drawn cards.</li>
+            <li><strong>Dynamic Card Orientations </strong> Each drawn card can appear in an upright or reversed position, adding depth 
+                to the interpretation.</li>
+            <li><strong>User-Friendly Interface </strong> Clean and responsive design powered by Bootstrap ensures a smooth experience 
+                across all devices.</li>
+
+        
+        <img src="pictures/tarot.png" alt="map" class="mt-4 mx-auto rounded-lg" style="width: 400px; height: auto;">
+        <p class="text-md mb-4" style="font-size: 0.7rem;">User Interface</p>
+
+        <p class="text-lg mt-4"></p>
+            <a href="https://github.com/King7D/Tarot" class="contact-button px-6 py-3 border rounded transition" target="_blank">Link to GitHub</a>
+        </p>
+        <a href="#" class="back-button mb-16" id="backToProjects">Back to Projects</a>
+    </div>
+
+    <script>
+        // Add fade-in effect on page load
+        window.addEventListener('load', function () {
+            document.body.style.opacity = 1;
+        });
+
+        // Add fade-out effect on back button click
+        document.getElementById('backToProjects').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.body.style.opacity = 0;
+            setTimeout(function () {
+                window.location.href = "../index.html#projects";
+            }, 500);
+        });
+    </script>
+
+</body>
+
+</html>
