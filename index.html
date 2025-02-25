@@ -361,32 +361,31 @@
     </div>
   </section>
   
-  <!-- Investment Section -->
-  <section id="investment" class="hero">
+<!-- Investment Section -->
+<section id="investment" class="hero">
     <div class="section-content text-center">
       <div class="fade-in delay-1">
         <h2 class="text-4xl font-bold mb-8">Investment Portfolio</h2>
       </div>
-      <div class="grid md:grid-cols-2 gap-8 fade-in delay-2">
-        <!-- Stocks Card -->
-        <div class="card">
-          <h3 class="text-2xl font-bold mb-4">Stocks</h3>
-          <p class="text-gray-300">
-            AAPL: <span id="aapl-price">Loading...</span>
-          </p>
-          <!-- You can add more stocks here -->
-        </div>
-        <!-- Cryptocurrencies Card -->
-        <div class="card">
-          <h3 class="text-2xl font-bold mb-4">Cryptocurrencies</h3>
-          <p class="text-gray-300">
-            Bitcoin (BTC): <span id="btc-price">Loading...</span>
-          </p>
-          <!-- You can add more crypto holdings here -->
-        </div>
+      <!-- Current Date/Time (Pacific Time) -->
+      <div id="current-datetime" class="text-xl mb-4"></div>
+      
+      <!-- Crypto Portfolio -->
+      <div class="mb-8 fade-in delay-2">
+        <h3 class="text-2xl font-bold mb-4">Crypto Portfolio</h3>
+        <canvas id="cryptoChart"></canvas>
+        <div id="crypto-prices" class="mt-4 text-gray-300"></div>
+      </div>
+      
+      <!-- Stocks Portfolio -->
+      <div class="fade-in delay-3">
+        <h3 class="text-2xl font-bold mb-4">US Stocks Portfolio</h3>
+        <canvas id="stocksChart"></canvas>
+        <div id="stocks-prices" class="mt-4 text-gray-300"></div>
       </div>
     </div>
   </section>
+  
   
   <!-- Contact Section -->
   <section id="contact" class="hero active flex items-center justify-center">
@@ -425,6 +424,7 @@
   </section>
   
   <script>
+    // ----- Section Switching (unchanged) -----
     function showSection(event, sectionId) {
       if (event) event.preventDefault();
       const sections = document.querySelectorAll('.hero');
@@ -432,40 +432,180 @@
       document.getElementById(sectionId).classList.add('active');
       window.history.pushState(null, null, `#${sectionId}`);
     }
-  
-    // On page load, if no valid hash is present, Home remains active.
     window.addEventListener('DOMContentLoaded', () => {
       const hash = window.location.hash.substring(1);
       if (hash && document.getElementById(hash)) {
         showSection(null, hash);
+      } else {
+        showSection(null, 'home');
       }
     });
-  
-    // Update investment prices from external APIs.
-    function updatePrices() {
-      // Fetch stock price for AAPL using Financial Modeling Prep API demo endpoint.
-      fetch("https://financialmodelingprep.com/api/v3/quote-short/AAPL?apikey=demo")
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.length > 0) {
-            document.getElementById("aapl-price").textContent = "$" + data[0].price.toFixed(2);
-          }
-        })
-        .catch(error => console.error("Error fetching stock price:", error));
-  
-      // Fetch Bitcoin price from Coindesk API.
-      fetch("https://api.coindesk.com/v1/bpi/currentprice/USD.json")
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.bpi && data.bpi.USD) {
-            const rate = parseFloat(data.bpi.USD.rate.replace(/,/g, ""));
-            document.getElementById("btc-price").textContent = "$" + rate.toFixed(2);
-          }
-        })
-        .catch(error => console.error("Error fetching crypto price:", error));
+    
+    // ----- Current Date/Time in Pacific Time -----
+    function updateDateTime() {
+      const now = new Date();
+      const options = {
+        timeZone: "America/Los_Angeles",
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: true
+      };
+      const formatter = new Intl.DateTimeFormat([], options);
+      document.getElementById('current-datetime').textContent = formatter.format(now);
     }
-  
-    updatePrices();
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+    
+    // ----- Crypto Portfolio Data & Chart -----
+    // Allocation percentages (ignoring "Other")
+    const cryptoAllocations = {
+      "BNB": 78.44,
+      "BTC": 9.5,
+      "WBETH": 3.94,
+      "BNSOL": 3.81,
+      "USDT": 3.04
+    };
+    // Mapping asset names to CoinGecko IDs
+    const cryptoIdsMapping = {
+      "BNB": "binancecoin",
+      "BTC": "bitcoin",
+      "WBETH": "weth",       // using Wrapped Ether as a proxy for WBETH
+      "BNSOL": "solana",     // assuming Solana represents BNSOL here
+      "USDT": "tether"
+    };
+    // Build comma-separated list for API call
+    const cryptoIds = Object.values(cryptoIdsMapping).join(",");
+    
+    fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`)
+      .then(response => response.json())
+      .then(data => {
+        // Create an object mapping our asset symbol to its current price in USD
+        const cryptoPrices = {};
+        for (let asset in cryptoAllocations) {
+          const id = cryptoIdsMapping[asset];
+          cryptoPrices[asset] = data[id] ? data[id].usd : "N/A";
+        }
+        // Render Pie Chart for Crypto Portfolio
+        const cryptoCtx = document.getElementById('cryptoChart').getContext('2d');
+        new Chart(cryptoCtx, {
+          type: 'pie',
+          data: {
+            labels: Object.keys(cryptoAllocations),
+            datasets: [{
+              data: Object.values(cryptoAllocations),
+              backgroundColor: [
+                "#3b82f6",
+                "#f59e0b",
+                "#10b981",
+                "#6366f1",
+                "#ef4444"
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+        // List each crypto's current price
+        let cryptoPricesHTML = "<ul class='list-disc list-inside'>";
+        for (let asset in cryptoPrices) {
+          cryptoPricesHTML += `<li>${asset}: $${cryptoPrices[asset] !== "N/A" ? parseFloat(cryptoPrices[asset]).toFixed(2) : "N/A"}</li>`;
+        }
+        cryptoPricesHTML += "</ul>";
+        document.getElementById('crypto-prices').innerHTML = cryptoPricesHTML;
+      })
+      .catch(error => console.error("Error fetching crypto prices:", error));
+    
+    // ----- Stocks Portfolio Data & Chart -----
+    // Allocation percentages (as provided)
+    const stockAllocations = {
+      "Fixed Income": 28.6,
+      "Royal Bank of Canada": 4.2,
+      "Brookfield Asset Management Limited": 3.1,
+      "Cash (Bank Overdraft)": 2.5,
+      "Apple Inc.": 2.4,
+      "Dollarama Inc.": 2.3,
+      "Intact Financial Corporation": 2.3,
+      "Thomson Reuters Corporation": 2.3,
+      "Meta Platforms Inc.": 2.2
+    };
+    // Mapping asset names to ticker symbols (only for those with a market price)
+    const stockTickers = {
+      "Royal Bank of Canada": "RY",
+      "Brookfield Asset Management Limited": "BAM.A",
+      "Apple Inc.": "AAPL",
+      "Dollarama Inc.": "DOL.TO",
+      "Intact Financial Corporation": "IFC.TO",
+      "Thomson Reuters Corporation": "TRI",
+      "Meta Platforms Inc.": "META"
+    };
+    // Prepare list of tickers to fetch (comma separated)
+    const tickersToFetch = Object.values(stockTickers).join(",");
+    
+    // Fetch stock prices from Twelve Data (using demo API key)
+    fetch(`https://api.twelvedata.com/price?symbol=${tickersToFetch}&apikey=demo`)
+      .then(response => response.json())
+      .then(data => {
+        // data is expected to contain an object with keys matching the ticker symbols
+        const stockPrices = {};
+        for (let asset in stockAllocations) {
+          if (stockTickers[asset]) {
+            // Some APIs may return an object per symbol.
+            stockPrices[asset] = data[ stockTickers[asset] ] && data[ stockTickers[asset] ].price 
+              ? parseFloat(data[ stockTickers[asset] ].price).toFixed(2) 
+              : "N/A";
+          } else {
+            // For assets without a ticker (Fixed Income, Cash)
+            stockPrices[asset] = "N/A";
+          }
+        }
+        // Render Pie Chart for Stocks Portfolio
+        const stocksCtx = document.getElementById('stocksChart').getContext('2d');
+        new Chart(stocksCtx, {
+          type: 'pie',
+          data: {
+            labels: Object.keys(stockAllocations),
+            datasets: [{
+              data: Object.values(stockAllocations),
+              backgroundColor: [
+                "#6366f1",
+                "#10b981",
+                "#f59e0b",
+                "#ef4444",
+                "#3b82f6",
+                "#8b5cf6",
+                "#14b8a6",
+                "#f97316",
+                "#34d399"
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+        // List each stock's current price
+        let stocksPricesHTML = "<ul class='list-disc list-inside'>";
+        for (let asset in stockPrices) {
+          stocksPricesHTML += `<li>${asset}: ${stockPrices[asset] !== "N/A" ? "$" + stockPrices[asset] : "N/A"}</li>`;
+        }
+        stocksPricesHTML += "</ul>";
+        document.getElementById('stocks-prices').innerHTML = stocksPricesHTML;
+      })
+      .catch(error => console.error("Error fetching stock prices:", error));
   </script>
+  
+  
 </body>
 </html>
