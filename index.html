@@ -1,189 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Xiaoxian Wang - Machine Learning Developer & Quantitative Trader">
-    <meta name="keywords" content="AI, Machine Learning, Quantitative Trading, Edge Computing, Data Analysis">
-    <title>Xiaoxian Wang | AI Developer & Quantitative Trader</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <style>
-        :root {
-          --primary: #3b82f6;
-          --secondary: #f59e0b;
-        }
-    
-        body {
-          font-family: 'Inter', sans-serif;
-          background: linear-gradient(270deg, #0f172a, #1e3a8a, #2563eb, #1d4ed8);
-          background-size: 400% 400%;
-          animation: gradientShift 30s ease infinite;
-          min-height: 100vh;
-          color: white;
-          overflow-x: hidden;
-        }
-    
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-    
-        .hero {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          min-height: 100vh;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-          pointer-events: none;
-          padding: 2rem;
-          box-sizing: border-box;
-        }
-    
-        .hero.active {
-          opacity: 1;
-          transform: translateY(0);
-          pointer-events: all;
-          transition-delay: 0.2s;
-        }
-    
-        .section-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 80px 20px;
-        }
-    
-        .nav-item {
-          position: relative;
-          padding: 0.5rem 1rem;
-          transition: all 0.3s ease;
-        }
-    
-        .nav-item::after {
-          content: '';
-          position: absolute;
-          bottom: -5px;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background: var(--secondary);
-          transition: width 0.3s ease;
-        }
-    
-        .nav-item:hover::after {
-          width: 100%;
-        }
-    
-        .project-link {
-          position: relative;
-          transition: all 0.3s ease;
-        }
-    
-        .project-link:hover {
-          transform: translateX(10px);
-          color: var(--secondary);
-        }
-    
-        .contact-button {
-          position: relative;
-          overflow: hidden;
-          transition: all 0.4s ease;
-        }
-    
-        .contact-button::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-          transition: left 0.6s;
-        }
-    
-        .contact-button:hover::after {
-          left: 100%;
-        }
-    
-        .fade-in {
-          animation: fadeIn 0.8s ease forwards;
-        }
-    
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-        .delay-4 { animation-delay: 0.8s; }
-    
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-    
-        .card {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
-          border-radius: 12px;
-          padding: 2rem;
-          margin: 1rem 0;
-          transition: transform 0.3s ease;
-        }
-    
-        .card:hover {
-          transform: translateY(-5px);
-        }
-    
-        @media (max-width: 768px) {
-          .hero-text h1 {
-            font-size: 2.5rem;
-          }
-          
-          .section-content {
-            padding: 40px 20px;
-          }
-        }
-      </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Xiaoxian Wang - Machine Learning Developer & Quantitative Trader" />
+  <meta name="keywords" content="AI, Machine Learning, Quantitative Trading, Edge Computing, Data Analysis" />
+  <title>Xiaoxian Wang | AI Developer & Quantitative Trader</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --secondary: #f59e0b;
+    }
+  
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(270deg, #0f172a, #1e3a8a, #2563eb, #1d4ed8);
+      background-size: 400% 400%;
+      animation: gradientShift 30s ease infinite;
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+  
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  
+    .hero {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: 100vh;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+  
+    /* The Home section is active by default */
+    .hero.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+      transition-delay: 0.2s;
+    }
+  
+    .section-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px;
+    }
+  
+    .nav-item {
+      position: relative;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+    }
+  
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+    }
+  
+    .nav-item:hover::after {
+      width: 100%;
+    }
+  
+    .project-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+  
+    .project-link:hover {
+      transform: translateX(10px);
+      color: var(--secondary);
+    }
+  
+    .contact-button {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+  
+    .contact-button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s;
+    }
+  
+    .contact-button:hover::after {
+      left: 100%;
+    }
+  
+    .fade-in {
+      animation: fadeIn 0.8s ease forwards;
+    }
+  
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+  
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 1rem 0;
+      transition: transform 0.3s ease;
+    }
+  
+    .card:hover {
+      transform: translateY(-5px);
+    }
+  
+    @media (max-width: 768px) {
+      .section-content {
+        padding: 40px 20px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <!-- Navigation -->
-    <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md">
-        <nav class="container mx-auto flex justify-between items-center px-4">
-            <a href="#" class="text-2xl font-bold text-white hover:text-secondary transition-colors" onclick="showSection(event, 'home')">XW</a>
-            <ul class="flex space-x-6">
-                <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'about')">About</a></li>
-                <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'projects')">Projects</a></li>
-                <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'contact')">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Home Section -->
-    <section id="home" class="hero active flex items-center justify-center">
-        <div class="section-content text-center">
-            <div class="fade-in">
-                <p class="text-secondary text-lg mb-2">Innovating at the intersection of AI and finance</p>
-                <h1 class="text-5xl md:text-7xl font-bold mb-4">Xiaoxian Wang</h1>
-                <div class="overflow-hidden">
-                    <p class="text-xl md:text-2xl text-gray-300 mb-8 animate-slideUp">
-                        Machine Learning Developer & Quantitative Trading Strategist
-                    </p>
-                </div>
-                <a href="#about" 
-                class="contact-button inline-block px-8 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white"
-                onclick="showSection(event, 'about')">
-                    About Me
-                </a>
-            </div>
+  <!-- Navigation -->
+  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md">
+    <nav class="container mx-auto flex justify-between items-center px-4">
+      <a href="#" class="text-2xl font-bold text-white hover:text-secondary transition-colors" onclick="showSection(event, 'home')">XW</a>
+      <ul class="flex space-x-6">
+        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'about')">About</a></li>
+        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'projects')">Projects</a></li>
+        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'investment')">Investment</a></li>
+        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'contact')">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Home Section (Active by Default) -->
+  <section id="home" class="hero active flex items-center justify-center">
+    <div class="section-content text-center">
+      <div class="fade-in">
+        <p class="text-secondary text-lg mb-2">Innovating at the intersection of AI and finance</p>
+        <h1 class="text-5xl md:text-7xl font-bold mb-4">Xiaoxian Wang</h1>
+        <div class="overflow-hidden">
+          <p class="text-xl md:text-2xl text-gray-300 mb-8">
+            Machine Learning Developer & Quantitative Trading Strategist
+          </p>
         </div>
-    </section>
-
-<!-- About Section -->
-<section id="about" class="hero">
+        <a href="#about" class="contact-button inline-block px-8 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white"
+           onclick="showSection(event, 'about')">
+          About Me
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- About Section -->
+  <section id="about" class="hero">
     <div class="section-content px-4 sm:px-6 lg:px-8">
       <div class="fade-in delay-1">
         <h2 class="text-4xl font-bold text-center mb-12">About Me</h2>
@@ -236,208 +231,241 @@
     </div>
   </section>
   
-
-<!-- Projects Section -->
-<section id="projects" class="hero">
+  <!-- Projects Section -->
+  <section id="projects" class="hero">
     <div class="section-content">
-        <div class="fade-in">
-            <h2 class="text-4xl font-bold mb-8 text-center">Featured Projects</h2>
-
-            <!-- Grid for All Projects -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Project Cards -->
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Campus Bullying Detection</h3>
-                    <p class="text-gray-300 mb-4">Real-time AI monitoring system using edge computing...</p>
-                    <a href="projects/campus-bullying.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">EvoNAS Operating System</h3>
-                    <p class="text-gray-300 mb-4">Lightweight and scalable OS designed for Edge AI...</p>
-                    <a href="projects/evonas.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Inventory Tracking System</h3>
-                    <p class="text-gray-300 mb-4">Automated inventory management using machine learning...</p>
-                    <a href="projects/inventory.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Image Similarity Enhancer</h3>
-                    <p class="text-gray-300 mb-4">Advanced AI model to improve image similarity metrics...</p>
-                    <a href="projects/image.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Heart Disease Prediction</h3>
-                    <p class="text-gray-300 mb-4">AI-driven diagnostic tool for heart disease risk assessment...</p>
-                    <a href="projects/heart-disease.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Maze Solver</h3>
-                    <p class="text-gray-300 mb-4">Pathfinding algorithms to solve complex mazes efficiently...</p>
-                    <a href="projects/maze.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Digit Classification</h3>
-                    <p class="text-gray-300 mb-4">Deep learning model for handwritten digit recognition...</p>
-                    <a href="projects/digit.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">YouTube Converter</h3>
-                    <p class="text-gray-300 mb-4">A tool to convert YouTube videos into various formats...</p>
-                    <a href="projects/youtube.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Cyber Tarot</h3>
-                    <p class="text-gray-300 mb-4">A unique AI-powered tarot reading experience...</p>
-                    <a href="projects/tarot.html" class="project-link text-secondary flex items-center">
-                        View Case Study
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Currently Working On -->
-            <h3 class="text-2xl font-bold mt-12 text-center">Currently Working On</h3>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Quantitative Trading Strategy</h3>
-                    <p class="text-gray-300 mb-4">Machine learning-driven trading algorithm...</p>
-                    <a href="projects/invest.html" class="project-link text-secondary flex items-center">
-                        View Progress
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Intel Edge Solutions Challenge</h3>
-                    <p class="text-gray-300 mb-4">Edge AI for Smart Cities & Transportation...</p>
-                    <a href="projects/IESC.html" class="project-link text-secondary flex items-center">
-                        View Progress
-                    </a>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration & CDN</h3>
-                    <p class="text-gray-300 mb-4">Optimizing AI inference performance at the edge...</p>
-                    <a href="projects/edge.html" class="project-link text-secondary flex items-center">
-                        View Progress
-                    </a>
-                </div>
-            </div>
+      <div class="fade-in">
+        <h2 class="text-4xl font-bold mb-8 text-center">Featured Projects</h2>
+  
+        <!-- Grid for Project Cards -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Project Card -->
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Campus Bullying Detection</h3>
+            <p class="text-gray-300 mb-4">Real-time AI monitoring system using edge computing...</p>
+            <a href="projects/campus-bullying.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">EvoNAS Operating System</h3>
+            <p class="text-gray-300 mb-4">Lightweight and scalable OS designed for Edge AI...</p>
+            <a href="projects/evonas.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Inventory Tracking System</h3>
+            <p class="text-gray-300 mb-4">Automated inventory management using machine learning...</p>
+            <a href="projects/inventory.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Image Similarity Enhancer</h3>
+            <p class="text-gray-300 mb-4">Advanced AI model to improve image similarity metrics...</p>
+            <a href="projects/image.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Heart Disease Prediction</h3>
+            <p class="text-gray-300 mb-4">AI-driven diagnostic tool for heart disease risk assessment...</p>
+            <a href="projects/heart-disease.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Maze Solver</h3>
+            <p class="text-gray-300 mb-4">Pathfinding algorithms to solve complex mazes efficiently...</p>
+            <a href="projects/maze.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Digit Classification</h3>
+            <p class="text-gray-300 mb-4">Deep learning model for handwritten digit recognition...</p>
+            <a href="projects/digit.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">YouTube Converter</h3>
+            <p class="text-gray-300 mb-4">A tool to convert YouTube videos into various formats...</p>
+            <a href="projects/youtube.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Cyber Tarot</h3>
+            <p class="text-gray-300 mb-4">A unique AI-powered tarot reading experience...</p>
+            <a href="projects/tarot.html" class="project-link text-secondary flex items-center">
+              View Case Study
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
         </div>
+  
+        <!-- Currently Working On Section -->
+        <h3 class="text-2xl font-bold mt-12 text-center">Currently Working On</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Quantitative Trading Strategy</h3>
+            <p class="text-gray-300 mb-4">Machine learning-driven trading algorithm...</p>
+            <a href="projects/invest.html" class="project-link text-secondary flex items-center">
+              View Progress
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Intel Edge Solutions Challenge</h3>
+            <p class="text-gray-300 mb-4">Edge AI for Smart Cities & Transportation...</p>
+            <a href="projects/IESC.html" class="project-link text-secondary flex items-center">
+              View Progress
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration & CDN</h3>
+            <p class="text-gray-300 mb-4">Optimizing AI inference performance at the edge...</p>
+            <a href="projects/edge.html" class="project-link text-secondary flex items-center">
+              View Progress
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
-
-
-<!-- Contact Section -->
-<section id="contact" class="hero active flex items-center justify-center">
+  </section>
+  
+  <!-- Investment Section -->
+  <section id="investment" class="hero">
     <div class="section-content text-center">
-        <!-- Image -->
-        <div class="fade-in delay-1">
-            <img src="pictures/kaer.jpg" alt="Kaer" class="mx-auto mt-12 rounded-lg shadow-lg w-full max-w-lg">
-            <p class="text-sm text-gray-400 mt-2">Wall of Fame at Shandong Kaer Electronic Co., Ltd</p>
+      <div class="fade-in delay-1">
+        <h2 class="text-4xl font-bold mb-8">Investment Portfolio</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8 fade-in delay-2">
+        <!-- Stocks Card -->
+        <div class="card">
+          <h3 class="text-2xl font-bold mb-4">Stocks</h3>
+          <p class="text-gray-300">
+            AAPL: <span id="aapl-price">Loading...</span>
+          </p>
+          <!-- You can add more stocks here -->
         </div>
-
-        <!-- Heading -->
-        <div class="fade-in delay-2">
-            <h1 class="text-4xl font-bold mt-8">Feel free to reach out via email or LinkedIn:</h1>
+        <!-- Cryptocurrencies Card -->
+        <div class="card">
+          <h3 class="text-2xl font-bold mb-4">Cryptocurrencies</h3>
+          <p class="text-gray-300">
+            Bitcoin (BTC): <span id="btc-price">Loading...</span>
+          </p>
+          <!-- You can add more crypto holdings here -->
         </div>
-
-        <!-- Contact Buttons -->
-        <div class="mt-6 fade-in delay-3">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center">
-                <a href="mailto:wangxiaoxian2016@gmail.com" 
-                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-                    Personal Email
-                </a>
-                <a href="mailto:ericwang@eii-tech.com" 
-                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-                    Business Email
-                </a>
-                <a href="https://www.linkedin.com/in/xiaoxian-wang-a83b621b9" target="_blank" 
-                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-                    LinkedIn
-                </a>
-                <a href="https://github.com/King7D" target="_blank" 
-                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-                    GitHub
-                </a>
-            </div>
-        </div>
+      </div>
     </div>
-</section>
-
-
-    <script>
-        function showSection(event, sectionId) {
-            event.preventDefault();
-            const sections = document.querySelectorAll('.hero');
-            const targetSection = document.getElementById(sectionId);
-            
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            setTimeout(() => {
-                targetSection.classList.add('active');
-                window.history.pushState(null, null, `#${sectionId}`);
-            }, 300);
-        }
-
-        // Handle initial page load
-        window.addEventListener('load', () => {
-            const hash = window.location.hash.substring(1);
-            if (hash) showSection({ preventDefault: () => {} }, hash);
-        });
-    </script>
+  </section>
+  
+  <!-- Contact Section -->
+  <section id="contact" class="hero active flex items-center justify-center">
+    <div class="section-content text-center">
+      <!-- Image -->
+      <div class="fade-in delay-1">
+        <img src="pictures/kaer.jpg" alt="Kaer" class="mx-auto mt-12 rounded-lg shadow-lg w-full max-w-lg">
+        <p class="text-sm text-gray-400 mt-2">Wall of Fame at Shandong Kaer Electronic Co., Ltd</p>
+      </div>
+      <!-- Heading -->
+      <div class="fade-in delay-2">
+        <h1 class="text-4xl font-bold mt-8">Feel free to reach out via email or LinkedIn:</h1>
+      </div>
+      <!-- Contact Buttons -->
+      <div class="mt-6 fade-in delay-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center">
+          <a href="mailto:wangxiaoxian2016@gmail.com" 
+             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+            Personal Email
+          </a>
+          <a href="mailto:ericwang@eii-tech.com" 
+             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+            Business Email
+          </a>
+          <a href="https://www.linkedin.com/in/xiaoxian-wang-a83b621b9" target="_blank" 
+             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+            LinkedIn
+          </a>
+          <a href="https://github.com/King7D" target="_blank" 
+             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <script>
+    function showSection(event, sectionId) {
+      if (event) event.preventDefault();
+      const sections = document.querySelectorAll('.hero');
+      sections.forEach(section => section.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+      window.history.pushState(null, null, `#${sectionId}`);
+    }
+  
+    // On page load, if no valid hash is present, Home remains active.
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        showSection(null, hash);
+      }
+    });
+  
+    // Update investment prices from external APIs.
+    function updatePrices() {
+      // Fetch stock price for AAPL using Financial Modeling Prep API demo endpoint.
+      fetch("https://financialmodelingprep.com/api/v3/quote-short/AAPL?apikey=demo")
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            document.getElementById("aapl-price").textContent = "$" + data[0].price.toFixed(2);
+          }
+        })
+        .catch(error => console.error("Error fetching stock price:", error));
+  
+      // Fetch Bitcoin price from Coindesk API.
+      fetch("https://api.coindesk.com/v1/bpi/currentprice/USD.json")
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.bpi && data.bpi.USD) {
+            const rate = parseFloat(data.bpi.USD.rate.replace(/,/g, ""));
+            document.getElementById("btc-price").textContent = "$" + rate.toFixed(2);
+          }
+        })
+        .catch(error => console.error("Error fetching crypto price:", error));
+    }
+  
+    updatePrices();
+  </script>
 </body>
 </html>
