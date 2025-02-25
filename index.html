@@ -4,304 +4,440 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Xiaoxian Wang's Website</title>
+    <meta name="description" content="Xiaoxian Wang - Machine Learning Developer & Quantitative Trader">
+    <meta name="keywords" content="AI, Machine Learning, Quantitative Trading, Edge Computing, Data Analysis">
+    <title>Xiaoxian Wang | AI Developer & Quantitative Trader</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <style>
+        :root {
+          --primary: #3b82f6;
+          --secondary: #f59e0b;
+        }
+    
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(270deg, #0f172a, #1e3a8a, #3b82f6, #2d95c2);
-            background-size: 400% 400%;
-            animation: gradientShift 45s ease-in-out infinite;
-            min-height: 100vh;
-            color: white;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            overflow-x: hidden;
+          font-family: 'Inter', sans-serif;
+          background: linear-gradient(270deg, #0f172a, #1e3a8a, #2563eb, #1d4ed8);
+          background-size: 400% 400%;
+          animation: gradientShift 30s ease infinite;
+          min-height: 100vh;
+          color: white;
+          overflow-x: hidden;
         }
-
+    
         @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            25% {
-                background-position: 50% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            75% {
-                background-position: 50% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
-
+    
         .hero {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease-in-out; 
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          min-height: 100vh;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          pointer-events: none;
+          padding: 2rem;
+          box-sizing: border-box;
         }
-
+    
         .hero.active {
-            opacity: 1;
-            pointer-events: all;
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: all;
+          transition-delay: 0.2s;
         }
-
-        .hero-text h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+    
+        .section-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 80px 20px;
         }
-
-        .hero-text h2 {
-            font-size: 2rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
+    
+        .nav-item {
+          position: relative;
+          padding: 0.5rem 1rem;
+          transition: all 0.3s ease;
         }
-
-        .hero-text h3 {
-            font-size: 2rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
+    
+        .nav-item::after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--secondary);
+          transition: width 0.3s ease;
         }
-
-        .hero-text h4 {
-            font-size: 2rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
+    
+        .nav-item:hover::after {
+          width: 100%;
         }
-
-        @media (min-width: 640px) {
-            .hero-text h1 {
-                font-size: 5rem;
-            }
-
-            .hero-text h2 {
-                font-size: 3rem;
-            }
+    
+        .project-link {
+          position: relative;
+          transition: all 0.3s ease;
         }
-
-        @media (min-width: 768px) {
-            .hero-text h1 {
-                font-size: 6rem;
-            }
-
-            .hero-text h2 {
-                font-size: 3.5rem;
-            }
+    
+        .project-link:hover {
+          transform: translateX(10px);
+          color: var(--secondary);
         }
-
-        @media (min-width: 1024px) {
-            .hero-text h1 {
-                font-size: 7rem;
-            }
-
-            .hero-text h2 {
-                font-size: 4rem;
-            }
-        }
-
-        .nav-item,
-        .logo-item {
-            color: white;
-            transition: color 0.3s ease;
-        }
-
-        .nav-item:hover,
-        .logo-item:hover {
-            color: #38bdf8;
-        }
-
+    
         .contact-button {
-            color: #f39c12;
-            border: 2px solid #f39c12;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            display: inline-block;
+          position: relative;
+          overflow: hidden;
+          transition: all 0.4s ease;
         }
-
-        .contact-button:hover {
-            background-color: #f39c12;
-            color: white;
+    
+        .contact-button::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.6s;
         }
-
-        #contact a {
-            color: #f39c12;
-            text-decoration: underline;
+    
+        .contact-button:hover::after {
+          left: 100%;
         }
-
-        #contact a:hover {
-            color: white;
-            background-color: #f39c12;
-            text-decoration: none;
+    
+        .fade-in {
+          animation: fadeIn 0.8s ease forwards;
         }
-
-        header {
-            z-index: 999;
+    
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+    
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-    </style>
+    
+        .card {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border-radius: 12px;
+          padding: 2rem;
+          margin: 1rem 0;
+          transition: transform 0.3s ease;
+        }
+    
+        .card:hover {
+          transform: translateY(-5px);
+        }
+    
+        @media (max-width: 768px) {
+          .hero-text h1 {
+            font-size: 2.5rem;
+          }
+          
+          .section-content {
+            padding: 40px 20px;
+          }
+        }
+      </style>
 </head>
 
 <body>
-
-    <!-- Navbar -->
-    <header class="absolute top-0 left-0 w-full p-5">
-        <nav class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-white font-bold text-lg logo-item" onclick="showSection(event, 'home')">XW</a>
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md">
+        <nav class="container mx-auto flex justify-between items-center px-4">
+            <a href="#" class="text-2xl font-bold text-white hover:text-secondary transition-colors" onclick="showSection(event, 'home')">XW</a>
             <ul class="flex space-x-6">
-                <li><a href="#" class="nav-item" onclick="showSection(event, 'about')">About</a></li>
-                <li><a href="#" class="nav-item" onclick="showSection(event, 'projects')">Projects</a></li>
-                <li><a href="#" class="nav-item" onclick="showSection(event, 'contact')">Contact</a></li>
+                <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'about')">About</a></li>
+                <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'projects')">Projects</a></li>
+                <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'contact')">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- Home Section -->
-    <section id="home" class="hero active">
-        <div class="text-center hero-text px-4 sm:px-6 lg:px-8">
-            <p class="intro-text text-2xl md:text-3xl lg:text-4xl">Hello, my name is:</p>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">Xiaoxian Wang.</h1>
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-light mb-4">I believe Edge AI is the future.</h2>
-            <p class="text-lg text-gray-300 mb-4 mt-8">I'm a machine learning developer, quantitative trader and data analyst.</p>
-            <p class="text-lg text-gray-300 mb-8">Currently developing a machine learning-driven quantitative trading strategy.</p>
-            <a href="mailto:wangxiaoxian2016@gmail.com" class="contact-button px-6 py-3 border rounded transition">Get in touch</a>
-        </div>
-    </section>
-    
-
-    <!-- About Section -->
-    <section id="about" class="hero">
-        <div class="flex flex-col items-center justify-center text-center hero-text px-4 sm:px-6 lg:px-8">
-            <img src="pictures/intel_summit.jpg" alt="intel summit" class="mt-16 rounded-lg" style="width: 500px; height: auto;">
-            <p class="text-md mb-4" style="font-size: 0.7rem;">Participated in the 2023 Intel LOEM Summit In Macau</p>
-            <h1 class="text-4xl font-bold" style="font-size: 3rem;">Who am I?</h1>
-            <p class="text-xl mt-4">Iam Xiaoxian Wang, a machine learning developer,a quantitative trader, and a data analyst.</p>
-            <p class="text-lg mt-4">An Intel Student Ambassador and a Titanium member of the Intel Partner Alliance.</p>
-            <h2 class="text-4xl font-bold mt-8" style="font-size: 2rem; font-weight: 900;">Licenses & Certifications</h2>
-            <ul class="text-lg mt-4 max-w-2xl list-disc list-inside">
-                <li>Microsoft Certified: Azure AI Fundamentals(AI-900)</li>
-                <li>Microsoft Office Specialist - Expert (Microsoft 365 Apps)</li>
-                <li>Intel Edge AI Developer Certification</li>
-                <li>Google Analytics Certification</li>
-                <li>Google IT Support Professional Certificate</li>
-                <li>CFI AI for Excel Formulas</li>
-                <li>Intel MLOps Professional Candidate</li>
-
-            </ul>
-            <h3 class="text-4xl font-bold mt-8" style="font-size: 2rem; font-weight: 900;">Education & Scholarship</h3>
-            <p class="text-lg font-bold mt-4">Master of Business Analytics, University of British Columbia(2025-2026)</p>
-            <p class="text-lg mt-4 ">Recipient of the Accelerated Career Scholarship</p>
-            <p class="text-lg font-bold mt-4">Master of Business Administration, Academy Europe Open University</p>
-            <p class="text-lg font-bold mt-4">Bachelor of Arts in Economics, University of British Columbia(2021-2025)</p>
-            <p class="text-lg mt-4 mb-4">Recipient of the International Student Scholarship, issued by the Faculty of Arts</p>
-
-            <h4 class="text-4xl font-bold mt-4" style="font-size: 2rem; font-weight:900;"></h4>
-            <img src="pictures\group_picture.jpg" alt="group picture" class="rounded-lg" style="width: 500px; height: auto;">
-            <p class="text-md mb-16" style="font-size: 0.7rem;">Group picture with John Kalvin (Intel Global Go-To-Market Operations VP & GM), Dave Guzzi (Intel Global Distribution & Partner Sales VP) and Ye Zong (Intel PRC GM)</p>
-        </div>
-    </section>
-
-
-    <!-- Projects Section -->
-    <section id="projects" class="hero">
-        <div class="flex flex-col items-center justify-center text-center hero-text px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-bold" style="font-size: 3rem;">Projects</h1>
-                <ul class="text-lg mt-4 max-w-2xl list-disc list-inside">
-                    <li><a href="projects/campus-bullying.html" class="text-orange-300 hover:underline">Campus Bullying Detection System</a></li>
-                    <li><a href="projects/evonas.html" class="text-orange-300 hover:underline">EvoNAS Operating System</a></li>
-                    <li><a href="projects/inventory.html" class="text-orange-300 hover:underline">Inventory Tracking System</a></li>
-                    <li><a href="projects/image.html" class="text-orange-300 hover:underline">Image Similarity Enchancer</a></li>
-                    <li><a href="projects/heart-disease.html" class="text-orange-300 hover:underline">Heart Disease Prediction</a></li>
-                    <li><a href="projects/maze.html" class="text-orange-300 hover:underline">Maze Solver</a></li>
-                    <li><a href="projects/digit.html" class="text-orange-300 hover:underline">Digit Classification</a></li>
-                    <li><a href="projects/youtube.html" class="text-orange-300 hover:underline">Youtube Converter</a></li>
-                    <li><a href="projects/tarot.html" class = "text-orange-300 hover:underline"> Cyber Tarot</a></li>
-                </ul>
-            <p class="text-4xl font-bold mt-8" style="font-size: 2rem;">Here are some of the projects I'm currently working on:</p>
-            <ul class="text-lg mt-4 max-w-2xl list-disc list-inside">
-                <li><a href="projects/invest.html" class="text-orange-300 hover:underline">Machine Learning-Driven Quantitative Trading Strategy</a></li>
-                <li><a href="projects/IESC.html" class="text-orange-300 hover:underline">Intel Edge Solutions Challenge: Edge AI for Smart Cities & Transportation</a></li>
-                <li><a href="projects/edge.html" class="text-orange-300 hover:underline">Edge Computing Distribution for AI Acceleration & CDN Deployment</a></li>
-            </ul>
-        </div>
-    </section>
-
-
-    <!-- Contact Section -->
-    <section id="contact" class="hero">
-        <div class="text-center hero-text px-4 sm:px-6 lg:px-8">
-            <img src="pictures\kaer.jpg" alt="Kaer" class="mx-auto mt-16 rounded-lg" style="width: 600px; height: auto;">
-            <p class="text-md mb-4" style="font-size: 0.7rem;">Wall of Fame at Shandong Kaer Electronic Co., Ltd</p>
-            <h1 class="text-4xl font-bold" style="font-size: 2.5rem;">Feel free to reach out via email or LinkedIn:</h1>
-            <div class="mt-6">
-                <p class="text-lg">
-                    <a href="mailto:wangxiaoxian2016@gmail.com" class="contact-button px-6 py-3 border rounded transition">Personal Email</a>
-                </p>
-                <p class="text-lg mt-4">
-                    <a href="mailto:ericwang@eii-tech.com" class="contact-button px-6 py-3 border rounded transition">Business Email</a>
-                </p>
-                <p class="text-lg mt-4">
-                    <a href="https://www.linkedin.com/in/xiaoxian-wang-a83b621b9" class="contact-button px-6 py-3 border rounded transition" target="_blank">LinkedIn</a>
-                </p>
-                <p class="text-lg mt-4 mb-16">
-                    <a href="https://github.com/King7D" class="contact-button px-6 py-3 border rounded transition" target="_blank">GitHub</a>
-                </p>
+    <section id="home" class="hero active flex items-center justify-center">
+        <div class="section-content text-center">
+            <div class="fade-in">
+                <p class="text-secondary text-lg mb-2">Innovating at the intersection of AI and finance</p>
+                <h1 class="text-5xl md:text-7xl font-bold mb-4">Xiaoxian Wang</h1>
+                <div class="overflow-hidden">
+                    <p class="text-xl md:text-2xl text-gray-300 mb-8 animate-slideUp">
+                        Machine Learning Developer & Quantitative Trading Strategist
+                    </p>
+                </div>
+                <a href="#about" 
+                class="contact-button inline-block px-8 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white"
+                onclick="showSection(event, 'about')">
+                    About Me
+                </a>
             </div>
         </div>
     </section>
 
+<!-- About Section -->
+<section id="about" class="hero">
+    <div class="section-content px-4 sm:px-6 lg:px-8">
+      <div class="fade-in delay-1">
+        <h2 class="text-4xl font-bold text-center mb-12">About Me</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <!-- Left Column: Personal Info -->
+        <div class="space-y-6 fade-in delay-2">
+          <img src="pictures/intel_summit.jpg" alt="Intel Summit" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
+          <p class="text-sm text-center text-gray-400">Participated in the 2023 Intel LOEM Summit in Macau</p>
+          <h3 class="text-3xl font-bold text-center">Who am I?</h3>
+          <p class="text-lg text-center">
+            I am Xiaoxian Wang, a machine learning developer, quantitative trader, and data analyst with a passion for innovation at the intersection of AI and finance.
+          </p>
+          <p class="text-lg text-center">
+            As an Intel Student Ambassador and Titanium member of the Intel Partner Alliance, I consistently push boundaries in tech.
+          </p>
+        </div>
+        <!-- Right Column: Credentials -->
+        <div class="space-y-8 fade-in delay-3">
+          <div>
+            <h4 class="text-2xl font-bold mb-4">Licenses &amp; Certifications</h4>
+            <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
+              <li>Microsoft Certified: Azure AI Fundamentals (AI-900)</li>
+              <li>Microsoft Office Specialist - Expert (Microsoft 365 Apps)</li>
+              <li>Intel Edge AI Developer Certification</li>
+              <li>Google Analytics Certification</li>
+              <li>Google IT Support Professional Certificate</li>
+              <li>CFI AI for Excel Formulas</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-2xl font-bold mb-4">Education &amp; Scholarship</h4>
+            <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
+              <li class="font-semibold">Master of Business Analytics, University of British Columbia (2025‑2026)</li>
+              <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the Accelerated Career Scholarship</li>
+              <li class="font-semibold">Master of Business Administration, Academy Europe Open University</li>
+              <li class="font-semibold">Bachelor of Arts in Economics, University of British Columbia (2021‑2025)</li>
+              <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the International Student Scholarship (Faculty of Arts)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Group Picture Section -->
+      <div class="mt-16 text-center fade-in delay-4">
+        <img src="pictures/group_picture.jpg" alt="Group picture with industry leaders" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
+        <p class="text-xs text-gray-400 mt-2">
+          Group picture with John Kalvin (Intel Global Go‑To‑Market Operations VP &amp; GM), Dave Guzzi (Intel Global Distribution &amp; Partner Sales VP) and Ye Zong (Intel PRC GM)
+        </p>
+      </div>
+    </div>
+  </section>
+  
+
+<!-- Projects Section -->
+<section id="projects" class="hero">
+    <div class="section-content">
+        <div class="fade-in">
+            <h2 class="text-4xl font-bold mb-8 text-center">Featured Projects</h2>
+
+            <!-- Grid for All Projects -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Project Cards -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Campus Bullying Detection</h3>
+                    <p class="text-gray-300 mb-4">Real-time AI monitoring system using edge computing...</p>
+                    <a href="projects/campus-bullying.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">EvoNAS Operating System</h3>
+                    <p class="text-gray-300 mb-4">Lightweight and scalable OS designed for Edge AI...</p>
+                    <a href="projects/evonas.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Inventory Tracking System</h3>
+                    <p class="text-gray-300 mb-4">Automated inventory management using machine learning...</p>
+                    <a href="projects/inventory.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Image Similarity Enhancer</h3>
+                    <p class="text-gray-300 mb-4">Advanced AI model to improve image similarity metrics...</p>
+                    <a href="projects/image.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Heart Disease Prediction</h3>
+                    <p class="text-gray-300 mb-4">AI-driven diagnostic tool for heart disease risk assessment...</p>
+                    <a href="projects/heart-disease.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Maze Solver</h3>
+                    <p class="text-gray-300 mb-4">Pathfinding algorithms to solve complex mazes efficiently...</p>
+                    <a href="projects/maze.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Digit Classification</h3>
+                    <p class="text-gray-300 mb-4">Deep learning model for handwritten digit recognition...</p>
+                    <a href="projects/digit.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">YouTube Converter</h3>
+                    <p class="text-gray-300 mb-4">A tool to convert YouTube videos into various formats...</p>
+                    <a href="projects/youtube.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Cyber Tarot</h3>
+                    <p class="text-gray-300 mb-4">A unique AI-powered tarot reading experience...</p>
+                    <a href="projects/tarot.html" class="project-link text-secondary flex items-center">
+                        View Case Study
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Currently Working On -->
+            <h3 class="text-2xl font-bold mt-12 text-center">Currently Working On</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Quantitative Trading Strategy</h3>
+                    <p class="text-gray-300 mb-4">Machine learning-driven trading algorithm...</p>
+                    <a href="projects/invest.html" class="project-link text-secondary flex items-center">
+                        View Progress
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Intel Edge Solutions Challenge</h3>
+                    <p class="text-gray-300 mb-4">Edge AI for Smart Cities & Transportation...</p>
+                    <a href="projects/IESC.html" class="project-link text-secondary flex items-center">
+                        View Progress
+                    </a>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration & CDN</h3>
+                    <p class="text-gray-300 mb-4">Optimizing AI inference performance at the edge...</p>
+                    <a href="projects/edge.html" class="project-link text-secondary flex items-center">
+                        View Progress
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Contact Section -->
+<section id="contact" class="hero active flex items-center justify-center">
+    <div class="section-content text-center">
+        <!-- Image -->
+        <div class="fade-in delay-1">
+            <img src="pictures/kaer.jpg" alt="Kaer" class="mx-auto mt-12 rounded-lg shadow-lg w-full max-w-lg">
+            <p class="text-sm text-gray-400 mt-2">Wall of Fame at Shandong Kaer Electronic Co., Ltd</p>
+        </div>
+
+        <!-- Heading -->
+        <div class="fade-in delay-2">
+            <h1 class="text-4xl font-bold mt-8">Feel free to reach out via email or LinkedIn:</h1>
+        </div>
+
+        <!-- Contact Buttons -->
+        <div class="mt-6 fade-in delay-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center">
+                <a href="mailto:wangxiaoxian2016@gmail.com" 
+                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+                    Personal Email
+                </a>
+                <a href="mailto:ericwang@eii-tech.com" 
+                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+                    Business Email
+                </a>
+                <a href="https://www.linkedin.com/in/xiaoxian-wang-a83b621b9" target="_blank" 
+                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+                    LinkedIn
+                </a>
+                <a href="https://github.com/King7D" target="_blank" 
+                   class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 
     <script>
-        // Show the section based on the anchor link
         function showSection(event, sectionId) {
-            if (event) {
-                event.preventDefault();
-            }
+            event.preventDefault();
+            const sections = document.querySelectorAll('.hero');
+            const targetSection = document.getElementById(sectionId);
             
-            const activeSection = document.querySelector('.hero.active');
-            const newSection = document.getElementById(sectionId);
-    
-            if (activeSection !== newSection) {
-                activeSection.classList.remove('active');
-    
-                setTimeout(() => {
-                    newSection.classList.add('active');
-                }, 500);
-            }
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            setTimeout(() => {
+                targetSection.classList.add('active');
+                window.history.pushState(null, null, `#${sectionId}`);
+            }, 300);
         }
-    
-        // Function to handle anchor links (like #projects)
-        function handleAnchorLinks() {
-            const hash = window.location.hash; // Get the current hash from the URL
-            if (hash) {
-                const sectionId = hash.substring(1); // Remove the # from the hash
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    showSection(null, sectionId); // Show the section
-                }
-            }
-        }
-    
-        // Call handleAnchorLinks when the page loads
-        window.addEventListener('load', handleAnchorLinks);
+
+        // Handle initial page load
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) showSection({ preventDefault: () => {} }, hash);
+        });
     </script>
-    
-
 </body>
-
 </html>
