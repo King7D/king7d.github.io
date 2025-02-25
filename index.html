@@ -311,13 +311,10 @@
             </a>
           </div>
           <div class="card">
-            <h3 class="text-xl font-semibold mb-3">YouTube Converter</h3>
-            <p class="text-gray-300 mb-4">A tool to convert YouTube videos into various formats...</p>
-            <a href="projects/youtube.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
+            <h3 class="text-xl font-semibold mb-3">Intel Edge Solutions Challenge</h3>
+            <p class="text-gray-300 mb-4">Edge AI for Smart Cities & Transportation...</p>
+            <a href="projects/IESC.html" class="project-link text-secondary flex items-center">
+              View Progress
             </a>
           </div>
           <div class="card">
@@ -342,13 +339,7 @@
               View Progress
             </a>
           </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Intel Edge Solutions Challenge</h3>
-            <p class="text-gray-300 mb-4">Edge AI for Smart Cities & Transportation...</p>
-            <a href="projects/IESC.html" class="project-link text-secondary flex items-center">
-              View Progress
-            </a>
-          </div>
+          
           <div class="card">
             <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration & CDN</h3>
             <p class="text-gray-300 mb-4">Optimizing AI inference performance at the edge...</p>
@@ -365,23 +356,35 @@
 <section id="investment" class="hero">
     <div class="section-content text-center">
       <div class="fade-in delay-1">
-        <h2 class="text-4xl font-bold mb-8">Investment Portfolio</h2>
+        <h2 class="text-4xl font-bold mb-8" style="color: white;">Investment Portfolio</h2>
       </div>
-      <!-- Current Date/Time (Pacific Time) -->
-      <div id="current-datetime" class="text-xl mb-4"></div>
-      
-      <!-- Crypto Portfolio -->
-      <div class="mb-8 fade-in delay-2">
-        <h3 class="text-2xl font-bold mb-4">Crypto Portfolio</h3>
-        <canvas id="cryptoChart"></canvas>
-        <div id="crypto-prices" class="mt-4 text-gray-300"></div>
-      </div>
-      
-      <!-- Stocks Portfolio -->
-      <div class="fade-in delay-3">
-        <h3 class="text-2xl font-bold mb-4">US Stocks Portfolio</h3>
-        <canvas id="stocksChart"></canvas>
-        <div id="stocks-prices" class="mt-4 text-gray-300"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Crypto Column -->
+        <div class="space-y-6">
+          <!-- Crypto Pie Chart Card -->
+          <div class="card fade-in delay-2 p-6">
+            <h3 class="text-2xl font-bold mb-4" style="color: white;">Crypto</h3>
+            <div id="cryptoChart" style="width: 100%; height: 400px;"></div>
+          </div>
+          <!-- Crypto Prices Card -->
+          <div class="card fade-in delay-3 p-6">
+            <h3 class="text-2xl font-bold mb-4" style="color: white;">Crypto Prices</h3>
+            <div id="crypto-prices"></div>
+          </div>
+        </div>
+        <!-- Stock Column -->
+        <div class="space-y-6">
+          <!-- Stock Pie Chart Card -->
+          <div class="card fade-in delay-2 p-6">
+            <h3 class="text-2xl font-bold mb-4" style="color: white;">Stock</h3>
+            <div id="stocksChart" style="width: 100%; height: 400px;"></div>
+          </div>
+          <!-- Stock Prices Card -->
+          <div class="card fade-in delay-3 p-6">
+            <h3 class="text-2xl font-bold mb-4" style="color: white;">Stock Prices</h3>
+            <div id="stock-prices"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -440,93 +443,62 @@
         showSection(null, 'home');
       }
     });
-    
-    // ----- Current Date/Time in Pacific Time -----
-    function updateDateTime() {
-      const now = new Date();
-      const options = {
-        timeZone: "America/Los_Angeles",
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: true
-      };
-      const formatter = new Intl.DateTimeFormat([], options);
-      document.getElementById('current-datetime').textContent = formatter.format(now);
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-    
-    // ----- Crypto Portfolio Data & Chart -----
-    // Allocation percentages (ignoring "Other")
-    const cryptoAllocations = {
-      "BNB": 78.44,
-      "BTC": 9.5,
-      "WBETH": 3.94,
-      "BNSOL": 3.81,
-      "USDT": 3.04
+</script>
+
+<!-- Load Google Charts -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // ----- Update Date/Time (Pacific Time) -----
+  function updateDateTime() {
+    const now = new Date();
+    const options = {
+      timeZone: "America/Los_Angeles",
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true
     };
-    // Mapping asset names to CoinGecko IDs
-    const cryptoIdsMapping = {
-      "BNB": "binancecoin",
-      "BTC": "bitcoin",
-      "WBETH": "weth",       // using Wrapped Ether as a proxy for WBETH
-      "BNSOL": "solana",     // assuming Solana represents BNSOL here
-      "USDT": "tether"
+    const formatter = new Intl.DateTimeFormat([], options);
+    // Ensure an element with id "current-datetime" exists (if used elsewhere)
+    const dtElem = document.getElementById('current-datetime');
+    if(dtElem) dtElem.textContent = formatter.format(now);
+  }
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+
+  // ----- Draw Google Charts -----
+  google.charts.load('current', { packages: ['corechart'] });
+  google.charts.setOnLoadCallback(drawCharts);
+
+  function drawCharts() {
+    // Crypto Pie Chart
+    var cryptoData = google.visualization.arrayToDataTable([
+      ['Asset', 'Allocation'],
+      ['BNB', 78.44],
+      ['BTC', 9.5],
+      ['WBETH', 3.94],
+      ['BNSOL', 3.81],
+      ['USDT', 3.04]
+    ]);
+    var cryptoOptions = {
+      title: 'Crypto Portfolio',
+      titleTextStyle: { color: 'white' },
+      pieHole: 0.4,
+      colors: ["#3b82f6", "#f59e0b", "#10b981", "#6366f1", "#ef4444"],
+      legend: { position: 'bottom', textStyle: { color: 'white' } },
+      pieSliceTextStyle: { color: 'white' },
+      backgroundColor: 'transparent'
     };
-    // Build comma-separated list for API call
-    const cryptoIds = Object.values(cryptoIdsMapping).join(",");
-    
-    fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`)
-      .then(response => response.json())
-      .then(data => {
-        // Create an object mapping our asset symbol to its current price in USD
-        const cryptoPrices = {};
-        for (let asset in cryptoAllocations) {
-          const id = cryptoIdsMapping[asset];
-          cryptoPrices[asset] = data[id] ? data[id].usd : "N/A";
-        }
-        // Render Pie Chart for Crypto Portfolio
-        const cryptoCtx = document.getElementById('cryptoChart').getContext('2d');
-        new Chart(cryptoCtx, {
-          type: 'pie',
-          data: {
-            labels: Object.keys(cryptoAllocations),
-            datasets: [{
-              data: Object.values(cryptoAllocations),
-              backgroundColor: [
-                "#3b82f6",
-                "#f59e0b",
-                "#10b981",
-                "#6366f1",
-                "#ef4444"
-              ]
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { position: 'bottom' }
-            }
-          }
-        });
-        // List each crypto's current price
-        let cryptoPricesHTML = "<ul class='list-disc list-inside'>";
-        for (let asset in cryptoPrices) {
-          cryptoPricesHTML += `<li>${asset}: $${cryptoPrices[asset] !== "N/A" ? parseFloat(cryptoPrices[asset]).toFixed(2) : "N/A"}</li>`;
-        }
-        cryptoPricesHTML += "</ul>";
-        document.getElementById('crypto-prices').innerHTML = cryptoPricesHTML;
-      })
-      .catch(error => console.error("Error fetching crypto prices:", error));
-    
-    // ----- Stocks Portfolio Data & Chart -----
-    // Allocation percentages (as provided)
-    const stockAllocations = {
+    var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
+    cryptoChart.draw(cryptoData, cryptoOptions);
+
+    // Stock Pie Chart
+    var stockAllocations = {
       "Fixed Income": 28.6,
       "Royal Bank of Canada": 4.2,
       "Brookfield Asset Management Limited": 3.1,
@@ -535,77 +507,93 @@
       "Dollarama Inc.": 2.3,
       "Intact Financial Corporation": 2.3,
       "Thomson Reuters Corporation": 2.3,
-      "Meta Platforms Inc.": 2.2
+      "Meta Platforms Inc.": 2.2,
+      "Others": 50.1
     };
-    // Mapping asset names to ticker symbols (only for those with a market price)
-    const stockTickers = {
-      "Royal Bank of Canada": "RY",
-      "Brookfield Asset Management Limited": "BAM.A",
+    // Map names to ticker IDs where available
+    var stockTickers = {
+      "Royal Bank of Canada": "RY.TO",
+      "Brookfield Asset Management Limited": "BAM-A.TO",
       "Apple Inc.": "AAPL",
       "Dollarama Inc.": "DOL.TO",
       "Intact Financial Corporation": "IFC.TO",
       "Thomson Reuters Corporation": "TRI",
       "Meta Platforms Inc.": "META"
     };
-    // Prepare list of tickers to fetch (comma separated)
-    const tickersToFetch = Object.values(stockTickers).join(",");
-    
-    // Fetch stock prices from Twelve Data (using demo API key)
-    fetch(`https://api.twelvedata.com/price?symbol=${tickersToFetch}&apikey=demo`)
+    var stocksArray = [['Asset', 'Allocation']];
+    for (var key in stockAllocations) {
+      var label = stockTickers[key] || key;
+      stocksArray.push([label, stockAllocations[key]]);
+    }
+    var stocksData = google.visualization.arrayToDataTable(stocksArray);
+    var stocksOptions = {
+      title: 'Stock Portfolio',
+      titleTextStyle: { color: 'white' },
+      pieHole: 0.4,
+      colors: ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6", "#14b8a6", "#f97316", "#34d399", "#a78bfa"],
+      legend: { position: 'bottom', textStyle: { color: 'white' } },
+      pieSliceTextStyle: { color: 'white' },
+      backgroundColor: 'transparent'
+    };
+    var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
+    stocksChart.draw(stocksData, stocksOptions);
+  }
+
+  // ----- Fetch Crypto Prices from CoinGecko -----
+  function fetchCryptoPrices() {
+    const cryptoMapping = {
+      "BNB": "binancecoin",
+      "BTC": "bitcoin",
+      "WBETH": "weth",
+      "BNSOL": "solana",
+      "USDT": "tether"
+    };
+    const cryptoIds = Object.values(cryptoMapping).join(",");
+    fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`)
       .then(response => response.json())
       .then(data => {
-        // data is expected to contain an object with keys matching the ticker symbols
-        const stockPrices = {};
-        for (let asset in stockAllocations) {
-          if (stockTickers[asset]) {
-            // Some APIs may return an object per symbol.
-            stockPrices[asset] = data[ stockTickers[asset] ] && data[ stockTickers[asset] ].price 
-              ? parseFloat(data[ stockTickers[asset] ].price).toFixed(2) 
-              : "N/A";
-          } else {
-            // For assets without a ticker (Fixed Income, Cash)
-            stockPrices[asset] = "N/A";
-          }
+        let html = "<ul>";
+        for (let asset in cryptoMapping) {
+          const coinId = cryptoMapping[asset];
+          const price = data[coinId] && data[coinId].usd ? data[coinId].usd : "N/A";
+          html += `<li>${asset}: $${typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price}</li>`;
         }
-        // Render Pie Chart for Stocks Portfolio
-        const stocksCtx = document.getElementById('stocksChart').getContext('2d');
-        new Chart(stocksCtx, {
-          type: 'pie',
-          data: {
-            labels: Object.keys(stockAllocations),
-            datasets: [{
-              data: Object.values(stockAllocations),
-              backgroundColor: [
-                "#6366f1",
-                "#10b981",
-                "#f59e0b",
-                "#ef4444",
-                "#3b82f6",
-                "#8b5cf6",
-                "#14b8a6",
-                "#f97316",
-                "#34d399"
-              ]
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { position: 'bottom' }
-            }
-          }
-        });
-        // List each stock's current price
-        let stocksPricesHTML = "<ul class='list-disc list-inside'>";
-        for (let asset in stockPrices) {
-          stocksPricesHTML += `<li>${asset}: ${stockPrices[asset] !== "N/A" ? "$" + stockPrices[asset] : "N/A"}</li>`;
-        }
-        stocksPricesHTML += "</ul>";
-        document.getElementById('stocks-prices').innerHTML = stocksPricesHTML;
+        html += "</ul>";
+        document.getElementById('crypto-prices').innerHTML = html;
       })
-      .catch(error => console.error("Error fetching stock prices:", error));
-  </script>
-  
-  
+      .catch(error => {
+        console.error("Error fetching crypto prices:", error);
+        document.getElementById('crypto-prices').innerHTML = "<p>Error fetching crypto prices.</p>";
+      });
+  }
+  fetchCryptoPrices();
+
+  // Stock Prices (Using Finnhub API)
+  function fetchStockPricesFinnhub() {
+    const stockTickersArr = ["RY", "BAM", "AAPL", "DOL", "TRI", "META"];
+    const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";  // Replace with your actual API key
+    Promise.all(stockTickersArr.map(ticker =>
+      fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
+        .then(response => response.json())
+        .then(data => ({ ticker, price: data.c }))
+        .catch(error => ({ ticker, price: null }))
+    ))
+    .then(results => {
+      let html = "<ul>";
+      results.forEach(item => {
+        html += `<li>${item.ticker}: $${item.price && item.price > 0 ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "N/A"}</li>`;
+      });
+      html += "</ul>";
+      document.getElementById('stock-prices').innerHTML = html;
+    })
+    .catch(error => {
+      console.error("Error fetching stock prices via Finnhub:", error);
+      document.getElementById('stock-prices').innerHTML = "<p>Error fetching stock prices. Please try again later.</p>";
+    });
+  }
+  fetchStockPricesFinnhub();
+});
+</script>
+
 </body>
 </html>
