@@ -394,6 +394,13 @@
           </div>
         </div>
       </div>
+        <!-- Trading Simulation Card (Placed outside the grid) -->
+        <div class="mt-6 fade-in delay-4">
+          <div class="card p-6 mx-auto" style="max-width: 1200px;">
+            <h3 class="text-2xl font-bold mb-4" style="color: white;">Trading Simulation</h3>
+            <canvas id="tradingSimulationCanvas" width="1000" height="500" style="background: transparent;"></canvas>
+          </div>
+        </div>
     </div>
   </section>
   
@@ -748,5 +755,144 @@
       }
     });
   </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    function startTradingSimulation() {
+      const canvas = document.getElementById("tradingSimulationCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+  
+      // Clear the canvas for a fresh simulation
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+      // Define margins for the chart area
+      const marginLeft = 50, marginRight = 20, marginTop = 20, marginBottom = 40;
+      const width = canvas.width - marginLeft - marginRight;
+      const height = canvas.height - marginTop - marginBottom;
+  
+      // Generate a series of price points using a simple random walk
+      const numPoints = 20;
+      const prices = [];
+      let currentPrice = 100; // starting price
+      prices.push(currentPrice);
+      for (let i = 1; i < numPoints; i++) {
+        // Random change between -10 and +10
+        const change = (Math.random() * 20) - 10;
+        currentPrice = currentPrice + change;
+        prices.push(currentPrice);
+      }
+  
+      // Calculate the average of all generated prices
+      const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+  
+      // Function to map a price value to a y-coordinate on the canvas.
+      // (Higher prices are drawn higher on the canvas.)
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+      function priceToY(price) {
+        if (maxPrice === minPrice) return marginTop + height / 2;
+        return marginTop + ((maxPrice - price) / (maxPrice - minPrice)) * height;
+      }
+  
+      // Compute (x, y) coordinates for each point (evenly spaced along the timeline)
+      const xSpacing = width / (numPoints - 1);
+      const coords = prices.map((price, index) => ({
+        x: marginLeft + index * xSpacing,
+        y: priceToY(price),
+        price: price
+      }));
+  
+      let currentIndex = 0;
+      // Total animation duration is 5 seconds
+      const interval = 5000 / (numPoints - 1);
+  
+      // Draw the axes for the chart
+      function drawAxes() {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 1;
+        // Draw x-axis
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, marginTop + height);
+        ctx.lineTo(marginLeft + width, marginTop + height);
+        ctx.stroke();
+        // Draw y-axis
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, marginTop);
+        ctx.lineTo(marginLeft, marginTop + height);
+        ctx.stroke();
+      }
+  
+      // Clear the canvas
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+  
+      // Draw the simulation: axes, connecting line, points, and trading signals
+      function drawSimulation() {
+        clearCanvas();
+        drawAxes();
+  
+        // Draw connecting lines for all revealed points
+        ctx.strokeStyle = "#f59e0b";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i <= currentIndex; i++) {
+          const pt = coords[i];
+          if (i === 0) {
+            ctx.moveTo(pt.x, pt.y);
+          } else {
+            ctx.lineTo(pt.x, pt.y);
+          }
+        }
+        ctx.stroke();
+  
+        // Draw each point and its trading signal based on average
+        for (let i = 0; i <= currentIndex; i++) {
+          const pt = coords[i];
+          // Draw point as a small circle
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = "white";
+          ctx.fill();
+  
+          // Determine trading signal:
+          // If price is below average, label with "B" (buy) beneath the point.
+          // If price is above average, label with "S" (sell) above the point.
+          ctx.fillStyle = "white";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "center";
+          if (pt.price < avgPrice) {
+            ctx.fillText("B", pt.x, pt.y + 20);
+          } else if (pt.price > avgPrice) {
+            ctx.fillText("S", pt.x, pt.y - 10);
+          }
+        }
+      }
+  
+      // Reveal the next point in the simulation
+      function updateSimulation() {
+        if (currentIndex < coords.length - 1) {
+          currentIndex++;
+          drawSimulation();
+        } else {
+          clearInterval(timer);
+          // Restart the simulation after a 5-second delay
+          setTimeout(startTradingSimulation, 5000);
+        }
+      }
+  
+      // Initial draw (first point only)
+      drawSimulation();
+      const timer = setInterval(updateSimulation, interval);
+    }
+  
+    // Start the simulation for the first time
+    startTradingSimulation();
+  });
+  </script>
+  
+  
+  
 </body>
 </html>
