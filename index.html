@@ -142,6 +142,14 @@
         padding: 40px 20px;
       }
     }
+  
+    /* Simulation container styles */
+    #simulationContainer {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
@@ -157,7 +165,7 @@
       </ul>
     </nav>
   </header>
-  
+
   <!-- Home Section (Active by Default) -->
   <section id="home" class="hero active flex items-center justify-center">
     <div class="section-content text-center">
@@ -312,7 +320,7 @@
           </div>
           <div class="card">
             <h3 class="text-xl font-semibold mb-3">Intel Edge Solutions Challenge</h3>
-            <p class="text-gray-300 mb-4">Edge AI for Smart Cities & Transportation...</p>
+            <p class="text-gray-300 mb-4">Edge AI for Smart Cities &amp; Transportation...</p>
             <a href="projects/IESC.html" class="project-link text-secondary flex items-center">
               View Progress
             </a>
@@ -334,14 +342,14 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           <div class="card">
             <h3 class="text-xl font-semibold mb-3">Quantitative Trading Strategy</h3>
-            <p class="text-gray-300 mb-4">Machine learning-driven trading algorithm...</p>
+            <p class="text-gray-300 mb-4">Machine learning-driven trading algorithm.</p>
             <a href="projects/invest.html" class="project-link text-secondary flex items-center">
               View Progress
             </a>
           </div>
           
           <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration & CDN</h3>
+            <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration &amp; CDN</h3>
             <p class="text-gray-300 mb-4">Optimizing AI inference performance at the edge...</p>
             <a href="projects/edge.html" class="project-link text-secondary flex items-center">
               View Progress
@@ -352,8 +360,8 @@
     </div>
   </section>
   
-<!-- Investment Section -->
-<section id="investment" class="hero">
+  <!-- Investment Section -->
+  <section id="investment" class="hero">
     <div class="section-content text-center">
       <div class="fade-in delay-1">
         <h2 class="text-4xl font-bold mb-8" style="color: white;">Investment Portfolio</h2>
@@ -368,7 +376,7 @@
           </div>
           <!-- Crypto Prices Card -->
           <div class="card fade-in delay-3 p-6">
-            <h3 class="text-2xl font-bold mb-4" style="color: white;">Crypto Prices</h3>
+            <h3 class="text-2xl font-bold mb-4" style="color: white;">Current Crypto Prices</h3>
             <div id="crypto-prices"></div>
           </div>
         </div>
@@ -381,14 +389,13 @@
           </div>
           <!-- Stock Prices Card -->
           <div class="card fade-in delay-3 p-6">
-            <h3 class="text-2xl font-bold mb-4" style="color: white;">Stock Prices</h3>
+            <h3 class="text-2xl font-bold mb-4" style="color: white;">Current Stock Prices</h3>
             <div id="stock-prices"></div>
           </div>
         </div>
       </div>
     </div>
   </section>
-  
   
   <!-- Contact Section -->
   <section id="contact" class="hero active flex items-center justify-center">
@@ -426,8 +433,305 @@
     </div>
   </section>
   
+  <!-- Google Charts Scripts -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script>
-    // ----- Section Switching (unchanged) -----
+    document.addEventListener("DOMContentLoaded", function() {
+      // ----- Update Date/Time (Pacific Time) -----
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          timeZone: "America/Los_Angeles",
+          weekday: 'short',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          hour12: true
+        };
+        const formatter = new Intl.DateTimeFormat([], options);
+        const dtElem = document.getElementById('current-datetime');
+        if(dtElem) dtElem.textContent = formatter.format(now);
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+    
+      // ----- Draw Google Charts -----
+      google.charts.load('current', { packages: ['corechart'] });
+      google.charts.setOnLoadCallback(drawCharts);
+    
+      function drawCharts() {
+        // Crypto Pie Chart
+        var cryptoData = google.visualization.arrayToDataTable([
+          ['Asset', 'Allocation'],
+          ['BNB', 78.44],
+          ['BTC', 9.5],
+          ['WBETH', 3.94],
+          ['BNSOL', 3.81],
+          ['USDT', 3.04]
+        ]);
+        var cryptoOptions = {
+          title: 'Crypto Portfolio',
+          titleTextStyle: { color: 'white' },
+          pieHole: 0.4,
+          colors: ["#3b82f6", "#f59e0b", "#10b981", "#6366f1", "#ef4444"],
+          legend: { position: 'bottom', textStyle: { color: 'white' } },
+          pieSliceTextStyle: { color: 'white' },
+          backgroundColor: 'transparent'
+        };
+        var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
+        cryptoChart.draw(cryptoData, cryptoOptions);
+    
+        // Stock Pie Chart with new allocations
+        var stockAllocations = {
+          "Apple Inc.": 8,
+          "Meta Platforms Inc.": 7.1,
+          "Microsoft Corp - Common": 4.0,
+          "NVIDIA Corporation": 3.7,
+          "JPMorgan Chase & Company": 2.2,
+          "Cash (Bank Overdraft)": 4.6,
+          "Broadcom Inc.": 1.9,
+          "Costco Wholesale Corporation": 1.8,
+          "Visa Inc.": 1.8,
+          "Fixed Income": 28.6,
+          "Royal Bank of Canada": 4.2,
+          "Brookfield Asset Management Limited": 3.1,
+          "Dollarama Inc.": 2.3,
+          "Intact Financial Corporation": 2.3,
+          "Thomson Reuters Corporation": 2.3,
+          "Yinn":14,
+          "Others": 8.1
+        };
+        // Map names to ticker IDs (Cash remains without a ticker)
+        var stockTickers = {
+          "Apple Inc.": "AAPL",
+          "Meta Platforms Inc.": "META",
+          "Microsoft Corp - Common": "MSFT",
+          "NVIDIA Corporation": "NVDA",
+          "JPMorgan Chase & Company": "JPM",
+          "Broadcom Inc.": "AVGO",
+          "Costco Wholesale Corporation": "COST",
+          "Visa Inc.": "V",
+          "Royal Bank of Canada": "RY",
+          "Brookfield Asset Management Limited": "BAM",
+          "Dollarama Inc.": "DOL",
+          "Intact Financial Corporation": "IFC.TO",
+          "Thomson Reuters Corporation": "TRI",
+        };
+        var stocksArray = [['Asset', 'Allocation']];
+        for (var key in stockAllocations) {
+          var label = stockTickers[key] || key;
+          stocksArray.push([label, stockAllocations[key]]);
+        }
+        var stocksData = google.visualization.arrayToDataTable(stocksArray);
+        var stocksOptions = {
+          title: 'Stock Portfolio',
+          titleTextStyle: { color: 'white' },
+          pieHole: 0.4,
+          colors: ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6", "#14b8a6", "#f97316", "#34d399", "#a78bfa"],
+          legend: { position: 'bottom', textStyle: { color: 'white' } },
+          pieSliceTextStyle: { color: 'white' },
+          backgroundColor: 'transparent'
+        };
+        var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
+        stocksChart.draw(stocksData, stocksOptions);
+      }
+    
+      // ----- Fetch Crypto Prices from CoinGecko -----
+      function fetchCryptoPrices() {
+        const cryptoMapping = {
+          "BNB": "binancecoin",
+          "BTC": "bitcoin",
+          "WBETH": "weth",
+          "BNSOL": "solana",
+          "USDT": "tether"
+        };
+        const cryptoIds = Object.values(cryptoMapping).join(",");
+        fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`)
+          .then(response => response.json())
+          .then(data => {
+            let html = "<ul>";
+            for (let asset in cryptoMapping) {
+              const coinId = cryptoMapping[asset];
+              const price = data[coinId] && data[coinId].usd ? data[coinId].usd : "N/A";
+              html += `<li>${asset}: $${typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price}</li>`;
+            }
+            html += "</ul>";
+            document.getElementById('crypto-prices').innerHTML = html;
+          })
+          .catch(error => {
+            console.error("Error fetching crypto prices:", error);
+            document.getElementById('crypto-prices').innerHTML = "<p>Error fetching crypto prices.</p>";
+          });
+      }
+      fetchCryptoPrices();
+    
+      // ----- Fetch Stock Prices from Finnhub API -----
+      function fetchStockPricesFinnhub() {
+        // Define only tickers that have trading data (Cash is excluded)
+        const stockTickersArr = ["AAPL", "META", "MSFT", "NVDA", "JPM", "AVGO", "COST", "V","RY", "BAM", "DOL", "TRI","YINN"];
+        const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
+        Promise.all(stockTickersArr.map(ticker =>
+          fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
+            .then(response => response.json())
+            .then(data => ({ ticker, price: data.c }))
+            .catch(error => ({ ticker, price: null }))
+        ))
+        .then(results => {
+          let html = "<ul>";
+          results.forEach(item => {
+            html += `<li>${item.ticker}: $${item.price && item.price > 0 ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "N/A"}</li>`;
+          });
+          html += "</ul>";
+          document.getElementById('stock-prices').innerHTML = html;
+        })
+        .catch(error => {
+          console.error("Error fetching stock prices via Finnhub:", error);
+          document.getElementById('stock-prices').innerHTML = "<p>Error fetching stock prices. Please try again later.</p>";
+        });
+      }
+      fetchStockPricesFinnhub();
+    });
+  </script>
+  
+  <!-- Spinning Hexagon with Red Ball Simulation Script (Fixed at Bottom Left) -->
+<script>
+  // Wait for the window to load to ensure all elements are available
+  window.addEventListener('load', function() {
+    const canvas = document.getElementById("simulationCanvas");
+    const ctx = canvas.getContext("2d");
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const hexRadius = 70; // Radius of the hexagon
+    
+    let rotation = 0;             // Current rotation angle (in radians)
+    const rotationSpeed = 0.01;   // Radians per frame
+    
+    // Define the red ball with initial position, velocity, and radius
+    const ball = {
+      x: cx,
+      y: cy,
+      radius: 8,
+      vx: 2.5,
+      vy: -2.0,
+    };
+    
+    const gravity = 0.1;      // Gravitational acceleration (pixels/frame²)
+    const restitution = 1.0;  // Bounce energy retention (1.0 = perfectly bouncy)
+  
+    // Compute hexagon vertices given a rotation angle
+    function getHexagonVertices(rot) {
+      const vertices = [];
+      const sides = 6;
+      for (let i = 0; i < sides; i++) {
+        const angle = (2 * Math.PI / sides) * i + rot;
+        const x = cx + hexRadius * Math.cos(angle);
+        const y = cy + hexRadius * Math.sin(angle);
+        vertices.push({ x, y });
+      }
+      return vertices;
+    }
+    
+    // Returns the distance from point P to the line segment AB and the closest point on AB
+    function pointLineDistance(P, A, B) {
+      const ABx = B.x - A.x;
+      const ABy = B.y - A.y;
+      const APx = P.x - A.x;
+      const APy = P.y - A.y;
+      const ab2 = ABx * ABx + ABy * ABy;
+      let t = (APx * ABx + APy * ABy) / ab2;
+      t = Math.max(0, Math.min(1, t)); // Clamp t to [0,1]
+      const closestX = A.x + t * ABx;
+      const closestY = A.y + t * ABy;
+      const dx = P.x - closestX;
+      const dy = P.y - closestY;
+      return { distance: Math.hypot(dx, dy), closest: { x: closestX, y: closestY } };
+    }
+    
+    // Main animation loop
+    function animate() {
+      rotation += rotationSpeed; // Update rotation of the hexagon
+      
+      // Update ball physics
+      ball.vy += gravity;
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+      
+      // Get current hexagon vertices
+      const vertices = getHexagonVertices(rotation);
+      
+      // Check collision with each edge of the hexagon
+      for (let i = 0; i < vertices.length; i++) {
+        const A = vertices[i];
+        const B = vertices[(i + 1) % vertices.length];
+        const { distance, closest } = pointLineDistance({ x: ball.x, y: ball.y }, A, B);
+        if (distance < ball.radius) {
+          // Calculate edge vector and derive a perpendicular normal
+          const edgeVec = { x: B.x - A.x, y: B.y - A.y };
+          let normal = { x: -edgeVec.y, y: edgeVec.x };
+          const normLength = Math.hypot(normal.x, normal.y);
+          normal.x /= normLength;
+          normal.y /= normLength;
+          
+          // Ensure the normal points from the edge toward the ball
+          const toBall = { x: ball.x - closest.x, y: ball.y - closest.y };
+          if (toBall.x * normal.x + toBall.y * normal.y < 0) {
+            normal.x = -normal.x;
+            normal.y = -normal.y;
+          }
+          
+          // Reflect the ball's velocity off the edge using the normal vector
+          const dot = ball.vx * normal.x + ball.vy * normal.y;
+          ball.vx = ball.vx - 2 * dot * normal.x;
+          ball.vy = ball.vy - 2 * dot * normal.y;
+          
+          // Move the ball just outside the collision
+          ball.x = closest.x + normal.x * ball.radius;
+          ball.y = closest.y + normal.y * ball.radius;
+          
+          // Apply energy retention (more bouncy if closer to 1)
+          ball.vx *= restitution;
+          ball.vy *= restitution;
+        }
+      }
+      
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the spinning hexagon
+      ctx.beginPath();
+      const hexVertices = getHexagonVertices(rotation);
+      ctx.moveTo(hexVertices[0].x, hexVertices[0].y);
+      for (let i = 1; i < hexVertices.length; i++) {
+        ctx.lineTo(hexVertices[i].x, hexVertices[i].y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Draw the red ball
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+      
+      requestAnimationFrame(animate);
+    }
+    
+    animate();
+  });
+</script>
+  
+  <!-- Simulation Container (Fixed at Bottom Left) -->
+  <div id="simulationContainer">
+    <canvas id="simulationCanvas" width="200" height="200" style="background: transparent;"></canvas>
+  </div>
+  
+  <!-- Section Switching Script -->
+  <script>
     function showSection(event, sectionId) {
       if (event) event.preventDefault();
       const sections = document.querySelectorAll('.hero');
@@ -443,157 +747,6 @@
         showSection(null, 'home');
       }
     });
-</script>
-
-<!-- Load Google Charts -->
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  // ----- Update Date/Time (Pacific Time) -----
-  function updateDateTime() {
-    const now = new Date();
-    const options = {
-      timeZone: "America/Los_Angeles",
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true
-    };
-    const formatter = new Intl.DateTimeFormat([], options);
-    // Ensure an element with id "current-datetime" exists (if used elsewhere)
-    const dtElem = document.getElementById('current-datetime');
-    if(dtElem) dtElem.textContent = formatter.format(now);
-  }
-  updateDateTime();
-  setInterval(updateDateTime, 1000);
-
-  // ----- Draw Google Charts -----
-  google.charts.load('current', { packages: ['corechart'] });
-  google.charts.setOnLoadCallback(drawCharts);
-
-  function drawCharts() {
-    // Crypto Pie Chart
-    var cryptoData = google.visualization.arrayToDataTable([
-      ['Asset', 'Allocation'],
-      ['BNB', 78.44],
-      ['BTC', 9.5],
-      ['WBETH', 3.94],
-      ['BNSOL', 3.81],
-      ['USDT', 3.04]
-    ]);
-    var cryptoOptions = {
-      title: 'Crypto Portfolio',
-      titleTextStyle: { color: 'white' },
-      pieHole: 0.4,
-      colors: ["#3b82f6", "#f59e0b", "#10b981", "#6366f1", "#ef4444"],
-      legend: { position: 'bottom', textStyle: { color: 'white' } },
-      pieSliceTextStyle: { color: 'white' },
-      backgroundColor: 'transparent'
-    };
-    var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
-    cryptoChart.draw(cryptoData, cryptoOptions);
-
-    // Stock Pie Chart
-    var stockAllocations = {
-      "Fixed Income": 28.6,
-      "Royal Bank of Canada": 4.2,
-      "Brookfield Asset Management Limited": 3.1,
-      "Cash (Bank Overdraft)": 2.5,
-      "Apple Inc.": 2.4,
-      "Dollarama Inc.": 2.3,
-      "Intact Financial Corporation": 2.3,
-      "Thomson Reuters Corporation": 2.3,
-      "Meta Platforms Inc.": 2.2,
-      "Others": 50.1
-    };
-    // Map names to ticker IDs where available
-    var stockTickers = {
-      "Royal Bank of Canada": "RY.TO",
-      "Brookfield Asset Management Limited": "BAM-A.TO",
-      "Apple Inc.": "AAPL",
-      "Dollarama Inc.": "DOL.TO",
-      "Intact Financial Corporation": "IFC.TO",
-      "Thomson Reuters Corporation": "TRI",
-      "Meta Platforms Inc.": "META"
-    };
-    var stocksArray = [['Asset', 'Allocation']];
-    for (var key in stockAllocations) {
-      var label = stockTickers[key] || key;
-      stocksArray.push([label, stockAllocations[key]]);
-    }
-    var stocksData = google.visualization.arrayToDataTable(stocksArray);
-    var stocksOptions = {
-      title: 'Stock Portfolio',
-      titleTextStyle: { color: 'white' },
-      pieHole: 0.4,
-      colors: ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6", "#14b8a6", "#f97316", "#34d399", "#a78bfa"],
-      legend: { position: 'bottom', textStyle: { color: 'white' } },
-      pieSliceTextStyle: { color: 'white' },
-      backgroundColor: 'transparent'
-    };
-    var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
-    stocksChart.draw(stocksData, stocksOptions);
-  }
-
-  // ----- Fetch Crypto Prices from CoinGecko -----
-  function fetchCryptoPrices() {
-    const cryptoMapping = {
-      "BNB": "binancecoin",
-      "BTC": "bitcoin",
-      "WBETH": "weth",
-      "BNSOL": "solana",
-      "USDT": "tether"
-    };
-    const cryptoIds = Object.values(cryptoMapping).join(",");
-    fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`)
-      .then(response => response.json())
-      .then(data => {
-        let html = "<ul>";
-        for (let asset in cryptoMapping) {
-          const coinId = cryptoMapping[asset];
-          const price = data[coinId] && data[coinId].usd ? data[coinId].usd : "N/A";
-          html += `<li>${asset}: $${typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price}</li>`;
-        }
-        html += "</ul>";
-        document.getElementById('crypto-prices').innerHTML = html;
-      })
-      .catch(error => {
-        console.error("Error fetching crypto prices:", error);
-        document.getElementById('crypto-prices').innerHTML = "<p>Error fetching crypto prices.</p>";
-      });
-  }
-  fetchCryptoPrices();
-
-  // Stock Prices (Using Finnhub API)
-  function fetchStockPricesFinnhub() {
-    const stockTickersArr = ["RY", "BAM", "AAPL", "DOL", "TRI", "META"];
-    const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";  // Replace with your actual API key
-    Promise.all(stockTickersArr.map(ticker =>
-      fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
-        .then(response => response.json())
-        .then(data => ({ ticker, price: data.c }))
-        .catch(error => ({ ticker, price: null }))
-    ))
-    .then(results => {
-      let html = "<ul>";
-      results.forEach(item => {
-        html += `<li>${item.ticker}: $${item.price && item.price > 0 ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "N/A"}</li>`;
-      });
-      html += "</ul>";
-      document.getElementById('stock-prices').innerHTML = html;
-    })
-    .catch(error => {
-      console.error("Error fetching stock prices via Finnhub:", error);
-      document.getElementById('stock-prices').innerHTML = "<p>Error fetching stock prices. Please try again later.</p>";
-    });
-  }
-  fetchStockPricesFinnhub();
-});
-</script>
-
+  </script>
 </body>
 </html>
