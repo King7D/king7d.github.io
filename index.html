@@ -477,7 +477,7 @@
           ['BTC', 9.5],
           ['WBETH', 3.94],
           ['BNSOL', 3.81],
-          ['USDT', 3.04]
+          ['USDT', 4.31]
         ]);
         var cryptoOptions = {
           title: 'Crypto Portfolio',
@@ -577,7 +577,6 @@
     
       // ----- Fetch Stock Prices from Finnhub API -----
       function fetchStockPricesFinnhub() {
-        // Define only tickers that have trading data (Cash is excluded)
         const stockTickersArr = ["AAPL", "META", "MSFT", "NVDA", "JPM", "AVGO", "COST", "V","RY", "BAM", "DOL", "TRI","YINN"];
         const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
         Promise.all(stockTickersArr.map(ticker =>
@@ -891,8 +890,6 @@
     startTradingSimulation();
   });
   </script>
-  
-  
   
 </body>
 </html>
