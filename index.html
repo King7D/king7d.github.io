@@ -890,6 +890,20 @@
     startTradingSimulation();
   });
   </script>
+
+<script>
+  // scroll windows to the top 
+  function showSection(event, sectionId) {
+    if (event) event.preventDefault();
+    const sections = document.querySelectorAll('.hero');
+    sections.forEach(section => section.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    window.history.pushState(null, null, `#${sectionId}`);
+    // Scroll to top when switching sections
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
   
 </body>
 </html>
