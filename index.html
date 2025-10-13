@@ -370,7 +370,7 @@
   <section id="investment" class="hero">
     <div class="section-content text-center">
       <div class="fade-in delay-1">
-        <h2 class="text-4xl font-bold mb-8" style="color: white;">Investment Portfolio</h2>
+        <h2 class="text-4xl font-bold mb-8" style="color: white;">Investment Portfolio [2025.10]</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Crypto Column -->
@@ -478,11 +478,11 @@
         // Crypto Pie Chart
         var cryptoData = google.visualization.arrayToDataTable([
           ['Asset', 'Allocation'],
-          ['BNB', 78.44],
-          ['BTC', 9.5],
-          ['WBETH', 3.94],
-          ['BNSOL', 3.81],
-          ['USDT', 4.31]
+          ['BNB', 82.18],
+          ['BTC', 5.57],
+          ['WBETH', 3.1],
+          ['BNSOL', 32.58],
+          ['USDT', 1.86]
         ]);
         var cryptoOptions = {
           title: 'Crypto Portfolio',
@@ -498,39 +498,39 @@
     
         // Stock Pie Chart with new allocations
         var stockAllocations = {
-          "Apple Inc.": 8,
-          "Meta Platforms Inc.": 7.1,
-          "Microsoft Corp - Common": 4.0,
-          "NVIDIA Corporation": 3.7,
-          "JPMorgan Chase & Company": 2.2,
-          "Cash (Bank Overdraft)": 4.6,
-          "Broadcom Inc.": 1.9,
-          "Costco Wholesale Corporation": 1.8,
-          "Visa Inc.": 1.8,
-          "Fixed Income": 28.6,
-          "Royal Bank of Canada": 4.2,
-          "Brookfield Asset Management Limited": 3.1,
-          "Dollarama Inc.": 2.3,
-          "Intact Financial Corporation": 2.3,
-          "Thomson Reuters Corporation": 2.3,
+          // "Apple Inc.": 8,
+          // "Meta Platforms Inc.": 7.1,
+          // "Microsoft Corp - Common": 4.0,
+          // "NVIDIA Corporation": 3.7,
+          // "JPMorgan Chase & Company": 2.2,
+          "Cash (Bank Overdraft)": 14.6,
+          // "Broadcom Inc.": 1.9,
+          // "Costco Wholesale Corporation": 1.8,
+          // "Visa Inc.": 1.8,
+          "Fixed Income": 42,
+          "Royal Bank of Canada": 21.2,
+          "Brookfield Asset Management Limited": 10,
+          "Dollarama Inc.": 10.3,
+          // "Intact Financial Corporation": 2.3,
+          // "Thomson Reuters Corporation": 2.3,
           "Yinn":14,
-          "Others": 8.1
+          "Others": 2.1
         };
         // Map names to ticker IDs (Cash remains without a ticker)
         var stockTickers = {
-          "Apple Inc.": "AAPL",
-          "Meta Platforms Inc.": "META",
-          "Microsoft Corp - Common": "MSFT",
-          "NVIDIA Corporation": "NVDA",
-          "JPMorgan Chase & Company": "JPM",
-          "Broadcom Inc.": "AVGO",
-          "Costco Wholesale Corporation": "COST",
-          "Visa Inc.": "V",
-          "Royal Bank of Canada": "RY",
-          "Brookfield Asset Management Limited": "BAM",
-          "Dollarama Inc.": "DOL",
-          "Intact Financial Corporation": "IFC.TO",
-          "Thomson Reuters Corporation": "TRI",
+          // "Apple Inc.": "AAPL",
+          // "Meta Platforms Inc.": "META",
+          // "Microsoft Corp - Common": "MSFT",
+          // "NVIDIA Corporation": "NVDA",
+          // "JPMorgan Chase & Company": "JPM",
+          // "Broadcom Inc.": "AVGO",
+          // "Costco Wholesale Corporation": "COST",
+          // "Visa Inc.": "V",
+          "Royal Bank of Canada": "Royal Bank of Canada",
+          "Brookfield Asset Management Limited": "Brookfield Asset Management Limited",
+          "Dollarama Inc.": "Dollarama Inc",
+          // "Intact Financial Corporation": "IFC.TO",
+          // "Thomson Reuters Corporation": "TRI",
         };
         var stocksArray = [['Asset', 'Allocation']];
         for (var key in stockAllocations) {
@@ -557,8 +557,7 @@
           "BNB": "binancecoin",
           "BTC": "bitcoin",
           "WBETH": "weth",
-          "BNSOL": "solana",
-          "USDT": "tether"
+          "BNSOL": "solana"
         };
         const cryptoIds = Object.values(cryptoMapping).join(",");
         fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`)
@@ -582,7 +581,7 @@
     
       // ----- Fetch Stock Prices from Finnhub API -----
       function fetchStockPricesFinnhub() {
-        const stockTickersArr = ["AAPL", "META", "MSFT", "NVDA", "JPM", "AVGO", "COST", "V","RY", "BAM", "DOL", "TRI","YINN"];
+        const stockTickersArr = ["RY", "BAM", "DOL", "YINN"];
         const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
         Promise.all(stockTickersArr.map(ticker =>
           fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
