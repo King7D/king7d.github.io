@@ -15,7 +15,8 @@
       --link-b:#60a5fa;         /* blue */
     }
 
-    html,body{height:100%;}
+    html{scroll-behavior:smooth;}
+
     body{
       font-family:'Roboto',sans-serif;
       background:var(--bg-deep);
@@ -24,11 +25,12 @@
       padding:0;
       display:flex;
       justify-content:center;
-      align-items:center;
+      align-items:flex-start;   /* top-align for natural scrolling */
       color:white;
-      opacity:0;                 /* fade-in on load */
+      opacity:0;                /* fade-in on load */
       transition:opacity .5s ease-in-out;
-      overflow:hidden;           /* keep canvas edges clean */
+      overflow-y:auto;          /* allow vertical scroll */
+      overflow-x:hidden;        /* avoid horizontal scrollbars */
     }
 
     /* Full-screen animated background (behind everything) */
@@ -67,6 +69,7 @@
       max-width:800px;
       text-align:center;
       padding:2rem;
+      margin:2rem 1rem 4rem; /* breathing room at top/bottom */
     }
 
     h1{font-size:3.5rem;font-weight:700;margin-bottom:1.5rem;}
@@ -95,23 +98,23 @@
 
   <div class="content">
     <h1 style="font-size: 2.5rem">Digit Classification</h1>
-    <p>Handwritten digit recognition is a common task in teh field of computer vision and pattern recognition,
-      often used as an introductory project to explore various machine learning algorithms.This project built
+    <p>Handwritten digit recognition is a common task in the field of computer vision and pattern recognition,
+      often used as an introductory project to explore various machine learning algorithms. This project builds
       a classifier that can accurately recognize digits from pixel data using the k-NN algorithm.
     </p>
 
     <h2 style="font-size: 2rem">Features</h2>
     <ul>
-      <li>Data Preprocessing - Normalized and combined with corresponding labels for both training and testing datasets</li>
-      <li>Model Tuning - Use cross-validation to determine the optimal number of neighbors for the KNN classifier</li>
-      <li>Model Evaluation - Evaluated using accuracy metrics and a confusion matrix</li>
-      <li>Visualization - Providing insights into how well the model is recognizing patterns in the data</li>
+      <li>Data Preprocessing – Normalize and combine with corresponding labels for both training and testing datasets</li>
+      <li>Model Tuning – Use cross-validation to determine the optimal number of neighbors for the KNN classifier</li>
+      <li>Model Evaluation – Evaluate using accuracy metrics and a confusion matrix</li>
+      <li>Visualization – Provide insights into how well the model recognizes patterns in the data</li>
     </ul>
 
     <h2 style="font-size: 2rem">Libraries</h2>
     <ul>
       <li>Data manipulation and visualization: tidyverse</li>
-      <li>Model building, preprocessing, and evluation: tidymodels</li>
+      <li>Model building, preprocessing, and evaluation: tidymodels</li>
       <li>k-NN algorithm: kknn</li>
       <li>Plot: ggplot2</li>
       <li>Controlling output: repr</li>
@@ -136,7 +139,7 @@
     });
   </script>
 
-  <!-- Constellation/network background (distinct from WQ, but similar vibe) -->
+  <!-- Constellation/network background (distinct from WQ, similar feel) -->
   <script>
     (() => {
       const canvas = document.getElementById('bgCanvas');

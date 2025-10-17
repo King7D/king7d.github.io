@@ -15,7 +15,8 @@
       --link-b:#60a5fa;         /* blue */
     }
 
-    html,body{height:100%;}
+    html{scroll-behavior:smooth;}
+
     body{
       font-family:'Roboto',sans-serif;
       background:var(--bg-deep);
@@ -24,11 +25,12 @@
       padding:0;
       display:flex;
       justify-content:center;
-      align-items:center;
+      align-items:flex-start;   /* top-align so the page can scroll naturally */
       color:white;
-      opacity:0;                 /* fade-in on load */
+      opacity:0;                /* fade-in on load */
       transition:opacity .5s ease-in-out;
-      overflow:hidden;           /* keep canvas edges clean */
+      overflow-y:auto;          /* allow vertical scroll */
+      overflow-x:hidden;        /* avoid horizontal scrollbars */
     }
 
     /* Full-screen animated background (behind everything) */
@@ -67,6 +69,7 @@
       max-width:800px;
       text-align:center;
       padding:2rem;
+      margin:2rem 1rem 4rem;  /* spacing from top and bottom so last line isn't flush */
     }
 
     h1{font-size:3.5rem;font-weight:700;margin-bottom:1.5rem;}
@@ -111,7 +114,7 @@
       different age groups and genders.
     </p>
 
-    <h2 style="font-size: 2rem">Dataset Description</h2>
+    <h2 style="font-size: 2 rem">Dataset Description</h2>
     <p>
       The Cleveland Heart Disease dataset includes data from individuals evaluated for heart disease at 
       the Cleveland Clinic Foundation. The dataset features the following key attributes used in our predictive
@@ -164,6 +167,7 @@
       let width, height, dpr, rafId;
       let points = [];
       let t = 0;
+      let theCount = 0;   // declare to avoid accidental globals
 
       function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);

@@ -15,8 +15,9 @@
       --link-b:#60a5fa;         /* blue */
     }
 
+    html{scroll-behavior:smooth;}
+
     /* Base layout */
-    html,body{height:100%;}
     body{
       font-family:'Roboto',sans-serif;
       background:var(--bg-deep);
@@ -25,11 +26,12 @@
       padding:0;
       display:flex;
       justify-content:center;
-      align-items:center;
+      align-items:flex-start;   /* top-align so the page can scroll naturally */
       color:white;
-      opacity:0;                 /* fade-in on load */
+      opacity:0;                /* fade-in on load */
       transition:opacity .5s ease-in-out;
-      overflow:hidden;           /* keep canvas edges clean */
+      overflow-y:auto;          /* allow vertical scroll */
+      overflow-x:hidden;        /* avoid horizontal scrollbars */
     }
 
     /* Full-screen animated background (behind everything) */
@@ -70,6 +72,7 @@
       max-width:800px;
       text-align:center;
       padding:2rem;
+      margin:2rem 1rem 4rem; /* breathing room at top/bottom */
     }
     h1{font-size:3.5rem;font-weight:700;margin-bottom:1.5rem;}
     p{font-size:1rem;line-height:1.8;margin-bottom:1.5rem;}
@@ -189,13 +192,11 @@
         t += 0.0025;
         const curlAmp = 0.25;
         for (const p of points) {
-          // Curl-ish drift
           const ax = Math.sin((p.y + t * 700) * 0.002) * curlAmp;
           const ay = Math.cos((p.x - t * 700) * 0.002) * curlAmp;
           p.vx += ax * 0.002;
           p.vy += ay * 0.002;
 
-          // Integrate
           p.x += p.vx;
           p.y += p.vy;
 
@@ -218,15 +219,14 @@
             const dx = a.x - b.x, dy = a.y - b.y;
             const d2 = dx * dx + dy * dy;
             if (d2 <= maxDist2) {
-              // Limit per-node connections to keep readability
-              if (links++ > 4) continue;
+              if (links++ > 4) continue; // limit per-node connections
 
               const d = Math.sqrt(d2);
               const alpha = 1 - d / maxDist; // closer => brighter
 
               const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
               grad.addColorStop(0, `rgba(34, 211, 238, ${alpha * 0.55})`); // cyan
-              grad.addColorStop(1, `rgba(96, 165, 250, ${alpha * 0.55})`); // blue
+              grad.addColorStop(1, `rgba(96, 165, 250, ${alpha * 0.55})`);  // blue
 
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
@@ -269,11 +269,4 @@
       window.addEventListener('resize', start, { passive: true });
       const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
       function handleMotion() { mql.matches ? renderStill() : start(); }
-      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
-      else mql.addListener(handleMotion);
-
-      handleMotion();
-    })();
-  </script>
-</body>
-</html>
+      if (mql.addEventListener) mql.addEventListener('
