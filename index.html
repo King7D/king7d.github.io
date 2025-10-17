@@ -13,23 +13,39 @@
       --primary: #3b82f6;
       --secondary: #f59e0b;
     }
-  
+
+    /* Background base --- */
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(270deg, #0f172a, #1e3a8a, #2563eb, #1d4ed8);
-      background-size: 400% 400%;
-      animation: gradientShift 30s ease infinite;
+      background: #030712; /* deep navy */
       min-height: 100vh;
       color: white;
       overflow-x: hidden;
     }
-  
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+
+    /* Full-viewport canvas behind everything */
+    #wqBgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
+      display: block;
     }
-  
+
+    /* Subtle dot texture overlay */
+    .wq-texture {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1.2px);
+      background-size: 12px 12px;
+      mix-blend-mode: soft-light;
+      opacity: 0.9;
+    }
+
     .hero {
       position: absolute;
       top: 0;
@@ -43,7 +59,7 @@
       padding: 2rem;
       box-sizing: border-box;
     }
-  
+
     /* The Home section is active by default */
     .hero.active {
       opacity: 1;
@@ -51,19 +67,18 @@
       pointer-events: all;
       transition-delay: 0.2s;
     }
-  
+
     .section-content {
       max-width: 1200px;
       margin: 0 auto;
       padding: 80px 20px;
     }
-  
+
     .nav-item {
       position: relative;
       padding: 0.5rem 1rem;
       transition: all 0.3s ease;
     }
-  
     .nav-item::after {
       content: '';
       position: absolute;
@@ -74,27 +89,22 @@
       background: var(--secondary);
       transition: width 0.3s ease;
     }
-  
-    .nav-item:hover::after {
-      width: 100%;
-    }
-  
+    .nav-item:hover::after { width: 100%; }
+
     .project-link {
       position: relative;
       transition: all 0.3s ease;
     }
-  
     .project-link:hover {
       transform: translateX(10px);
       color: var(--secondary);
     }
-  
+
     .contact-button {
       position: relative;
       overflow: hidden;
       transition: all 0.4s ease;
     }
-  
     .contact-button::after {
       content: '';
       position: absolute;
@@ -105,25 +115,19 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
       transition: left 0.6s;
     }
-  
-    .contact-button:hover::after {
-      left: 100%;
-    }
-  
-    .fade-in {
-      animation: fadeIn 0.8s ease forwards;
-    }
-  
+    .contact-button:hover::after { left: 100%; }
+
+    .fade-in { animation: fadeIn 0.8s ease forwards; }
     .delay-1 { animation-delay: 0.2s; }
     .delay-2 { animation-delay: 0.4s; }
     .delay-3 { animation-delay: 0.6s; }
     .delay-4 { animation-delay: 0.8s; }
-  
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-  
+
     .card {
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
@@ -132,17 +136,12 @@
       margin: 1rem 0;
       transition: transform 0.3s ease;
     }
-  
-    .card:hover {
-      transform: translateY(-5px);
-    }
-  
+    .card:hover { transform: translateY(-5px); }
+
     @media (max-width: 768px) {
-      .section-content {
-        padding: 40px 20px;
-      }
+      .section-content { padding: 40px 20px; }
     }
-  
+
     /* Simulation container styles */
     #simulationContainer {
       position: fixed;
@@ -153,6 +152,11 @@
   </style>
 </head>
 <body>
+
+  <!-- Background layers (behind everything) -->
+  <canvas id="wqBgCanvas" aria-hidden="true"></canvas>
+  <div class="wq-texture" aria-hidden="true"></div>
+
   <!-- Navigation -->
   <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md">
     <nav class="container mx-auto flex justify-between items-center px-4">
@@ -184,7 +188,7 @@
       </div>
     </div>
   </section>
-  
+
   <!-- About Section -->
   <section id="about" class="hero">
     <div class="section-content px-4 sm:px-6 lg:px-8">
@@ -222,11 +226,11 @@
             <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
               <li class="font-semibold">Certificate in Quantitative Finance, CQF Institute (2026.1-2026.6)</li>
               <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the Learning Incentive Scholarship</li>
-              <li class="font-semibold">Master of Business Analytics, University of British Columbia (2025‑2026)</li>
+              <li class="font-semibold">Master of Business Analytics, University of British Columbia (2025-2026)</li>
               <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the Accelerated Career Scholarship</li>
               <li class="font-semibold">Master of Financial Engineer, WorldQuant University (2025-2027)</li>
               <li class="font-semibold">Master of Business Administration, Academy Europe Open University</li>
-              <li class="font-semibold">Bachelor of Arts in Economics, University of British Columbia (2021‑2025)</li>
+              <li class="font-semibold">Bachelor of Arts in Economics, University of British Columbia (2021-2025)</li>
               <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the International Student Scholarship (Faculty of Arts)</li>
             </ul>
           </div>
@@ -236,18 +240,18 @@
       <div class="mt-16 text-center fade-in delay-4">
         <img src="pictures/group_picture.jpg" alt="Group picture with industry leaders" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
         <p class="text-xs text-gray-400 mt-2">
-          Group picture with John Kalvin (Intel Global Go‑To‑Market Operations VP &amp; GM), Dave Guzzi (Intel Global Distribution &amp; Partner Sales VP) and Ye Zong (Intel PRC GM)
+          Group picture with John Kalvin (Intel Global Go-To-Market Operations VP &amp; GM), Dave Guzzi (Intel Global Distribution &amp; Partner Sales VP) and Ye Zong (Intel PRC GM)
         </p>
       </div>
     </div>
   </section>
-  
+
   <!-- Projects Section -->
   <section id="projects" class="hero">
     <div class="section-content">
       <div class="fade-in">
         <h2 class="text-4xl font-bold mb-8 text-center">Featured Projects</h2>
-  
+
         <!-- Grid for Project Cards -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Project Card -->
@@ -342,7 +346,7 @@
             </a>
           </div>
         </div>
-  
+
         <!-- Currently Working On Section -->
         <h3 class="text-2xl font-bold mt-12 text-center">Currently Working On</h3>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
@@ -353,7 +357,7 @@
               View Progress
             </a>
           </div>
-          
+
           <div class="card">
             <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration &amp; CDN</h3>
             <p class="text-gray-300 mb-4">Optimizing AI inference performance at the edge...</p>
@@ -365,7 +369,7 @@
       </div>
     </div>
   </section>
-  
+
   <!-- Investment Section -->
   <section id="investment" class="hero">
     <div class="section-content text-center">
@@ -400,18 +404,18 @@
           </div>
         </div>
       </div>
-        <!-- Trading Simulation Card (Placed outside the grid) -->
-        <div class="mt-6 fade-in delay-4">
-          <div class="card p-6 mx-auto" style="max-width: 1200px;">
-            <h3 class="text-2xl font-bold mb-4" style="color: white;">Trading Simulation</h3>
-            <canvas id="tradingSimulationCanvas" width="1000" height="500" style="background: transparent;"></canvas>
-          </div>
+      <!-- Trading Simulation Card (Placed outside the grid) -->
+      <div class="mt-6 fade-in delay-4">
+        <div class="card p-6 mx-auto" style="max-width: 1200px;">
+          <h3 class="text-2xl font-bold mb-4" style="color: white;">Trading Simulation</h3>
+          <canvas id="tradingSimulationCanvas" width="1000" height="500" style="background: transparent;"></canvas>
         </div>
+      </div>
     </div>
   </section>
-  
+
   <!-- Contact Section -->
-  <section id="contact" class="hero active flex items-center justify-center">
+  <section id="contact" class="hero flex items-center justify-center">
     <div class="section-content text-center">
       <!-- Image -->
       <div class="fade-in delay-1">
@@ -444,7 +448,7 @@
       </div>
     </div>
   </section>
-  
+
   <!-- Google Charts Scripts -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script>
@@ -469,11 +473,11 @@
       }
       updateDateTime();
       setInterval(updateDateTime, 1000);
-    
+
       // ----- Draw Google Charts -----
       google.charts.load('current', { packages: ['corechart'] });
       google.charts.setOnLoadCallback(drawCharts);
-    
+
       function drawCharts() {
         // Crypto Pie Chart
         var cryptoData = google.visualization.arrayToDataTable([
@@ -496,41 +500,20 @@
         };
         var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
         cryptoChart.draw(cryptoData, cryptoOptions);
-    
+
         // Stock Pie Chart with new allocations
         var stockAllocations = {
-          // "Apple Inc.": 8,
-          // "Meta Platforms Inc.": 7.1,
-          // "Microsoft Corp - Common": 4.0,
-          // "NVIDIA Corporation": 3.7,
-          // "JPMorgan Chase & Company": 2.2,
           "Cash (Bank Overdraft)": 6.4,
-          // "Broadcom Inc.": 1.9,
-          // "Costco Wholesale Corporation": 1.8,
-          // "Visa Inc.": 1.8,
           "Fixed Income": 41.2,
           "Royal Bank of Canada": 21.2,
           "Brookfield Asset Management Limited": 8.9,
           "Dollarama Inc.": 10.3,
-          // "Intact Financial Corporation": 2.3,
-          // "Thomson Reuters Corporation": 2.3,
-          "Yinn":12
+          "Yinn": 12
         };
-        // Map names to ticker IDs (Cash remains without a ticker)
         var stockTickers = {
-          // "Apple Inc.": "AAPL",
-          // "Meta Platforms Inc.": "META",
-          // "Microsoft Corp - Common": "MSFT",
-          // "NVIDIA Corporation": "NVDA",
-          // "JPMorgan Chase & Company": "JPM",
-          // "Broadcom Inc.": "AVGO",
-          // "Costco Wholesale Corporation": "COST",
-          // "Visa Inc.": "V",
           "Royal Bank of Canada": "Royal Bank of Canada",
           "Brookfield Asset Management Limited": "Brookfield Asset Management Limited",
-          "Dollarama Inc.": "Dollarama Inc",
-          // "Intact Financial Corporation": "IFC.TO",
-          // "Thomson Reuters Corporation": "TRI",
+          "Dollarama Inc.": "Dollarama Inc"
         };
         var stocksArray = [['Asset', 'Allocation']];
         for (var key in stockAllocations) {
@@ -550,7 +533,7 @@
         var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
         stocksChart.draw(stocksData, stocksOptions);
       }
-    
+
       // ----- Fetch Crypto Prices from CoinGecko -----
       function fetchCryptoPrices() {
         const cryptoMapping = {
@@ -578,7 +561,7 @@
           });
       }
       fetchCryptoPrices();
-    
+
       // ----- Fetch Stock Prices from Finnhub API -----
       function fetchStockPricesFinnhub() {
         const stockTickersArr = ["RY", "BAM", "DOL", "YINN"];
@@ -605,142 +588,420 @@
       fetchStockPricesFinnhub();
     });
   </script>
-  
+
   <!-- Spinning Hexagon with Red Ball Simulation Script (Fixed at Bottom Left) -->
-<script>
-  // Wait for the window to load to ensure all elements are available
-  window.addEventListener('load', function() {
-    const canvas = document.getElementById("simulationCanvas");
-    const ctx = canvas.getContext("2d");
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-    const hexRadius = 70; // Radius of the hexagon
-    
-    let rotation = 0;             // Current rotation angle (in radians)
-    const rotationSpeed = 0.01;   // Radians per frame
-    
-    // Define the red ball with initial position, velocity, and radius
-    const ball = {
-      x: cx,
-      y: cy,
-      radius: 8,
-      vx: 2.5,
-      vy: -2.0,
-    };
-    
-    const gravity = 0.1;      // Gravitational acceleration (pixels/frame²)
-    const restitution = 1.0;  // Bounce energy retention (1.0 = perfectly bouncy)
-  
-    // Compute hexagon vertices given a rotation angle
-    function getHexagonVertices(rot) {
-      const vertices = [];
-      const sides = 6;
-      for (let i = 0; i < sides; i++) {
-        const angle = (2 * Math.PI / sides) * i + rot;
-        const x = cx + hexRadius * Math.cos(angle);
-        const y = cy + hexRadius * Math.sin(angle);
-        vertices.push({ x, y });
-      }
-      return vertices;
-    }
-    
-    // Returns the distance from point P to the line segment AB and the closest point on AB
-    function pointLineDistance(P, A, B) {
-      const ABx = B.x - A.x;
-      const ABy = B.y - A.y;
-      const APx = P.x - A.x;
-      const APy = P.y - A.y;
-      const ab2 = ABx * ABx + ABy * ABy;
-      let t = (APx * ABx + APy * ABy) / ab2;
-      t = Math.max(0, Math.min(1, t)); // Clamp t to [0,1]
-      const closestX = A.x + t * ABx;
-      const closestY = A.y + t * ABy;
-      const dx = P.x - closestX;
-      const dy = P.y - closestY;
-      return { distance: Math.hypot(dx, dy), closest: { x: closestX, y: closestY } };
-    }
-    
-    // Main animation loop
-    function animate() {
-      rotation += rotationSpeed; // Update rotation of the hexagon
-      
-      // Update ball physics
-      ball.vy += gravity;
-      ball.x += ball.vx;
-      ball.y += ball.vy;
-      
-      // Get current hexagon vertices
-      const vertices = getHexagonVertices(rotation);
-      
-      // Check collision with each edge of the hexagon
-      for (let i = 0; i < vertices.length; i++) {
-        const A = vertices[i];
-        const B = vertices[(i + 1) % vertices.length];
-        const { distance, closest } = pointLineDistance({ x: ball.x, y: ball.y }, A, B);
-        if (distance < ball.radius) {
-          // Calculate edge vector and derive a perpendicular normal
-          const edgeVec = { x: B.x - A.x, y: B.y - A.y };
-          let normal = { x: -edgeVec.y, y: edgeVec.x };
-          const normLength = Math.hypot(normal.x, normal.y);
-          normal.x /= normLength;
-          normal.y /= normLength;
-          
-          // Ensure the normal points from the edge toward the ball
-          const toBall = { x: ball.x - closest.x, y: ball.y - closest.y };
-          if (toBall.x * normal.x + toBall.y * normal.y < 0) {
-            normal.x = -normal.x;
-            normal.y = -normal.y;
-          }
-          
-          // Reflect the ball's velocity off the edge using the normal vector
-          const dot = ball.vx * normal.x + ball.vy * normal.y;
-          ball.vx = ball.vx - 2 * dot * normal.x;
-          ball.vy = ball.vy - 2 * dot * normal.y;
-          
-          // Move the ball just outside the collision
-          ball.x = closest.x + normal.x * ball.radius;
-          ball.y = closest.y + normal.y * ball.radius;
-          
-          // Apply energy retention (more bouncy if closer to 1)
-          ball.vx *= restitution;
-          ball.vy *= restitution;
+  <script>
+    // Wait for the window to load to ensure all elements are available
+    window.addEventListener('load', function() {
+      const canvas = document.getElementById("simulationCanvas");
+      const ctx = canvas.getContext("2d");
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const hexRadius = 70; // Radius of the hexagon
+
+      let rotation = 0;             // Current rotation angle (in radians)
+      const rotationSpeed = 0.01;   // Radians per frame
+
+      // Define the red ball with initial position, velocity, and radius
+      const ball = {
+        x: cx,
+        y: cy,
+        radius: 8,
+        vx: 2.5,
+        vy: -2.0,
+      };
+
+      const gravity = 0.1;      // Gravitational acceleration (pixels/frame²)
+      const restitution = 1.0;  // Bounce energy retention (1.0 = perfectly bouncy)
+
+      // Compute hexagon vertices given a rotation angle
+      function getHexagonVertices(rot) {
+        const vertices = [];
+        const sides = 6;
+        for (let i = 0; i < sides; i++) {
+          const angle = (2 * Math.PI / sides) * i + rot;
+          const x = cx + hexRadius * Math.cos(angle);
+          const y = cy + hexRadius * Math.sin(angle);
+          vertices.push({ x, y });
         }
+        return vertices;
       }
-      
-      // Clear the canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw the spinning hexagon
-      ctx.beginPath();
-      const hexVertices = getHexagonVertices(rotation);
-      ctx.moveTo(hexVertices[0].x, hexVertices[0].y);
-      for (let i = 1; i < hexVertices.length; i++) {
-        ctx.lineTo(hexVertices[i].x, hexVertices[i].y);
+
+      // Returns the distance from point P to the line segment AB and the closest point on AB
+      function pointLineDistance(P, A, B) {
+        const ABx = B.x - A.x;
+        const ABy = B.y - A.y;
+        const APx = P.x - A.x;
+        const APy = P.y - A.y;
+        const ab2 = ABx * ABx + ABy * ABy;
+        let t = (APx * ABx + APy * ABy) / ab2;
+        t = Math.max(0, Math.min(1, t)); // Clamp t to [0,1]
+        const closestX = A.x + t * ABx;
+        const closestY = A.y + t * ABy;
+        const dx = P.x - closestX;
+        const dy = P.y - closestY;
+        return { distance: Math.hypot(dx, dy), closest: { x: closestX, y: closestY } };
       }
-      ctx.closePath();
-      ctx.strokeStyle = 'white';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      
-      // Draw the red ball
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-      ctx.fillStyle = 'red';
-      ctx.fill();
-      
-      requestAnimationFrame(animate);
-    }
-    
-    animate();
-  });
-</script>
-  
+
+      // Main animation loop
+      function animate() {
+        rotation += rotationSpeed; // Update rotation of the hexagon
+
+        // Update ball physics
+        ball.vy += gravity;
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        // Get current hexagon vertices
+        const vertices = getHexagonVertices(rotation);
+
+        // Check collision with each edge of the hexagon
+        for (let i = 0; i < vertices.length; i++) {
+          const A = vertices[i];
+          const B = vertices[(i + 1) % vertices.length];
+          const { distance, closest } = pointLineDistance({ x: ball.x, y: ball.y }, A, B);
+          if (distance < ball.radius) {
+            // Calculate edge vector and derive a perpendicular normal
+            const edgeVec = { x: B.x - A.x, y: B.y - A.y };
+            let normal = { x: -edgeVec.y, y: edgeVec.x };
+            const normLength = Math.hypot(normal.x, normal.y);
+            normal.x /= normLength;
+            normal.y /= normLength;
+
+            // Ensure the normal points from the edge toward the ball
+            const toBall = { x: ball.x - closest.x, y: ball.y - closest.y };
+            if (toBall.x * normal.x + toBall.y * normal.y < 0) {
+              normal.x = -normal.x;
+              normal.y = -normal.y;
+            }
+
+            // Reflect the ball's velocity off the edge using the normal vector
+            const dot = ball.vx * normal.x + ball.vy * normal.y;
+            ball.vx = ball.vx - 2 * dot * normal.x;
+            ball.vy = ball.vy - 2 * dot * normal.y;
+
+            // Move the ball just outside the collision
+            ball.x = closest.x + normal.x * ball.radius;
+            ball.y = closest.y + normal.y * ball.radius;
+
+            // Apply energy retention
+            ball.vx *= restitution;
+            ball.vy *= restitution;
+          }
+        }
+
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the spinning hexagon
+        ctx.beginPath();
+        const hexVertices = getHexagonVertices(rotation);
+        ctx.moveTo(hexVertices[0].x, hexVertices[0].y);
+        for (let i = 1; i < hexVertices.length; i++) {
+          ctx.lineTo(hexVertices[i].x, hexVertices[i].y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw the red ball
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    });
+  </script>
+
   <!-- Simulation Container (Fixed at Bottom Left) -->
   <div id="simulationContainer">
     <canvas id="simulationCanvas" width="200" height="200" style="background: transparent;"></canvas>
   </div>
-  
-  <!-- Section Switching Script -->
+
+  <!-- Flow-field background animation (blue tail -> white head sparkle, 1.5s fade memory) -->
+  <script>
+    (() => {
+      const canvas = document.getElementById('wqBgCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width, height, dpr, rafId;
+      const particles = [];
+      let t = 0;
+      let lastTs = performance.now();
+      const FADE_TAU_MS = 500; // time constant; ~invisible by ~1.5s
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function resetParticle(p) {
+        p.x = Math.random() * width;
+        p.y = Math.random() * height;
+        p.speed = 0.3 + Math.random() * 0.9;   // 0.3–1.2 px/frame
+        p.life = 120 + Math.random() * 420;    // lifespan in frames
+        p.alpha = 0.15 + Math.random() * 0.45; // trail brightness
+      }
+
+      function initParticles() {
+        particles.length = 0;
+        const target = Math.floor((width * height) / 1700);
+        const count = Math.max(250, Math.min(1000, target));
+        for (let i = 0; i < count; i++) {
+          const p = { x: 0, y: 0, vx: 0, vy: 0, speed: 0, life: 0, alpha: 0 };
+          resetParticle(p);
+          particles.push(p);
+        }
+      }
+
+      // Lightweight flow field using trig (no noise libs)
+      function fieldAngle(x, y) {
+        const s1 = 0.0015, s2 = 0.0012;
+        return Math.sin(y * s1 + t * 0.7) + Math.cos(x * s2 - t * 0.35);
+      }
+
+      function drawFrame(ts) {
+        // Time-based fade so trails disappear on a ~5s horizon
+        const dt = Math.max(0, Math.min(100, ts - lastTs));
+        const fade = 1 - Math.exp(-dt / FADE_TAU_MS);
+        ctx.fillStyle = `rgba(3, 7, 18, ${fade})`;
+        ctx.fillRect(0, 0, width, height);
+
+        for (const p of particles) {
+          const a = fieldAngle(p.x, p.y);
+          p.vx = Math.cos(a) * p.speed;
+          p.vy = Math.sin(a) * p.speed;
+
+          const nx = p.x + p.vx;
+          const ny = p.y + p.vy;
+
+          // Gradient stroke: blue tail -> white head
+          const grad = ctx.createLinearGradient(p.x, p.y, nx, ny);
+          const tailAlpha = p.alpha * 0.9;
+          const headAlpha = Math.min(1, p.alpha + 0.18);
+          grad.addColorStop(0, `hsla(215, 95%, 62%, ${tailAlpha})`);  // blue tail
+          grad.addColorStop(1, `hsla(0, 0%, 100%, ${headAlpha})`);     // white head
+
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(nx, ny);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1;
+          ctx.shadowColor = 'rgba(255,255,255,0.35)';
+          ctx.shadowBlur = 6;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          if ((p.life & 7) === 0) {
+            ctx.beginPath();
+            ctx.arc(nx, ny, 0.6, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${headAlpha})`;
+            ctx.fill();
+          }
+
+          p.x = nx; p.y = ny;
+          if (--p.life < 0 || nx < 0 || ny < 0 || nx > width || ny > height) {
+            resetParticle(p);
+          }
+        }
+
+        t += 0.0035;
+        lastTs = ts;
+        rafId = requestAnimationFrame(drawFrame);
+      }
+
+      function start() {
+        cancelAnimationFrame(rafId);
+        resize();
+        ctx.fillStyle = '#030712';
+        ctx.fillRect(0, 0, width, height);
+        initParticles();
+        lastTs = performance.now();
+        requestAnimationFrame(drawFrame);
+      }
+
+      function stopAndRenderStill() {
+        cancelAnimationFrame(rafId);
+        resize();
+        ctx.fillStyle = '#030712';
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      window.addEventListener('resize', start, { passive: true });
+      const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+      function handleMotion() { mql.matches ? stopAndRenderStill() : start(); }
+      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
+      else mql.addListener(handleMotion);
+
+      handleMotion();
+    })();
+  </script>
+
+  <!-- Trading Simulation (random walk with B/S signals, 5s fading trajectory) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      let simAnimId = null; // rAF id for continuous redraw
+      const VISIBLE_WINDOW_MS = 5000; // points fade out after 5s
+
+      function startTradingSimulation() {
+        const canvas = document.getElementById("tradingSimulationCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+
+        // Clear the canvas for a fresh simulation
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Define margins for the chart area
+        const marginLeft = 50, marginRight = 20, marginTop = 20, marginBottom = 40;
+        const width = canvas.width - marginLeft - marginRight;
+        const height = canvas.height - marginTop - marginBottom;
+
+        // Generate a series of price points using a simple random walk
+        const numPoints = 20;
+        const prices = [];
+        let currentPrice = 100; // starting price
+        prices.push(currentPrice);
+        for (let i = 1; i < numPoints; i++) {
+          const change = (Math.random() * 20) - 10; // -10 .. +10
+          currentPrice = currentPrice + change;
+          prices.push(currentPrice);
+        }
+
+        // Average of all generated prices
+        const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+        function priceToY(price) {
+          if (maxPrice === minPrice) return marginTop + height / 2;
+          return marginTop + ((maxPrice - price) / (maxPrice - minPrice)) * height;
+        }
+
+        // Compute (x, y) coordinates for each point; ts assigned when revealed
+        const xSpacing = width / (numPoints - 1);
+        const coords = prices.map((price, index) => ({
+          x: marginLeft + index * xSpacing,
+          y: priceToY(price),
+          price,
+          ts: null
+        }));
+
+        let currentIndex = 0;
+        const revealInterval = 5000 / (numPoints - 1); // total 5s reveal
+
+        function drawAxes() {
+          ctx.save();
+          ctx.globalAlpha = 1;
+          ctx.strokeStyle = "white";
+          ctx.lineWidth = 1;
+          // x-axis
+          ctx.beginPath();
+          ctx.moveTo(marginLeft, marginTop + height);
+          ctx.lineTo(marginLeft + width, marginTop + height);
+          ctx.stroke();
+          // y-axis
+          ctx.beginPath();
+          ctx.moveTo(marginLeft, marginTop);
+          ctx.lineTo(marginLeft, marginTop + height);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function render() {
+          // Full redraw each frame to apply fading
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawAxes();
+
+          const now = performance.now();
+
+          // Draw segments with age-based alpha; only if both ends visible
+          for (let i = 1; i <= currentIndex; i++) {
+            const a = coords[i-1];
+            const b = coords[i];
+            if (a.ts && b.ts) {
+              const ageA = now - a.ts;
+              const ageB = now - b.ts;
+              if (ageA <= VISIBLE_WINDOW_MS && ageB <= VISIBLE_WINDOW_MS) {
+                const alpha = Math.max(0, Math.min(1,
+                  1 - Math.max(ageA, ageB) / VISIBLE_WINDOW_MS));
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.strokeStyle = "#f59e0b";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+                ctx.restore();
+              }
+            }
+          }
+
+          // Draw points and B/S letters with fade
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "center";
+          for (let i = 0; i <= currentIndex; i++) {
+            const pt = coords[i];
+            if (!pt.ts) continue;
+            const age = now - pt.ts;
+            if (age > VISIBLE_WINDOW_MS) continue;
+            const alpha = 1 - age / VISIBLE_WINDOW_MS;
+
+            ctx.save();
+            ctx.globalAlpha = Math.max(0.25, alpha);
+            // point
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = "white";
+            ctx.fill();
+
+            // signal
+            if (pt.price < avgPrice) {
+              ctx.fillText("B", pt.x, pt.y + 20);
+            } else if (pt.price > avgPrice) {
+              ctx.fillText("S", pt.x, pt.y - 10);
+            }
+            ctx.restore();
+          }
+
+          simAnimId = requestAnimationFrame(render);
+        }
+
+        // Reveal points over time
+        function updateSimulation() {
+          if (currentIndex < coords.length - 1) {
+            currentIndex++;
+            coords[currentIndex].ts = performance.now();
+          } else {
+            clearInterval(timer);
+            cancelAnimationFrame(simAnimId);
+            setTimeout(startTradingSimulation, 2000); // restart after short pause
+          }
+        }
+
+        // Initialize timestamps for the first point and start loops
+        coords[0].ts = performance.now();
+        render();
+        const timer = setInterval(updateSimulation, revealInterval);
+      }
+
+      // Start simulation initially
+      startTradingSimulation();
+    });
+  </script>
+
+  <!-- Section Switching Script (single source of truth) -->
   <script>
     function showSection(event, sectionId) {
       if (event) event.preventDefault();
@@ -748,7 +1009,10 @@
       sections.forEach(section => section.classList.remove('active'));
       document.getElementById(sectionId).classList.add('active');
       window.history.pushState(null, null, `#${sectionId}`);
+      // Scroll to top when switching sections
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
     window.addEventListener('DOMContentLoaded', () => {
       const hash = window.location.hash.substring(1);
       if (hash && document.getElementById(hash)) {
@@ -759,155 +1023,5 @@
     });
   </script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    function startTradingSimulation() {
-      const canvas = document.getElementById("tradingSimulationCanvas");
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-  
-      // Clear the canvas for a fresh simulation
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-      // Define margins for the chart area
-      const marginLeft = 50, marginRight = 20, marginTop = 20, marginBottom = 40;
-      const width = canvas.width - marginLeft - marginRight;
-      const height = canvas.height - marginTop - marginBottom;
-  
-      // Generate a series of price points using a simple random walk
-      const numPoints = 20;
-      const prices = [];
-      let currentPrice = 100; // starting price
-      prices.push(currentPrice);
-      for (let i = 1; i < numPoints; i++) {
-        // Random change between -10 and +10
-        const change = (Math.random() * 20) - 10;
-        currentPrice = currentPrice + change;
-        prices.push(currentPrice);
-      }
-  
-      // Calculate the average of all generated prices
-      const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-  
-      // Function to map a price value to a y-coordinate on the canvas.
-      // (Higher prices are drawn higher on the canvas.)
-      const minPrice = Math.min(...prices);
-      const maxPrice = Math.max(...prices);
-      function priceToY(price) {
-        if (maxPrice === minPrice) return marginTop + height / 2;
-        return marginTop + ((maxPrice - price) / (maxPrice - minPrice)) * height;
-      }
-  
-      // Compute (x, y) coordinates for each point (evenly spaced along the timeline)
-      const xSpacing = width / (numPoints - 1);
-      const coords = prices.map((price, index) => ({
-        x: marginLeft + index * xSpacing,
-        y: priceToY(price),
-        price: price
-      }));
-  
-      let currentIndex = 0;
-      // Total animation duration is 5 seconds
-      const interval = 5000 / (numPoints - 1);
-  
-      // Draw the axes for the chart
-      function drawAxes() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
-        // Draw x-axis
-        ctx.beginPath();
-        ctx.moveTo(marginLeft, marginTop + height);
-        ctx.lineTo(marginLeft + width, marginTop + height);
-        ctx.stroke();
-        // Draw y-axis
-        ctx.beginPath();
-        ctx.moveTo(marginLeft, marginTop);
-        ctx.lineTo(marginLeft, marginTop + height);
-        ctx.stroke();
-      }
-  
-      // Clear the canvas
-      function clearCanvas() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-  
-      // Draw the simulation: axes, connecting line, points, and trading signals
-      function drawSimulation() {
-        clearCanvas();
-        drawAxes();
-  
-        // Draw connecting lines for all revealed points
-        ctx.strokeStyle = "#f59e0b";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        for (let i = 0; i <= currentIndex; i++) {
-          const pt = coords[i];
-          if (i === 0) {
-            ctx.moveTo(pt.x, pt.y);
-          } else {
-            ctx.lineTo(pt.x, pt.y);
-          }
-        }
-        ctx.stroke();
-  
-        // Draw each point and its trading signal based on average
-        for (let i = 0; i <= currentIndex; i++) {
-          const pt = coords[i];
-          // Draw point as a small circle
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
-          ctx.fillStyle = "white";
-          ctx.fill();
-  
-          // Determine trading signal:
-          // If price is below average, label with "B" (buy) beneath the point.
-          // If price is above average, label with "S" (sell) above the point.
-          ctx.fillStyle = "white";
-          ctx.font = "bold 16px Arial";
-          ctx.textAlign = "center";
-          if (pt.price < avgPrice) {
-            ctx.fillText("B", pt.x, pt.y + 20);
-          } else if (pt.price > avgPrice) {
-            ctx.fillText("S", pt.x, pt.y - 10);
-          }
-        }
-      }
-  
-      // Reveal the next point in the simulation
-      function updateSimulation() {
-        if (currentIndex < coords.length - 1) {
-          currentIndex++;
-          drawSimulation();
-        } else {
-          clearInterval(timer);
-          // Restart the simulation after a 5-second delay
-          setTimeout(startTradingSimulation, 5000);
-        }
-      }
-  
-      // Initial draw (first point only)
-      drawSimulation();
-      const timer = setInterval(updateSimulation, interval);
-    }
-  
-    // Start the simulation for the first time
-    startTradingSimulation();
-  });
-  </script>
-
-<script>
-  // scroll windows to the top 
-  function showSection(event, sectionId) {
-    if (event) event.preventDefault();
-    const sections = document.querySelectorAll('.hero');
-    sections.forEach(section => section.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    window.history.pushState(null, null, `#${sectionId}`);
-    // Scroll to top when switching sections
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-</script>
-
-  
 </body>
 </html>
