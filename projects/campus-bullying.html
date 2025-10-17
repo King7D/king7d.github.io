@@ -269,4 +269,11 @@
       window.addEventListener('resize', start, { passive: true });
       const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
       function handleMotion() { mql.matches ? renderStill() : start(); }
-      if (mql.addEventListener) mql.addEventListener('
+      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
+      else mql.addListener(handleMotion);
+
+      handleMotion();
+    })();
+  </script>
+</body>
+</html>
