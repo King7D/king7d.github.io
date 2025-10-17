@@ -2,141 +2,270 @@
 <html lang="en">
 
 <head>
-    <!-- Head Content -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EvoNAS System Description</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(270deg, #0f172a, #1e3a8a, #3b82f6, #2d95c2);
-            background-size: 400% 400%;
-            animation: gradientShift 90s ease-in-out infinite;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            opacity: 0; /* Set initial opacity to 0 */
-            transition: opacity 0.5s ease-in-out; /* Smooth transition */
-        }
+  <!-- Head Content -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EvoNAS System Description</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <style>
+    :root{
+      --bg-deep:#030712;        /* deep navy */
+      --node:#e5f4ff;           /* soft white/blue nodes */
+      --link-a:#22d3ee;         /* cyan */
+      --link-b:#60a5fa;         /* blue */
+    }
 
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
+    /* Allow page to extend and scroll */
+    html, body { height: auto; }
 
-            25% {
-                background-position: 50% 50%;
-            }
+    body{
+      font-family:'Roboto',sans-serif;
+      background:var(--bg-deep);
+      min-height:100vh;
+      margin:0;
+      padding:0;
+      /* removed flex centering so long pages can scroll */
+      color:white;
+      opacity:0;                 /* fade-in on load */
+      transition:opacity .5s ease-in-out;
+      overflow-x:hidden;         /* keep only horizontal overflow hidden */
+      /* let vertical scroll happen naturally */
+    }
 
-            50% {
-                background-position: 100% 50%;
-            }
+    /* Full-screen animated background (behind everything) */
+    #bgCanvas{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      width:100%;
+      height:100%;
+      display:block;
+      pointer-events:none;
+    }
 
-            75% {
-                background-position: 50% 50%;
-            }
+    /* Subtle dot texture + vignette for depth */
+    .texture{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1.2px);
+      background-size:12px 12px;
+      mix-blend-mode:soft-light;
+      opacity:.9;
+    }
+    .vignette{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.35) 100%);
+    }
 
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+    .content{
+      position:relative;
+      z-index:1;
+      max-width:800px;
+      text-align:center;
+      padding:2rem;
+      margin:3rem auto 6rem; /* vertical breathing room so the page scrolls */
+    }
 
-        .content {
-            max-width: 800px;
-            text-align: center;
-            padding: 2rem;
-        }
+    h1{font-size:3.5rem;font-weight:700;margin-bottom:1.5rem;}
+    p{font-size:1rem;line-height:1.8;margin-bottom:1.5rem;}
 
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
+    /* Optional: list without bullets */
+    ul.point-form{list-style:none;padding-left:0;margin:0;}
+    ul.point-form li{margin-bottom:1rem;}
 
-        p {
-            font-size: 1rem;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Remove bullet points */
-        ul.point-form {
-            list-style-type: none;
-            padding-left: 0;
-            margin: 0;
-        }
-
-        ul.point-form li {
-            margin-bottom: 1rem;
-        }
-
-        .back-button {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 10px 20px;
-            border: 2px solid #f39c12;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #f39c12;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .back-button:hover {
-            background-color: #f39c12;
-            color: white;
-        }
-
-        
-    </style>
+    .back-button{
+      display:inline-block;margin-top:2rem;padding:10px 20px;
+      border:2px solid #f39c12;border-radius:5px;text-decoration:none;color:#f39c12;
+      transition:background-color .3s ease,color .3s ease;
+    }
+    .back-button:hover{background-color:#f39c12;color:white;}
+  </style>
 </head>
 
 <body>
 
-    <div class="content mx-auto">
-        <h1 class="mt-4 text-3xl">EvoNAS - An Affordable Network Attached Storage Solution</h1>
-        <p class="text-lg">EvoNAS is built on the robust foundation of DebianOS and is designed to provide seamless, secure, 
-            and cost-effective data storage solutions. This family NAS system is developed to offer reliable NAS functionality
-             at an affordable price.</p>
-        <img src="pictures/naslogin.png" alt="NAS Login" class="mt-4 mx-auto rounded-lg" style="width: 400px; height: auto;">
-        <p class="text-md mb-4" style="font-size: 0.7rem;">EvoNAS Login Page</p>
-        <h2 class="mt-4 text-2xl">Key Features</h2>
-            <li><strong>Interface:</strong> EvoNAS includes an intuitive web-based control panel, where users can easily manage system settings, 
-                view real-time performance metrics, and monitor network activity.</li>
-            <li><strong>Comprehensive Data Sharing Services:</strong> EvoNAS supports multiple data-sharing protocols, making 
-                it compatible with a wide variety of operating systems and devices, ensuring easy integration in mixed environments.</li>
-            <li><strong>Advanced Security:</strong> The platform provides essential features such as password and username management to ensure that data is securely
-                accessible. The login page is fortified with a clean design, responsive layout, and the ability to switch languages between English and Chinese.</li>
-            <li><strong>Debian-Based Stability:</strong> Built on Debian OS, EvoNAS inherits the stability and security of the underlying Linux system, ensuring that 
-                your data is always safe and the system runs smoothly.</li>
-            <li><strong>Power-Efficient Performance:</strong> Leveraging the lightweight and efficient nature of Linux, EvoNAS optimizes energy consumption without 
-                sacrificing performance, making it a reliable and eco-friendly solution for continuous operation.</li>
-        <img src="pictures/nascontrol.png" alt="EvoNAS Control Panel" class="mt-4 mx-auto rounded-lg" style="width: 1200px; height: auto;">
-        <p class="text-md mb-4" style="font-size: 0.7rem;">EvoNAS Control Panel</p>
+  <!-- Background layers -->
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+  <div class="texture" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
 
-        <a href="#" class="back-button mt-4 mb-16" id="backToProjects">Back to Projects</a>
-    </div>
+  <div class="content mx-auto">
+    <h1 class="mt-4 text-3xl">EvoNAS - An Affordable Network Attached Storage Solution</h1>
+    <p class="text-lg">
+      EvoNAS is built on the robust foundation of DebianOS and is designed to provide seamless, secure, 
+      and cost-effective data storage solutions. This family NAS system is developed to offer reliable NAS functionality
+      at an affordable price.
+    </p>
 
-    <script>
-        window.addEventListener('load', function () {
-            document.body.style.opacity = 1;
-        });
+    <img src="pictures/naslogin.png" alt="NAS Login" class="mt-4 mx-auto rounded-lg" style="width: 400px; height: auto;">
+    <p class="text-md mb-4" style="font-size: 0.7rem;">EvoNAS Login Page</p>
 
-        document.getElementById('backToProjects').addEventListener('click', function (e) {
-            e.preventDefault();
-            document.body.style.opacity = 0;
-            setTimeout(function () {
-                window.location.href = "../index.html#projects";
-            }, 500);
-        });
-    </script>
+    <h2 class="mt-4 text-2xl">Key Features</h2>
+    <ul class="point-form">
+      <li><strong>Interface:</strong> EvoNAS includes an intuitive web-based control panel, where users can easily manage system settings, 
+        view real-time performance metrics, and monitor network activity.</li>
+      <li><strong>Comprehensive Data Sharing Services:</strong> EvoNAS supports multiple data-sharing protocols, making 
+        it compatible with a wide variety of operating systems and devices, ensuring easy integration in mixed environments.</li>
+      <li><strong>Advanced Security:</strong> The platform provides essential features such as password and username management to ensure that data is securely
+        accessible. The login page is fortified with a clean design, responsive layout, and the ability to switch languages between English and Chinese.</li>
+      <li><strong>Debian-Based Stability:</strong> Built on Debian OS, EvoNAS inherits the stability and security of the underlying Linux system, ensuring that 
+        your data is always safe and the system runs smoothly.</li>
+      <li><strong>Power-Efficient Performance:</strong> Leveraging the lightweight and efficient nature of Linux, EvoNAS optimizes energy consumption without 
+        sacrificing performance, making it a reliable and eco-friendly solution for continuous operation.</li>
+    </ul>
+
+    <img src="pictures/nascontrol.png" alt="EvoNAS Control Panel" class="mt-4 mx-auto rounded-lg" style="width: 1200px; height: auto;">
+    <p class="text-md mb-4" style="font-size: 0.7rem;">EvoNAS Control Panel</p>
+
+    <a href="#" class="back-button mt-4 mb-16" id="backToProjects">Back to Projects</a>
+  </div>
+
+  <script>
+    // Fade-in on load
+    window.addEventListener('load', () => { document.body.style.opacity = 1; });
+
+    // Fade-out on back
+    document.getElementById('backToProjects').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.body.style.opacity = 0;
+      setTimeout(() => { window.location.href = "../index.html#projects"; }, 500);
+    });
+  </script>
+
+  <!-- Constellation/network background (distinct from WQ, similar feel) -->
+  <script>
+    (() => {
+      const canvas = document.getElementById('bgCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width, height, dpr, rafId;
+      let points = [];
+      let t = 0;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        spawnPoints();
+      }
+
+      function spawnPoints() {
+        const density = 0.00018; // points per pixel
+        const count = Math.max(80, Math.min(280, Math.floor(width * height * density)));
+        points = [];
+        for (let i = 0; i < count; i++) {
+          points.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: (Math.random() - 0.5) * 0.35,
+            r: 1 + Math.random() * 1.2,
+            a: 0.45 + Math.random() * 0.4 // node brightness
+          });
+        }
+      }
+
+      function step() {
+        // Clear
+        ctx.clearRect(0, 0, width, height);
+
+        // Update positions with gentle curl
+        t += 0.0025;
+        const curlAmp = 0.25;
+        for (const p of points) {
+          const ax = Math.sin((p.y + t * 700) * 0.002) * curlAmp;
+          const ay = Math.cos((p.x - t * 700) * 0.002) * curlAmp;
+          p.vx += ax * 0.002;
+          p.vy += ay * 0.002;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Soft wrap
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+          if (p.y < -10) p.y = height + 10;
+          if (p.y > height + 10) p.y = -10;
+        }
+
+        // Draw links between nearby nodes
+        const maxDist = Math.min(140, Math.max(90, Math.hypot(width, height) * 0.08));
+        const maxDist2 = maxDist * maxDist;
+
+        for (let i = 0; i < points.length; i++) {
+          const a = points[i];
+          let links = 0;
+          for (let j = i + 1; j < points.length; j++) {
+            const b = points[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 <= maxDist2) {
+              if (links++ > 4) continue; // limit per-node connections
+
+              const d = Math.sqrt(d2);
+              const alpha = 1 - d / maxDist; // closer => brighter
+
+              const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+              grad.addColorStop(0, `rgba(34, 211, 238, ${alpha * 0.55})`); // cyan
+              grad.addColorStop(1, `rgba(96, 165, 250, ${alpha * 0.55})`);  // blue
+
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = grad;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Draw nodes (soft glow)
+        for (const p of points) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(229,244,255,${p.a})`;
+          ctx.shadowColor = 'rgba(180,220,255,0.35)';
+          ctx.shadowBlur = 6;
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+
+        rafId = requestAnimationFrame(step);
+      }
+
+      function start() {
+        cancelAnimationFrame(rafId);
+        resize();
+        step();
+      }
+
+      function renderStill() {
+        cancelAnimationFrame(rafId);
+        resize();
+        step();
+        cancelAnimationFrame(rafId);
+      }
+
+      window.addEventListener('resize', start, { passive: true });
+      const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+      function handleMotion() { mql.matches ? renderStill() : start(); }
+      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
+      else mql.addListener(handleMotion);
+
+      handleMotion();
+    })();
+  </script>
 
 </body>
-
 </html>

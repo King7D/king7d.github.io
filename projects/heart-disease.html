@@ -2,157 +2,286 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heart Disease Prediction Model</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(270deg, #0f172a, #1e3a8a, #3b82f6, #2d95c2);
-            background-size: 400% 400%;
-            animation: gradientShift 90s ease-in-out infinite;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            opacity: 0; /* Set initial opacity to 0 */
-            transition: opacity 0.5s ease-in-out; /* Smooth transition */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Heart Disease Prediction Model</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <style>
+    :root{
+      --bg-deep:#030712;        /* deep navy */
+      --node:#e5f4ff;           /* soft white/blue nodes */
+      --link-a:#22d3ee;         /* cyan */
+      --link-b:#60a5fa;         /* blue */
+    }
 
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
+    html,body{height:100%;}
+    body{
+      font-family:'Roboto',sans-serif;
+      background:var(--bg-deep);
+      min-height:100vh;
+      margin:0;
+      padding:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:white;
+      opacity:0;                 /* fade-in on load */
+      transition:opacity .5s ease-in-out;
+      overflow:hidden;           /* keep canvas edges clean */
+    }
 
-            25% {
-                background-position: 50% 50%;
-            }
+    /* Full-screen animated background (behind everything) */
+    #bgCanvas{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      width:100%;
+      height:100%;
+      display:block;
+      pointer-events:none;
+    }
 
-            50% {
-                background-position: 100% 50%;
-            }
+    /* Subtle dot texture + vignette for depth */
+    .texture{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1.2px);
+      background-size:12px 12px;
+      mix-blend-mode:soft-light;
+      opacity:.9;
+    }
+    .vignette{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.35) 100%);
+    }
 
-            75% {
-                background-position: 50% 50%;
-            }
+    .content{
+      position:relative;
+      z-index:1;
+      max-width:800px;
+      text-align:center;
+      padding:2rem;
+    }
 
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+    h1{font-size:3.5rem;font-weight:700;margin-bottom:1.5rem;}
+    h2{font-size:2rem;margin-top:1.5rem;}
+    p{font-size:1rem;line-height:1.8;margin-bottom:1.5rem;}
 
-        .content {
-            max-width: 800px;
-            text-align: center;
-            padding: 2rem;
-        }
+    ul{list-style:none;padding-left:0;margin:0;}
+    ul li{margin-bottom:1rem;}
 
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        p {
-            font-size: 1rem;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        ul li {
-            margin-bottom: 1rem;
-        }
-
-        .back-button {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 10px 20px;
-            border: 2px solid #f39c12;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #f39c12;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .back-button:hover {
-            background-color: #f39c12;
-            color: white;
-        }
-    </style>
+    .back-button{
+      display:inline-block;margin-top:2rem;padding:10px 20px;
+      border:2px solid #f39c12;border-radius:5px;text-decoration:none;color:#f39c12;
+      transition:background-color .3s ease,color .3s ease;
+    }
+    .back-button:hover{background-color:#f39c12;color:white;}
+  </style>
 </head>
 
 <body>
 
-    <div class="content">
-        <h1 style="font-size: 2.5rem">Heart Disease Prediction Model</h1>
-        <p>Heart disease remains a leading cause of mortality globally, with early detection playing a crucial 
-            role in managing and mitigating its impact. Utilizing advanced machine learning techniques, this 
-            project aims to enhance predictive models that assess the likelihood of heart disease based on various
-             predictors. These models are instrumental in aiding healthcare professionals to diagnose heart disease
-              swiftly and with greater accuracy, thereby facilitating prompt and effective medical interventions.</p>
+  <!-- Background layers -->
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+  <div class="texture" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
 
-        <h2 style="font-size: 2rem">Project Objective</h2>
-        <p>The primary objective of this project is to develop a predictive model using the Cleveland Heart Disease
-             dataset. This model will estimate the likelihood of an individual having heart disease based on medical
-              attributes and lifestyle factors, specifically focusing on the ability to predict the severity of heart
-               disease using variables such as chest pain type, resting blood pressure, and thalassemia across 
-               different age groups and genders.</p>
+  <div class="content">
+    <h1 style="font-size: 2.5rem">Heart Disease Prediction Model</h1>
+    <p>
+      Heart disease remains a leading cause of mortality globally, with early detection playing a crucial 
+      role in managing and mitigating its impact. Utilizing advanced machine learning techniques, this 
+      project aims to enhance predictive models that assess the likelihood of heart disease based on various
+      predictors. These models are instrumental in aiding healthcare professionals to diagnose heart disease
+      swiftly and with greater accuracy, thereby facilitating prompt and effective medical interventions.
+    </p>
 
-        <h2 style="font-size: 2rem">Dataset Description</h2>
-        <p>The Cleveland Heart Disease dataset includes data from individuals evaluated for heart disease at 
-            the Cleveland Clinic Foundation. The dataset features the following key attributes used in our predictive
-             modeling:</p>
-            <li>Chest Pain Type: Type of chest pain experienced by the patient.</li>
-            <li>Resting Blood Pressure: The resting blood pressure level of an individual.</li>
-            <li>Thalassemia: A blood disorder affecting hemoglobin in the blood.</li>
-            <li>Age: Age of the individual.</li>
-            <li>Sex: Gender of the individual.</li>
-        <p>Additional attributes include cholesterol levels, fasting blood sugar, resting electrocardiographic results,
-             and more.</p>
+    <h2 style="font-size: 2rem">Project Objective</h2>
+    <p>
+      The primary objective of this project is to develop a predictive model using the Cleveland Heart Disease
+      dataset. This model will estimate the likelihood of an individual having heart disease based on medical
+      attributes and lifestyle factors, specifically focusing on the ability to predict the severity of heart
+      disease using variables such as chest pain type, resting blood pressure, and thalassemia across 
+      different age groups and genders.
+    </p>
 
-        <h2 style="font-size: 2rem">Usage</h2>
-        <p>To use this predictive model, input the necessary medical parameters as specified in the model's input 
-            requirements. The model will output a probability score indicating the likelihood of heart disease presence.</p>
+    <h2 style="font-size: 2rem">Dataset Description</h2>
+    <p>
+      The Cleveland Heart Disease dataset includes data from individuals evaluated for heart disease at 
+      the Cleveland Clinic Foundation. The dataset features the following key attributes used in our predictive
+      modeling:
+    </p>
+    <ul>
+      <li>Chest Pain Type: Type of chest pain experienced by the patient.</li>
+      <li>Resting Blood Pressure: The resting blood pressure level of an individual.</li>
+      <li>Thalassemia: A blood disorder affecting hemoglobin in the blood.</li>
+      <li>Age: Age of the individual.</li>
+      <li>Sex: Gender of the individual.</li>
+    </ul>
+    <p>
+      Additional attributes include cholesterol levels, fasting blood sugar, resting electrocardiographic results,
+      and more.
+    </p>
 
-        <p class="text-lg mt-4"></p>
-            <a href="https://github.com/King7D/Heart-Disease-Prediction-Project" class="contact-button px-6 py-3 border rounded transition" target="_blank">Link to GitHub</a>
-        </p>
+    <h2 style="font-size: 2rem">Usage</h2>
+    <p>
+      To use this predictive model, input the necessary medical parameters as specified in the model's input 
+      requirements. The model will output a probability score indicating the likelihood of heart disease presence.
+    </p>
 
-        <a href="#" class="back-button mb-16" id="backToProjects">Back to Projects</a>
-    </div>
+    <p class="text-lg mt-4">
+      <a href="https://github.com/King7D/Heart-Disease-Prediction-Project" class="contact-button px-6 py-3 border rounded transition" target="_blank">Link to GitHub</a>
+    </p>
 
-    <script>
-        // Add fade-in effect on page load
-        window.addEventListener('load', function () {
-            document.body.style.opacity = 1;
-        });
+    <a href="#" class="back-button mb-16" id="backToProjects">Back to Projects</a>
+  </div>
 
-        // Add fade-out effect on back button click
-        document.getElementById('backToProjects').addEventListener('click', function (e) {
-            e.preventDefault();
-            document.body.style.opacity = 0;
-            setTimeout(function () {
-                window.location.href = "../index.html#projects";
-            }, 500);
-        });
-    </script>
+  <script>
+    // Fade-in on load
+    window.addEventListener('load', () => { document.body.style.opacity = 1; });
+
+    // Fade-out on back
+    document.getElementById('backToProjects').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.body.style.opacity = 0;
+      setTimeout(() => { window.location.href = "../index.html#projects"; }, 500);
+    });
+  </script>
+
+  <!-- Constellation/network background (distinct from WQ, similar feel) -->
+  <script>
+    (() => {
+      const canvas = document.getElementById('bgCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width, height, dpr, rafId;
+      let points = [];
+      let t = 0;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        spawnPoints();
+      }
+
+      function spawnPoints() {
+        const density = 0.00018; // points per pixel
+        theCount = Math.max(80, Math.min(280, Math.floor(width * height * density)));
+        points = [];
+        for (let i = 0; i < theCount; i++) {
+          points.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: (Math.random() - 0.5) * 0.35,
+            r: 1 + Math.random() * 1.2,
+            a: 0.45 + Math.random() * 0.4 // node brightness
+          });
+        }
+      }
+
+      function step() {
+        // Clear
+        ctx.clearRect(0, 0, width, height);
+
+        // Update positions with gentle curl
+        t += 0.0025;
+        const curlAmp = 0.25;
+        for (const p of points) {
+          const ax = Math.sin((p.y + t * 700) * 0.002) * curlAmp;
+          const ay = Math.cos((p.x - t * 700) * 0.002) * curlAmp;
+          p.vx += ax * 0.002;
+          p.vy += ay * 0.002;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Soft wrap
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+          if (p.y < -10) p.y = height + 10;
+          if (p.y > height + 10) p.y = -10;
+        }
+
+        // Draw links between nearby nodes
+        const maxDist = Math.min(140, Math.max(90, Math.hypot(width, height) * 0.08));
+        const maxDist2 = maxDist * maxDist;
+
+        for (let i = 0; i < points.length; i++) {
+          const a = points[i];
+          let links = 0;
+          for (let j = i + 1; j < points.length; j++) {
+            const b = points[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 <= maxDist2) {
+              if (links++ > 4) continue; // limit per-node connections
+
+              const d = Math.sqrt(d2);
+              const alpha = 1 - d / maxDist; // closer => brighter
+
+              const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+              grad.addColorStop(0, `rgba(34, 211, 238, ${alpha * 0.55})`); // cyan
+              grad.addColorStop(1, `rgba(96, 165, 250, ${alpha * 0.55})`);  // blue
+
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = grad;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Draw nodes (soft glow)
+        for (const p of points) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(229,244,255,${p.a})`;
+          ctx.shadowColor = 'rgba(180,220,255,0.35)';
+          ctx.shadowBlur = 6;
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+
+        rafId = requestAnimationFrame(step);
+      }
+
+      function start() {
+        cancelAnimationFrame(rafId);
+        resize();
+        step();
+      }
+
+      function renderStill() {
+        cancelAnimationFrame(rafId);
+        resize();
+        step();
+        cancelAnimationFrame(rafId);
+      }
+
+      window.addEventListener('resize', start, { passive: true });
+      const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+      function handleMotion() { mql.matches ? renderStill() : start(); }
+      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
+      else mql.addListener(handleMotion);
+
+      handleMotion();
+    })();
+  </script>
 
 </body>
-
 </html>
