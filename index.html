@@ -582,14 +582,15 @@
 <script>
 (() => {
   const canvas = document.getElementById('wqBgCanvas');
+
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
   let width, height, dpr, rafId;
   let t = 0, lastTs = performance.now();
 
-  const FADE_TAU_MS = 220;           // short trail (~0.5s)
-  const STAR_SPEED_FACTOR = 0.7;     // 0.7x starfield speed
+  const FADE_TAU_MS = 120;           
+  const STAR_SPEED_FACTOR = 0.7;    
 
   const particles = [];
   let starsNear = [], starsFar = [];
@@ -721,7 +722,7 @@
       p.x = nx; p.y = ny;
       if (--p.life < 0 || nx < 0 || ny < 0 || nx > width || ny > height) {
         p.x = Math.random() * width; p.y = Math.random() * height;
-        p.speed = 0.35 + Math.random() * 0.9;
+        p.speed = 0.35 + Math.random() * 0.2;
         p.life = 90 + Math.random() * 300;
         p.alpha = 0.12 + Math.random() * 0.4;
       }
@@ -730,7 +731,7 @@
     maybeShoot(ts);
     drawShooter();
 
-    t += 0.0035;
+    t += 0.0025;
     lastTs = ts;
     rafId = requestAnimationFrame(drawFrame);
   }
