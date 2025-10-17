@@ -579,135 +579,192 @@
     });
   </script>
 
-  <!-- Simulation Container (Fixed at Bottom Left) -->
-  <div id="simulationContainer">
-    <canvas id="simulationCanvas" width="200" height="200" style="background: transparent;"></canvas>
-  </div>
+<script>
+(() => {
+  const canvas = document.getElementById('wqBgCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
 
-  <!-- Flow-field background animation (blue tail -> white head sparkle, 1.5s fade memory) -->
-  <script>
-    (() => {
-      const canvas = document.getElementById('wqBgCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
+  let width, height, dpr, rafId;
+  let t = 0, lastTs = performance.now();
 
-      let width, height, dpr, rafId;
-      const particles = [];
-      let t = 0;
-      let lastTs = performance.now();
-      const FADE_TAU_MS = 500; // time constant; ~invisible by ~1.5s
+  const FADE_TAU_MS = 220;           // short trail (~0.5s)
+  const STAR_SPEED_FACTOR = 0.7;     // 0.7x starfield speed
 
-      function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const rect = canvas.getBoundingClientRect();
-        width = rect.width;
-        height = rect.height;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const particles = [];
+  let starsNear = [], starsFar = [];
+  let shooter = null, nextShootAt = 0;
+
+  const pointer = { x: 0.5, y: 0.5, active: false };
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    width = rect.width; height = rect.height;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    initAll();
+  }
+
+  function initAll() {
+    // flow particles
+    particles.length = 0;
+    const target = Math.floor((width * height) / 1600);
+    const count = Math.max(220, Math.min(900, target));
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        speed: 0.35 + Math.random() * 0.9,
+        life: 90 + Math.random() * 300,
+        alpha: 0.12 + Math.random() * 0.4
+      });
+    }
+
+    // starfield
+    const area = width * height;
+    const farCount  = Math.max(70, Math.min(240, Math.floor(area / 22000)));
+    const nearCount = Math.max(55, Math.min(160, Math.floor(area / 30000)));
+    starsFar = Array.from({ length: farCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 0.9 + 0.3,
+      phase: Math.random() * Math.PI * 2,
+      twinkle: 0.15 + Math.random() * 0.25,
+      speed: 0.015 + Math.random() * 0.03
+    }));
+    starsNear = Array.from({ length: nearCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 1.6 + 0.6,
+      phase: Math.random() * Math.PI * 2,
+      twinkle: 0.2 + Math.random() * 0.3,
+      speed: 0.04 + Math.random() * 0.08
+    }));
+
+    // shooter schedule
+    nextShootAt = performance.now() + 3000 + Math.random() * 6000;
+    shooter = null;
+  }
+
+  // ---------- Shooting star: TL -> BR, ~3–6s ----------
+  function spawnShooter(ts) {
+    const life = 180 + Math.floor(Math.random() * 180); // 3–6s @60fps
+    const x = -30 + Math.random() * 80;
+    const y = -30 + Math.random() * 80;
+    const speed = 2.2 + Math.random() * 1.6;
+    const jitter = (Math.random() - 0.5) * 0.25;
+    const len = Math.hypot(1 + jitter, 1 - jitter);
+    const vx = (1 + jitter) / len * speed;
+    const vy = (1 - jitter) / len * speed;
+    shooter = { x, y, vx, vy, life, tail: 10 + Math.random() * 12 };
+    nextShootAt = ts + 6000 + Math.random() * 4000;
+  }
+
+  function drawShooter() {
+    if (!shooter) return;
+    shooter.x += shooter.vx; shooter.y += shooter.vy; shooter.life--;
+    const tailX = shooter.x - shooter.vx * shooter.tail;
+    const tailY = shooter.y - shooter.vy * shooter.tail;
+    const grad = ctx.createLinearGradient(tailX, tailY, shooter.x, shooter.y);
+    grad.addColorStop(0, 'rgba(59,130,246,0)');
+    grad.addColorStop(1, 'rgba(255,255,255,0.95)');
+    ctx.lineWidth = 2; ctx.strokeStyle = grad;
+    ctx.beginPath(); ctx.moveTo(tailX, tailY); ctx.lineTo(shooter.x, shooter.y); ctx.stroke();
+    ctx.beginPath(); ctx.arc(shooter.x, shooter.y, 1.4, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.fill();
+    if (shooter.life <= 0 || shooter.x > width + 80 || shooter.y > height + 80) shooter = null;
+  }
+
+  // ---------- Flow field ----------
+  function fieldAngle(x, y) {
+    const s1 = 0.0015, s2 = 0.0012;
+    let base = Math.sin(y * s1 + t * 0.7) + Math.cos(x * s2 - t * 0.35);
+    if (pointer.active) {
+      const dx = x - pointer.x * width, dy = y - pointer.y * height;
+      const k = Math.min(1, 18000 / (dx*dx + dy*dy + 1));
+      base += k * Math.sin(t * 1.5);
+    }
+    return base;
+  }
+
+  function drawStars(list, parallax) {
+    for (const s of list) {
+      s.x -= s.speed * parallax * STAR_SPEED_FACTOR; // 0.7x speed
+      if (s.x < -2) s.x = width + 2;
+      const a = 0.35 + Math.sin(t * 1.8 + s.phase) * s.twinkle;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill();
+    }
+  }
+
+  function maybeShoot(ts) { if (ts >= nextShootAt && !shooter) spawnShooter(ts); }
+
+  function drawFrame(ts) {
+    const dt = Math.max(0, Math.min(100, ts - lastTs));
+    const fade = 1 - Math.exp(-dt / FADE_TAU_MS);
+    ctx.fillStyle = `rgba(3, 7, 18, ${fade})`; ctx.fillRect(0, 0, width, height);
+
+    drawStars(starsFar, 0.4);
+    drawStars(starsNear, 1.0);
+
+    for (const p of particles) {
+      const a = fieldAngle(p.x, p.y);
+      const vx = Math.cos(a) * p.speed, vy = Math.sin(a) * p.speed;
+      const nx = p.x + vx, ny = p.y + vy;
+      const grad = ctx.createLinearGradient(p.x, p.y, nx, ny);
+      grad.addColorStop(0, `hsla(215,95%,62%,${p.alpha * 0.8})`);
+      grad.addColorStop(1, `hsla(0,0%,100%,${Math.min(1, p.alpha + 0.2)})`);
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny);
+      ctx.strokeStyle = grad; ctx.lineWidth = 1; ctx.stroke();
+      p.x = nx; p.y = ny;
+      if (--p.life < 0 || nx < 0 || ny < 0 || nx > width || ny > height) {
+        p.x = Math.random() * width; p.y = Math.random() * height;
+        p.speed = 0.35 + Math.random() * 0.9;
+        p.life = 90 + Math.random() * 300;
+        p.alpha = 0.12 + Math.random() * 0.4;
       }
+    }
 
-      function resetParticle(p) {
-        p.x = Math.random() * width;
-        p.y = Math.random() * height;
-        p.speed = 0.3 + Math.random() * 0.9;   // 0.3–1.2 px/frame
-        p.life = 120 + Math.random() * 420;    // lifespan in frames
-        p.alpha = 0.15 + Math.random() * 0.45; // trail brightness
-      }
+    maybeShoot(ts);
+    drawShooter();
 
-      function initParticles() {
-        particles.length = 0;
-        const target = Math.floor((width * height) / 1700);
-        const count = Math.max(250, Math.min(1000, target));
-        for (let i = 0; i < count; i++) {
-          const p = { x: 0, y: 0, vx: 0, vy: 0, speed: 0, life: 0, alpha: 0 };
-          resetParticle(p);
-          particles.push(p);
-        }
-      }
+    t += 0.0035;
+    lastTs = ts;
+    rafId = requestAnimationFrame(drawFrame);
+  }
 
-      // Lightweight flow field using trig (no noise libs)
-      function fieldAngle(x, y) {
-        const s1 = 0.0015, s2 = 0.0012;
-        return Math.sin(y * s1 + t * 0.7) + Math.cos(x * s2 - t * 0.35);
-      }
+  function start() {
+    cancelAnimationFrame(rafId);
+    resize();
+    ctx.fillStyle = '#030712'; ctx.fillRect(0, 0, width, height);
+    lastTs = performance.now(); requestAnimationFrame(drawFrame);
+  }
+  function stopStill() {
+    cancelAnimationFrame(rafId);
+    resize();
+    ctx.fillStyle = '#030712'; ctx.fillRect(0, 0, width, height);
+  }
 
-      function drawFrame(ts) {
-        // Time-based fade so trails disappear on a ~5s horizon
-        const dt = Math.max(0, Math.min(100, ts - lastTs));
-        const fade = 1 - Math.exp(-dt / FADE_TAU_MS);
-        ctx.fillStyle = `rgba(3, 7, 18, ${fade})`;
-        ctx.fillRect(0, 0, width, height);
+  window.addEventListener('resize', start, { passive: true });
+  window.addEventListener('pointermove', (e) => {
+    const r = canvas.getBoundingClientRect();
+    pointer.x = (e.clientX - r.left) / r.width;
+    pointer.y = (e.clientY - r.top) / r.height;
+    pointer.active = true;
+    clearTimeout(pointer._to);
+    pointer._to = setTimeout(() => pointer.active = false, 1200);
+  }, { passive: true });
 
-        for (const p of particles) {
-          const a = fieldAngle(p.x, p.y);
-          p.vx = Math.cos(a) * p.speed;
-          p.vy = Math.sin(a) * p.speed;
+  const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const handleMotion = () => { mql.matches ? stopStill() : start(); };
+  if (mql.addEventListener) mql.addEventListener('change', handleMotion);
+  else mql.addListener(handleMotion);
+  handleMotion();
+})();
+</script>
 
-          const nx = p.x + p.vx;
-          const ny = p.y + p.vy;
-
-          // Gradient stroke: blue tail -> white head
-          const grad = ctx.createLinearGradient(p.x, p.y, nx, ny);
-          const tailAlpha = p.alpha * 0.9;
-          const headAlpha = Math.min(1, p.alpha + 0.18);
-          grad.addColorStop(0, `hsla(215, 95%, 62%, ${tailAlpha})`);  // blue tail
-          grad.addColorStop(1, `hsla(0, 0%, 100%, ${headAlpha})`);     // white head
-
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(nx, ny);
-          ctx.strokeStyle = grad;
-          ctx.lineWidth = 1;
-          ctx.shadowColor = 'rgba(255,255,255,0.35)';
-          ctx.shadowBlur = 6;
-          ctx.stroke();
-          ctx.shadowBlur = 0;
-
-          if ((p.life & 7) === 0) {
-            ctx.beginPath();
-            ctx.arc(nx, ny, 0.6, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${headAlpha})`;
-            ctx.fill();
-          }
-
-          p.x = nx; p.y = ny;
-          if (--p.life < 0 || nx < 0 || ny < 0 || nx > width || ny > height) {
-            resetParticle(p);
-          }
-        }
-
-        t += 0.0035;
-        lastTs = ts;
-        rafId = requestAnimationFrame(drawFrame);
-      }
-
-      function start() {
-        cancelAnimationFrame(rafId);
-        resize();
-        ctx.fillStyle = '#030712';
-        ctx.fillRect(0, 0, width, height);
-        initParticles();
-        lastTs = performance.now();
-        requestAnimationFrame(drawFrame);
-      }
-
-      function stopAndRenderStill() {
-        cancelAnimationFrame(rafId);
-        resize();
-        ctx.fillStyle = '#030712';
-        ctx.fillRect(0, 0, width, height);
-      }
-
-      window.addEventListener('resize', start, { passive: true });
-      const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-      function handleMotion() { mql.matches ? stopAndRenderStill() : start(); }
-      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
-      else mql.addListener(handleMotion);
-
-      handleMotion();
-    })();
-  </script>
 
 <!-- Trading Simulation (candlestick chart with random Buy/Sell signals, 50 candles, hold 3s; first candle offset from y-axis) -->
 <script>
