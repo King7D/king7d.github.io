@@ -589,135 +589,6 @@
     });
   </script>
 
-  <!-- Spinning Hexagon with Red Ball Simulation Script (Fixed at Bottom Left) -->
-  <script>
-    // Wait for the window to load to ensure all elements are available
-    window.addEventListener('load', function() {
-      const canvas = document.getElementById("simulationCanvas");
-      const ctx = canvas.getContext("2d");
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-      const hexRadius = 70; // Radius of the hexagon
-
-      let rotation = 0;             // Current rotation angle (in radians)
-      const rotationSpeed = 0.01;   // Radians per frame
-
-      // Define the red ball with initial position, velocity, and radius
-      const ball = {
-        x: cx,
-        y: cy,
-        radius: 8,
-        vx: 2.5,
-        vy: -2.0,
-      };
-
-      const gravity = 0.1;      // Gravitational acceleration (pixels/frame²)
-      const restitution = 1.0;  // Bounce energy retention (1.0 = perfectly bouncy)
-
-      // Compute hexagon vertices given a rotation angle
-      function getHexagonVertices(rot) {
-        const vertices = [];
-        const sides = 6;
-        for (let i = 0; i < sides; i++) {
-          const angle = (2 * Math.PI / sides) * i + rot;
-          const x = cx + hexRadius * Math.cos(angle);
-          const y = cy + hexRadius * Math.sin(angle);
-          vertices.push({ x, y });
-        }
-        return vertices;
-      }
-
-      // Returns the distance from point P to the line segment AB and the closest point on AB
-      function pointLineDistance(P, A, B) {
-        const ABx = B.x - A.x;
-        const ABy = B.y - A.y;
-        const APx = P.x - A.x;
-        const APy = P.y - A.y;
-        const ab2 = ABx * ABx + ABy * ABy;
-        let t = (APx * ABx + APy * ABy) / ab2;
-        t = Math.max(0, Math.min(1, t)); // Clamp t to [0,1]
-        const closestX = A.x + t * ABx;
-        const closestY = A.y + t * ABy;
-        const dx = P.x - closestX;
-        const dy = P.y - closestY;
-        return { distance: Math.hypot(dx, dy), closest: { x: closestX, y: closestY } };
-      }
-
-      // Main animation loop
-      function animate() {
-        rotation += rotationSpeed; // Update rotation of the hexagon
-
-        // Update ball physics
-        ball.vy += gravity;
-        ball.x += ball.vx;
-        ball.y += ball.vy;
-
-        // Get current hexagon vertices
-        const vertices = getHexagonVertices(rotation);
-
-        // Check collision with each edge of the hexagon
-        for (let i = 0; i < vertices.length; i++) {
-          const A = vertices[i];
-          const B = vertices[(i + 1) % vertices.length];
-          const { distance, closest } = pointLineDistance({ x: ball.x, y: ball.y }, A, B);
-          if (distance < ball.radius) {
-            // Calculate edge vector and derive a perpendicular normal
-            const edgeVec = { x: B.x - A.x, y: B.y - A.y };
-            let normal = { x: -edgeVec.y, y: edgeVec.x };
-            const normLength = Math.hypot(normal.x, normal.y);
-            normal.x /= normLength;
-            normal.y /= normLength;
-
-            // Ensure the normal points from the edge toward the ball
-            const toBall = { x: ball.x - closest.x, y: ball.y - closest.y };
-            if (toBall.x * normal.x + toBall.y * normal.y < 0) {
-              normal.x = -normal.x;
-              normal.y = -normal.y;
-            }
-
-            // Reflect the ball's velocity off the edge using the normal vector
-            const dot = ball.vx * normal.x + ball.vy * normal.y;
-            ball.vx = ball.vx - 2 * dot * normal.x;
-            ball.vy = ball.vy - 2 * dot * normal.y;
-
-            // Move the ball just outside the collision
-            ball.x = closest.x + normal.x * ball.radius;
-            ball.y = closest.y + normal.y * ball.radius;
-
-            // Apply energy retention
-            ball.vx *= restitution;
-            ball.vy *= restitution;
-          }
-        }
-
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw the spinning hexagon
-        ctx.beginPath();
-        const hexVertices = getHexagonVertices(rotation);
-        ctx.moveTo(hexVertices[0].x, hexVertices[0].y);
-        for (let i = 1; i < hexVertices.length; i++) {
-          ctx.lineTo(hexVertices[i].x, hexVertices[i].y);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Draw the red ball
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-    });
-  </script>
-
   <!-- Simulation Container (Fixed at Bottom Left) -->
   <div id="simulationContainer">
     <canvas id="simulationCanvas" width="200" height="200" style="background: transparent;"></canvas>
@@ -848,158 +719,240 @@
     })();
   </script>
 
-  <!-- Trading Simulation (random walk with B/S signals, 5s fading trajectory) -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      let simAnimId = null; // rAF id for continuous redraw
-      const VISIBLE_WINDOW_MS = 5000; // points fade out after 5s
+<!-- Trading Simulation (candlestick chart with random Buy/Sell signals, 50 candles, hold 3s; first candle offset from y-axis) -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    function startTradingSimulation() {
+      const canvas = document.getElementById("tradingSimulationCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
 
-      function startTradingSimulation() {
-        const canvas = document.getElementById("tradingSimulationCanvas");
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
+      // --- Config ---
+      const HOLD_MS = 3000;           // keep the finished chart on screen for 3s
+      const NUM_CANDLES = 50;         // number of candles
+      const BULL = "#10b981";         // green
+      const BEAR = "#ef4444";         // red
+      const AXIS_COLOR = "white";
+      const SIGNAL_MIN = 5;
+      const SIGNAL_MAX = 10;          // total number of signals (B+S)
 
-        // Clear the canvas for a fresh simulation
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // --- Layout ---
+      const marginLeft = 60, marginRight = 20, marginTop = 20, marginBottom = 40;
+      const width = canvas.width - marginLeft - marginRight;
+      const height = canvas.height - marginTop - marginBottom;
 
-        // Define margins for the chart area
-        const marginLeft = 50, marginRight = 20, marginTop = 20, marginBottom = 40;
-        const width = canvas.width - marginLeft - marginRight;
-        const height = canvas.height - marginTop - marginBottom;
+      // Clear & axes
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      function priceToY(price, minP, maxP) {
+        if (maxP === minP) return marginTop + height / 2;
+        return marginTop + ((maxP - price) / (maxP - minP)) * height;
+      }
+      function drawAxes(minP, maxP) {
+        ctx.strokeStyle = AXIS_COLOR;
+        ctx.lineWidth = 1;
+        // x-axis
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, marginTop + height);
+        ctx.lineTo(marginLeft + width, marginTop + height);
+        ctx.stroke();
+        // y-axis
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, marginTop);
+        ctx.lineTo(marginLeft, marginTop + height);
+        ctx.stroke();
 
-        // Generate a series of price points using a simple random walk
-        const numPoints = 20;
-        const prices = [];
-        let currentPrice = 100; // starting price
-        prices.push(currentPrice);
-        for (let i = 1; i < numPoints; i++) {
-          const change = (Math.random() * 20) - 10; // -10 .. +10
-          currentPrice = currentPrice + change;
-          prices.push(currentPrice);
-        }
-
-        // Average of all generated prices
-        const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-
-        const minPrice = Math.min(...prices);
-        const maxPrice = Math.max(...prices);
-        function priceToY(price) {
-          if (maxPrice === minPrice) return marginTop + height / 2;
-          return marginTop + ((maxPrice - price) / (maxPrice - minPrice)) * height;
-        }
-
-        // Compute (x, y) coordinates for each point; ts assigned when revealed
-        const xSpacing = width / (numPoints - 1);
-        const coords = prices.map((price, index) => ({
-          x: marginLeft + index * xSpacing,
-          y: priceToY(price),
-          price,
-          ts: null
-        }));
-
-        let currentIndex = 0;
-        const revealInterval = 5000 / (numPoints - 1); // total 5s reveal
-
-        function drawAxes() {
-          ctx.save();
-          ctx.globalAlpha = 1;
-          ctx.strokeStyle = "white";
-          ctx.lineWidth = 1;
-          // x-axis
-          ctx.beginPath();
-          ctx.moveTo(marginLeft, marginTop + height);
-          ctx.lineTo(marginLeft + width, marginTop + height);
-          ctx.stroke();
-          // y-axis
-          ctx.beginPath();
-          ctx.moveTo(marginLeft, marginTop);
-          ctx.lineTo(marginLeft, marginTop + height);
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        function render() {
-          // Full redraw each frame to apply fading
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          drawAxes();
-
-          const now = performance.now();
-
-          // Draw segments with age-based alpha; only if both ends visible
-          for (let i = 1; i <= currentIndex; i++) {
-            const a = coords[i-1];
-            const b = coords[i];
-            if (a.ts && b.ts) {
-              const ageA = now - a.ts;
-              const ageB = now - b.ts;
-              if (ageA <= VISIBLE_WINDOW_MS && ageB <= VISIBLE_WINDOW_MS) {
-                const alpha = Math.max(0, Math.min(1,
-                  1 - Math.max(ageA, ageB) / VISIBLE_WINDOW_MS));
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.strokeStyle = "#f59e0b";
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(a.x, a.y);
-                ctx.lineTo(b.x, b.y);
-                ctx.stroke();
-                ctx.restore();
-              }
-            }
-          }
-
-          // Draw points and B/S letters with fade
-          ctx.font = "bold 16px Arial";
-          ctx.textAlign = "center";
-          for (let i = 0; i <= currentIndex; i++) {
-            const pt = coords[i];
-            if (!pt.ts) continue;
-            const age = now - pt.ts;
-            if (age > VISIBLE_WINDOW_MS) continue;
-            const alpha = 1 - age / VISIBLE_WINDOW_MS;
-
-            ctx.save();
-            ctx.globalAlpha = Math.max(0.25, alpha);
-            // point
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
-            ctx.fillStyle = "white";
-            ctx.fill();
-
-            // signal
-            if (pt.price < avgPrice) {
-              ctx.fillText("B", pt.x, pt.y + 20);
-            } else if (pt.price > avgPrice) {
-              ctx.fillText("S", pt.x, pt.y - 10);
-            }
-            ctx.restore();
-          }
-
-          simAnimId = requestAnimationFrame(render);
-        }
-
-        // Reveal points over time
-        function updateSimulation() {
-          if (currentIndex < coords.length - 1) {
-            currentIndex++;
-            coords[currentIndex].ts = performance.now();
-          } else {
-            clearInterval(timer);
-            cancelAnimationFrame(simAnimId);
-            setTimeout(startTradingSimulation, 2000); // restart after short pause
-          }
-        }
-
-        // Initialize timestamps for the first point and start loops
-        coords[0].ts = performance.now();
-        render();
-        const timer = setInterval(updateSimulation, revealInterval);
+        // y labels (top/bottom only)
+        ctx.fillStyle = "white";
+        ctx.font = "12px Inter, Arial";
+        ctx.textAlign = "right";
+        ctx.fillText(maxP.toFixed(2), marginLeft - 8, marginTop + 10);
+        ctx.fillText(minP.toFixed(2), marginLeft - 8, marginTop + height - 2);
       }
 
-      // Start simulation initially
-      startTradingSimulation();
-    });
-  </script>
+      // --- Data generation (random OHLC candles) ---
+      function randNorm() {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      }
+
+      const candles = []; // {o,h,l,c}
+      let lastClose = 100;
+      for (let i = 0; i < NUM_CANDLES; i++) {
+        const open  = lastClose;
+        const delta = randNorm() * 3; // volatility
+        const close = open + delta;
+        const wickUp = Math.abs(randNorm()) * 1.5 + 0.5;
+        const wickDn = Math.abs(randNorm()) * 1.5 + 0.5;
+        const high = Math.max(open, close) + wickUp;
+        const low  = Math.min(open, close) - wickDn;
+        candles.push({ o: open, h: high, l: low, c: close });
+        lastClose = close;
+      }
+
+      // Determine y-scale with padding
+      const minPrice = Math.min(...candles.map(k => k.l));
+      const maxPrice = Math.max(...candles.map(k => k.h));
+      const pad = (maxPrice - minPrice) * 0.08 || 1;
+      const yMin = minPrice - pad;
+      const yMax = maxPrice + pad;
+
+      drawAxes(yMin, yMax);
+
+      // --- X positions & candle width ---
+      // First estimate spacing/body, compute a small right-shift offset to avoid the y-axis,
+      // then recompute spacing/body accurately across the remaining width.
+      const xSpacingRaw = width / (NUM_CANDLES - 1);
+      const tempBodyWidth = Math.max(4, Math.min(24, xSpacingRaw * 0.6));
+      const offsetX = Math.max(tempBodyWidth / 2 + 6, 12);           // shift away from y-axis
+      const xSpacing = (width - offsetX) / (NUM_CANDLES - 1);
+      const bodyWidth = Math.max(4, Math.min(24, xSpacing * 0.6));
+
+      const xCenterAt = (i) => marginLeft + offsetX + i * xSpacing;
+
+      function drawCandle(i) {
+        const { o, h, l, c } = candles[i];
+        const xCenter = xCenterAt(i);
+
+        const yOpen  = priceToY(o, yMin, yMax);
+        const yClose = priceToY(c, yMin, yMax);
+        const yHigh  = priceToY(h, yMin, yMax);
+        const yLow   = priceToY(l, yMin, yMax);
+
+        const isBull = c >= o;
+        const color = isBull ? BULL : BEAR;
+
+        // Wick
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(xCenter, yHigh);
+        ctx.lineTo(xCenter, yLow);
+        ctx.stroke();
+
+        // Body
+        const top = Math.min(yOpen, yClose);
+        const bottom = Math.max(yOpen, yClose);
+        const bodyHeight = Math.max(1, bottom - top);
+        ctx.fillStyle = color;
+        ctx.fillRect(xCenter - bodyWidth / 2, top, bodyWidth, bodyHeight);
+      }
+
+      // --- Signals generation ---
+      const meanClose = candles.reduce((s, k) => s + k.c, 0) / candles.length;
+
+      const totalSignals = Math.floor(Math.random() * (SIGNAL_MAX - SIGNAL_MIN + 1)) + SIGNAL_MIN;
+      const minEach = 1;
+      let buyTarget = Math.max(minEach, Math.floor(totalSignals / 2));
+      let sellTarget = totalSignals - buyTarget;
+
+      const buysEligible = [];
+      const sellsEligible = [];
+      for (let i = 0; i < NUM_CANDLES; i++) {
+        if (candles[i].c < meanClose) buysEligible.push(i);
+        else if (candles[i].c > meanClose) sellsEligible.push(i);
+      }
+
+      function shuffle(a){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+      function sampleUnique(list, k, used) {
+        const out = [];
+        const arr = shuffle(list.slice());
+        for (let i = 0; i < arr.length && out.length < k; i++) {
+          if (!used.has(arr[i])) { out.push(arr[i]); used.add(arr[i]); }
+        }
+        return out;
+      }
+
+      const usedIdx = new Set();
+      const buyIdxs  = sampleUnique(buysEligible, buyTarget, usedIdx);
+      const sellIdxs = sampleUnique(sellsEligible, sellTarget, usedIdx);
+
+      function fillFromAll(targetCount, typeIdxs) {
+        if (typeIdxs.length >= targetCount) return;
+        const remaining = [];
+        for (let i = 0; i < NUM_CANDLES; i++) if (!usedIdx.has(i)) remaining.push(i);
+        shuffle(remaining);
+        while (typeIdxs.length < targetCount && remaining.length) {
+          const i = remaining.pop();
+          typeIdxs.push(i);
+          usedIdx.add(i);
+        }
+      }
+      fillFromAll(buyTarget, buyIdxs);
+      fillFromAll(sellTarget, sellIdxs);
+
+      const signalsByIndex = {};
+      buyIdxs.forEach(i => signalsByIndex[i] = 'B');
+      sellIdxs.forEach(i => signalsByIndex[i] = 'S');
+
+      function drawSignal(i, type) {
+        const xCenter = xCenterAt(i);
+        const k = candles[i];
+        if (!k) return;
+        if (type === 'B') {
+          const y = priceToY(k.l, yMin, yMax) + 14; // below candle
+          // Up triangle
+          ctx.fillStyle = BULL;
+          ctx.beginPath();
+          ctx.moveTo(xCenter, y - 8);
+          ctx.lineTo(xCenter - 7, y + 6);
+          ctx.lineTo(xCenter + 7, y + 6);
+          ctx.closePath();
+          ctx.fill();
+          // Label
+          ctx.font = "bold 14px Inter, Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("B", xCenter, y + 20);
+        } else if (type === 'S') {
+          const y = priceToY(k.h, yMin, yMax) - 14; // above candle
+          // Down triangle
+          ctx.fillStyle = BEAR;
+          ctx.beginPath();
+          ctx.moveTo(xCenter, y + 8);
+          ctx.lineTo(xCenter - 7, y - 6);
+          ctx.lineTo(xCenter + 7, y - 6);
+          ctx.closePath();
+          ctx.fill();
+          // Label
+          ctx.font = "bold 14px Inter, Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("S", xCenter, y - 12);
+        }
+      }
+
+      // --- Reveal candles over 5s; draw signals when their candle appears; hold 3s; regenerate ---
+      let currentIndex = -1;
+      const revealInterval = 5000 / (NUM_CANDLES - 1);
+
+      function step() {
+        currentIndex++;
+        if (currentIndex === 0) {
+          drawCandle(0);
+          if (signalsByIndex[0]) drawSignal(0, signalsByIndex[0]);
+        } else if (currentIndex < NUM_CANDLES) {
+          drawCandle(currentIndex);
+          if (signalsByIndex[currentIndex]) drawSignal(currentIndex, signalsByIndex[currentIndex]);
+        } else {
+          clearInterval(timer);
+          setTimeout(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            startTradingSimulation();
+          }, HOLD_MS);
+        }
+      }
+
+      const timer = setInterval(step, revealInterval);
+      step(); // draw first immediately
+    }
+
+    // kick off
+    startTradingSimulation();
+  });
+</script>
+
+
+
 
   <!-- Section Switching Script (single source of truth) -->
   <script>
