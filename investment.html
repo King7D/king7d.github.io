@@ -343,7 +343,7 @@
             const k = candles[i];
             ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center";
             if (type === 'B') {
-                ctx.fillStyle = BULL; // Now using #10b981 (Green)
+                ctx.fillStyle = BULL; // Green
                 ctx.fillText("▲", x, priceToY(k.l, yMin, yMax) + 15);
             } else {
                 ctx.fillStyle = BEAR;
@@ -363,44 +363,35 @@
     const canvas = document.getElementById('globeCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let width, height;
+    let width, height, dpr;
 
     // Config
     const CONFIG = {
-      radius: 0, // calculated on resize
+      radius: 0, 
       dotCount: 600,
       dotSize: 1.5,
       rotationSpeed: 0.002,
-      colorBlue: '59, 130, 246', // Blue-500
-      colorGold: '245, 158, 11', // Amber-500
-      connectionDist: 0, // calculated on resize
+      colorBlue: '59, 130, 246', 
+      colorGold: '245, 158, 11', 
+      connectionDistSq: 0, 
     };
 
     let dots = [];
-    let angleY = 0; // Rotation around Y axis
+    let angleY = 0; 
 
     class Dot3D {
       constructor() {
-        // Random point on sphere surface using spherical coordinates
-        this.theta = Math.random() * Math.PI * 2; // Longitude
-        this.phi = Math.acos((Math.random() * 2) - 1); // Latitude
-        
-        // Base color chance
-        this.isGold = Math.random() > 0.9; // 10% Gold dots (Alpha opportunities)
+        this.theta = Math.random() * Math.PI * 2; 
+        this.phi = Math.acos((Math.random() * 2) - 1); 
+        this.isGold = Math.random() > 0.9; 
       }
 
       project(radius, rotation) {
-        // 1. Rotate around Y axis
-        // x = r * sin(phi) * cos(theta)
-        // y = r * cos(phi)
-        // z = r * sin(phi) * sin(theta)
-        
         let x = radius * Math.sin(this.phi) * Math.cos(this.theta + rotation);
         let y = radius * Math.cos(this.phi);
         let z = radius * Math.sin(this.phi) * Math.sin(this.theta + rotation);
 
-        // 2. 3D to 2D Projection
-        const scale = 400 / (400 - z); // Perspective transform
+        const scale = 400 / (400 - z); 
         const x2d = x * scale + width / 2;
         const y2d = y * scale + height / 2;
 
@@ -416,47 +407,38 @@
     }
 
     function resize() {
+      dpr = window.devicePixelRatio || 1; // HIGH-DPI FIX
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
       
-      // Radius depends on screen size, generally 35% of min dimension
+      // Set physical pixels
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      
+      // Scale context
+      ctx.scale(dpr, dpr);
+      
       CONFIG.radius = Math.min(width, height) * 0.35;
-      CONFIG.connectionDist = CONFIG.radius * 0.4; 
+      CONFIG.connectionDistSq = Math.pow(CONFIG.radius * 0.4, 2); 
     }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
-      
-      // Update rotation
       angleY += CONFIG.rotationSpeed;
 
-      // Project all dots first
       const projectedDots = dots.map(dot => {
         const proj = dot.project(CONFIG.radius, angleY);
         return { ...proj, dot: dot };
       });
 
-      // Sort by Z (depth sorting) so back dots draw first
       projectedDots.sort((a, b) => a.z - b.z);
 
-      // Draw Lines (Arcs) between close dots
-      // Optimization: Only draw lines for dots in front (z < 0 is front in this perspective math usually, or check logic)
-      // In this projection: z moves from -radius to +radius. +radius is closer to viewer (larger scale).
       ctx.lineWidth = 0.5;
       
       for (let i = 0; i < projectedDots.length; i++) {
         const p1 = projectedDots[i];
-        // Only draw if dot is roughly facing us or slightly side
-        if (p1.z < -CONFIG.radius * 0.2) continue; // Skip back dots lines for clarity
+        if (p1.z < -CONFIG.radius * 0.2) continue; 
 
-        // Connect to nearest neighbors
-        // This is O(N^2) roughly, keep count low or optimize loop
-        // Optimization: only check next 20 sorted dots? No, spatial locality isn't guaranteed by Z-sort.
-        // Just check random sample or restrict distance heavily.
-        
-        // Let's just draw lines for "Gold" nodes to emphasize "Alpha" paths
         if (p1.dot.isGold) {
            for (let j = 0; j < projectedDots.length; j++) {
              if (i === j) continue;
@@ -467,7 +449,7 @@
              const dy = p1.y - p2.y;
              const distSq = dx*dx + dy*dy;
 
-             if (distSq < 3000) { // Close enough on screen
+             if (distSq < 3000) { 
                 const alpha = 1 - (distSq / 3000);
                 ctx.strokeStyle = `rgba(${CONFIG.colorGold}, ${alpha * 0.4})`;
                 ctx.beginPath();
@@ -479,17 +461,15 @@
         }
       }
 
-      // Draw Dots
       for (let i = 0; i < projectedDots.length; i++) {
         const p = projectedDots[i];
-        const alpha = (p.z + CONFIG.radius) / (2 * CONFIG.radius); // Back dots faded
+        const alpha = (p.z + CONFIG.radius) / (2 * CONFIG.radius); 
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, CONFIG.dotSize * p.scale, 0, Math.PI * 2);
         
         if (p.dot.isGold) {
             ctx.fillStyle = `rgba(${CONFIG.colorGold}, ${alpha})`;
-            // Add glow for gold dots
             if (p.z > 0) {
                 ctx.shadowBlur = 10;
                 ctx.shadowColor = `rgba(${CONFIG.colorGold}, 0.8)`;
@@ -503,10 +483,7 @@
         
         ctx.fill();
       }
-      
-      // Reset shadow
       ctx.shadowBlur = 0;
-
       requestAnimationFrame(animate);
     }
 
