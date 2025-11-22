@@ -147,7 +147,7 @@
                 <div class="text-xl text-secondary font-bold font-mono">94.2%</div>
              </div>
           </div>
-          <canvas id="tradingSimulationCanvas" width="1000" height="400" style="background: transparent; width: 100%;"></canvas>
+          <canvas id="tradingSimulationCanvas" style="width: 100%; height: 400px; background: transparent;"></canvas>
         </div>
       </div>
     </div>
@@ -161,12 +161,12 @@
 
       const commonChartOptions = {
         titleTextStyle: { color: '#e5e7eb', fontName: 'Inter', fontSize: 16 },
-        pieHole: 0.6, // Thinner donut for modern look
+        pieHole: 0.6, 
         legend: { position: 'right', textStyle: { color: '#9ca3af', fontSize: 12 } },
-        pieSliceTextStyle: { color: 'transparent' }, // Hide text inside pie
+        pieSliceTextStyle: { color: 'transparent' }, 
         backgroundColor: 'transparent',
         chartArea: { width: '90%', height: '90%' },
-        pieSliceBorderColor: '#0f172a' // Match card background for separation
+        pieSliceBorderColor: '#0f172a' 
       };
 
       function drawCharts() {
@@ -186,13 +186,11 @@
         stocksChart.draw(stocksData, stocksOptions);
       }
 
-      // ----- Fetch Data with 24h Change Logic -----
-
-      // 1. Crypto Prices
+      // --- Fetch Crypto (CoinGecko) ---
       function fetchCryptoPrices() {
         const cryptoMapping = { "BNB": "binancecoin", "BTC": "bitcoin", "WBETH": "weth", "BNSOL": "solana" };
         const cryptoIds = Object.values(cryptoMapping).join(",");
-        // Added: include_24hr_change=true
+        
         fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd&include_24hr_change=true`)
           .then(response => response.json())
           .then(data => {
@@ -203,8 +201,8 @@
                   const price = data[coinId].usd;
                   const change = data[coinId].usd_24h_change || 0;
                   
-                  // Formatting
                   const priceStr = typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price;
+                  // Color Coding
                   const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
                   const changeSign = change >= 0 ? "+" : "";
                   
@@ -224,12 +222,11 @@
       }
       fetchCryptoPrices();
 
-      // 2. Stock Prices
+      // --- Fetch Stocks (Finnhub) ---
       function fetchStockPricesFinnhub() {
         const stockTickersArr = ["RY", "BAM", "DOL", "YINN"]; 
         const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
         
-        // Finnhub Quote Endpoint returns: c (current), d (change), dp (percent change)
         Promise.all(stockTickersArr.map(ticker => 
             fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
             .then(r => r.json())
@@ -241,6 +238,7 @@
           results.forEach(item => { 
              const priceStr = item.price && item.price > 0 ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "N/A";
              const change = item.change || 0;
+             // Color Coding
              const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
              const changeSign = change >= 0 ? "+" : "";
 
@@ -266,28 +264,34 @@
     function startTradingSimulation() {
       const canvas = document.getElementById("tradingSimulationCanvas");
       if (!canvas) return;
+      
+      // --- HIGH-DPI SCALING FIX ---
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      
+      // Set physical pixels
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      
       const ctx = canvas.getContext("2d");
+      // Scale all drawing operations
       ctx.scale(dpr, dpr);
 
       const HOLD_MS = 3000, NUM_CANDLES = 60, BULL = "#10b981", BEAR = "#ef4444", AXIS_COLOR = "rgba(255,255,255,0.1)";
       const marginLeft = 50, marginRight = 10, marginTop = 20, marginBottom = 30;
+      // Use logical CSS width for calculation
       const width = rect.width - marginLeft - marginRight, height = rect.height - marginTop - marginBottom;
 
       ctx.clearRect(0, 0, rect.width, rect.height);
+      
       function priceToY(price, minP, maxP) { return maxP === minP ? marginTop + height / 2 : marginTop + ((maxP - price) / (maxP - minP)) * height; }
       
-      // Draw Grid
       function drawGrid(yMin, yMax) {
         ctx.strokeStyle = AXIS_COLOR; ctx.lineWidth = 1;
-        // Horiz lines
         for(let i=0; i<5; i++) {
             let y = marginTop + (height/4)*i;
             ctx.beginPath(); ctx.moveTo(marginLeft, y); ctx.lineTo(marginLeft + width, y); ctx.stroke();
         }
-        // Labels
         ctx.fillStyle = "rgba(255,255,255,0.4)"; ctx.font = "10px monospace"; ctx.textAlign = "right";
         ctx.fillText(yMax.toFixed(2), marginLeft - 10, marginTop + 4);
         ctx.fillText(yMin.toFixed(2), marginLeft - 10, marginTop + height + 4);
@@ -321,7 +325,6 @@
         const candleH = Math.max(1, Math.abs(yOpen - yClose));
         ctx.fillRect(xCenter - bodyWidth / 2, Math.min(yOpen, yClose), bodyWidth, candleH);
         
-        // Draw SMA line roughly
         if (i > 0) {
             const prev = candles[i-1];
             const prevX = marginLeft + (i-1)*xSpacing + xSpacing/2;
@@ -343,18 +346,26 @@
             const k = candles[i];
             ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center";
             if (type === 'B') {
-                ctx.fillStyle = BULL; // Green
+                // FIXED: GREEN BUY SIGNAL
+                ctx.fillStyle = "#10b981"; 
                 ctx.fillText("▲", x, priceToY(k.l, yMin, yMax) + 15);
             } else {
-                ctx.fillStyle = BEAR;
+                ctx.fillStyle = "#ef4444";
                 ctx.fillText("▼", x, priceToY(k.h, yMin, yMax) - 8);
             }
         }
         i++;
       }, 50);
     }
+    
     startTradingSimulation();
-    let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(startTradingSimulation, 250); });
+    
+    // Resize Listener with debounce
+    let resizeTimer; 
+    window.addEventListener('resize', () => { 
+        clearTimeout(resizeTimer); 
+        resizeTimer = setTimeout(startTradingSimulation, 250); 
+    });
   });
   </script>
 
@@ -363,9 +374,8 @@
     const canvas = document.getElementById('globeCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let width, height, dpr;
+    let width, height;
 
-    // Config
     const CONFIG = {
       radius: 0, 
       dotCount: 600,
@@ -373,7 +383,7 @@
       rotationSpeed: 0.002,
       colorBlue: '59, 130, 246', 
       colorGold: '245, 158, 11', 
-      connectionDistSq: 0, 
+      connectionDist: 0, 
     };
 
     let dots = [];
@@ -407,19 +417,19 @@
     }
 
     function resize() {
-      dpr = window.devicePixelRatio || 1; // HIGH-DPI FIX
+      // --- HIGH-DPI FIX ---
+      const dpr = window.devicePixelRatio || 1;
       width = window.innerWidth;
       height = window.innerHeight;
       
-      // Set physical pixels
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       
-      // Scale context
       ctx.scale(dpr, dpr);
+      // --------------------
       
       CONFIG.radius = Math.min(width, height) * 0.35;
-      CONFIG.connectionDistSq = Math.pow(CONFIG.radius * 0.4, 2); 
+      CONFIG.connectionDist = CONFIG.radius * 0.4; 
     }
 
     function animate() {
