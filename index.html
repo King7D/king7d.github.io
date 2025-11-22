@@ -4,1034 +4,278 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Xiaoxian Wang - Machine Learning Developer & Quantitative Trader" />
-  <meta name="keywords" content="AI, Machine Learning, Quantitative Trading, Edge Computing, Data Analysis" />
-  <title>Xiaoxian Wang | AI Developer & Quantitative Trader</title>
+  <title>Xiaoxian Wang | Home</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
   <style>
-    :root {
-      --primary: #3b82f6;
-      --secondary: #f59e0b;
+    :root { --primary: #3b82f6; --secondary: #f59e0b; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #000000; /* Pure black for better contrast with particles */
+      min-height: 100vh; 
+      color: white; 
+      overflow-x: hidden; 
+      margin: 0;
     }
 
-    /* Background base --- */
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #030712; /* deep navy */
-      min-height: 100vh;
-      color: white;
-      overflow-x: hidden;
+    /* Canvas is fixed to background */
+    #flowCanvas { 
+      position: fixed; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%; 
+      z-index: -2; 
     }
 
-    /* Full-viewport canvas behind everything */
-    #wqBgCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      pointer-events: none;
-      display: block;
-    }
-
-    /* Subtle dot texture overlay */
-    .wq-texture {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1.2px);
-      background-size: 12px 12px;
-      mix-blend-mode: soft-light;
-      opacity: 0.9;
-    }
-
-    .hero {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      min-height: 100vh;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: none;
-      padding: 2rem;
-      box-sizing: border-box;
-    }
-
-    /* The Home section is active by default */
-    .hero.active {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
-      transition-delay: 0.2s;
-    }
-
-    .section-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 80px 20px;
-    }
-
-    .nav-item {
+    /* Overlay text styles */
+    .hero { 
+      width: 100%; 
+      min-height: 100vh; 
+      padding: 2rem; 
+      box-sizing: border-box; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
-      padding: 0.5rem 1rem;
-      transition: all 0.3s ease;
+      z-index: 1;
+      /* Subtle text shadow to separate from the busy background */
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
-    .nav-item::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--secondary);
-      transition: width 0.3s ease;
+
+    .section-content { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 80px 20px; 
+      text-align: center;
+      opacity: 0; 
+      animation: fadeIn 1.5s ease forwards 0.5s; 
     }
+
+    .nav-item { position: relative; padding: 0.5rem 1rem; transition: all 0.3s ease; }
+    .nav-item::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
     .nav-item:hover::after { width: 100%; }
 
-    .project-link {
-      position: relative;
-      transition: all 0.3s ease;
+    .contact-button { 
+      position: relative; 
+      overflow: hidden; 
+      transition: all 0.4s ease; 
+      backdrop-filter: blur(5px);
+      background: rgba(0,0,0,0.3);
     }
-    .project-link:hover {
-      transform: translateX(10px);
-      color: var(--secondary);
-    }
-
-    .contact-button {
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s ease;
-    }
-    .contact-button::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.6s;
-    }
+    .contact-button::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.6s; }
     .contact-button:hover::after { left: 100%; }
 
-    .fade-in { animation: fadeIn 0.8s ease forwards; }
-    .delay-1 { animation-delay: 0.2s; }
-    .delay-2 { animation-delay: 0.4s; }
-    .delay-3 { animation-delay: 0.6s; }
-    .delay-4 { animation-delay: 0.8s; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Make the main title HUGE like the "Future Faster" text */
+    .main-title {
+      font-size: 4rem;
+      line-height: 1.1;
     }
-
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 2rem;
-      margin: 1rem 0;
-      transition: transform 0.3s ease;
-    }
-    .card:hover { transform: translateY(-5px); }
-
-    @media (max-width: 768px) {
-      .section-content { padding: 40px 20px; }
-    }
-
-    /* Simulation container styles */
-    #simulationContainer {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
+    @media (min-width: 768px) {
+      .main-title { font-size: 6rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background layers (behind everything) -->
-  <canvas id="wqBgCanvas" aria-hidden="true"></canvas>
-  <div class="wq-texture" aria-hidden="true"></div>
+  <canvas id="flowCanvas"></canvas>
 
-  <!-- Navigation -->
-  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md">
+  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-sm border-b border-white/5">
     <nav class="container mx-auto flex justify-between items-center px-4">
-      <a href="#" class="text-2xl font-bold text-white hover:text-secondary transition-colors" onclick="showSection(event, 'home')">XW</a>
+      <a href="index.html" class="text-2xl font-bold text-white hover:text-secondary transition-colors">XW</a>
       <ul class="flex space-x-6">
-        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'about')">About</a></li>
-        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'projects')">Projects</a></li>
-        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'investment')">Investment</a></li>
-        <li><a href="#" class="nav-item text-white" onclick="showSection(event, 'contact')">Contact</a></li>
+        <li><a href="about.html" class="nav-item text-white">About</a></li>
+        <li><a href="projects.html" class="nav-item text-white">Projects</a></li>
+        <li><a href="investment.html" class="nav-item text-white">Investment</a></li>
+        <li><a href="contact.html" class="nav-item text-white">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Home Section (Active by Default) -->
-  <section id="home" class="hero active flex items-center justify-center">
-    <div class="section-content text-center">
-      <div class="fade-in">
-        <p class="text-secondary text-lg mb-2">Innovating at the intersection of AI and finance</p>
-        <h1 class="text-5xl md:text-7xl font-bold mb-4">Xiaoxian Wang</h1>
+  <section class="hero">
+    <div class="section-content">
+      <div>
+        <p class="text-secondary text-lg mb-4 font-mono tracking-[0.2em] uppercase">Quantitative Strategies // AI</p>
+        <h1 class="main-title font-bold mb-6 tracking-tighter text-white mix-blend-screen">
+          Xiaoxian<br>Wang
+        </h1>
         <div class="overflow-hidden">
-          <p class="text-xl md:text-2xl text-gray-300 mb-8">
-            Machine Learning Developer & Quantitative Trading Strategist
+          <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto font-light">
+            Developing high-frequency algorithmic trading strategies and scalable machine learning systems.
           </p>
         </div>
-        <a href="#about" class="contact-button inline-block px-8 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white"
-           onclick="showSection(event, 'about')">
-          About Me
+        <a href="about.html" class="contact-button inline-block px-10 py-4 border border-white/30 text-white rounded-full text-lg font-medium hover:bg-white hover:text-black transition-all duration-300">
+          Explore Work
         </a>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about" class="hero">
-    <div class="section-content px-4 sm:px-6 lg:px-8">
-      <div class="fade-in delay-1">
-        <h2 class="text-4xl font-bold text-center mb-12">About Me</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <!-- Left Column: Personal Info -->
-        <div class="space-y-6 fade-in delay-2">
-          <img src="pictures/intel_summit.jpg" alt="Intel Summit" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
-          <p class="text-sm text-center text-gray-400">Participated in the 2023 Intel LOEM Summit in Macau</p>
-          <h3 class="text-3xl font-bold text-center">Who am I?</h3>
-          <p class="text-lg text-center">
-            I am Xiaoxian Wang, a machine learning developer, quantitative trader, and data analyst with a passion for innovation at the intersection of AI and finance.
-          </p>
-          <p class="text-lg text-center">
-            As an Intel Developer and Prestige member of the Intel Partner Alliance, I consistently push boundaries in tech.
-          </p>
-        </div>
-        <!-- Right Column: Credentials -->
-        <div class="space-y-8 fade-in delay-3">
-          <div>
-            <h4 class="text-2xl font-bold mb-4">Licenses &amp; Certifications</h4>
-            <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
-              <li>WorldQuant Brain Gold Level and Top 10%</li>
-              <li>Microsoft Certified: Azure AI Fundamentals (AI-900)</li>
-              <li>Microsoft Office Specialist - Expert (Microsoft 365 Apps)</li>
-              <li>Intel Edge AI Developer Certification</li>
-              <li>Google Analytics Certification</li>
-              <li>Google IT Support Professional Certificate</li>
-              
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-2xl font-bold mb-4">Education &amp; Scholarship</h4>
-            <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
-              <li class="font-semibold">Certificate in Quantitative Finance, CQF Institute (2026.1-2026.6)</li>
-              <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the Learning Incentive Scholarship</li>
-              <li class="font-semibold">Master of Business Analytics, University of British Columbia (2025-2026)</li>
-              <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the Accelerated Career Scholarship</li>
-              <li class="font-semibold">Master of Science in Financial Engineering, WorldQuant University (2025-2027)</li>
-              <li class="font-semibold">Master of Business Administration, Academy Europe Open University</li>
-              <li class="font-semibold">Bachelor of Arts in Economics, University of British Columbia (2021-2025)</li>
-              <li class="text-gray-400 ml-6 list-none before:content-['•'] before:mr-2">Recipient of the International Student Scholarship (Faculty of Arts)</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- Group Picture Section -->
-      <div class="mt-16 text-center fade-in delay-4">
-        <img src="pictures/group_picture.jpg" alt="Group picture with industry leaders" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
-        <p class="text-xs text-gray-400 mt-2">
-          Group picture with John Kalvin (Intel Global Go-To-Market Operations VP &amp; GM), Dave Guzzi (Intel Global Distribution &amp; Partner Sales VP) and Ye Zong (Intel PRC GM)
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects" class="hero">
-    <div class="section-content">
-      <div class="fade-in">
-        <h2 class="text-4xl font-bold mb-8 text-center">Featured Projects</h2>
-
-        <!-- Grid for Project Cards -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Project Card -->
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Campus Bullying Detection</h3>
-            <p class="text-gray-300 mb-4">Real-time AI monitoring system using edge computing...</p>
-            <a href="projects/campus-bullying.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">EvoNAS Operating System</h3>
-            <p class="text-gray-300 mb-4">Lightweight and scalable OS designed for Edge AI...</p>
-            <a href="projects/evonas.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Inventory Tracking System</h3>
-            <p class="text-gray-300 mb-4">Automated inventory management using machine learning...</p>
-            <a href="projects/inventory.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Heart Disease Prediction</h3>
-            <p class="text-gray-300 mb-4">AI-driven diagnostic tool for heart disease risk assessment...</p>
-            <a href="projects/heart-disease.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Maze Solver</h3>
-            <p class="text-gray-300 mb-4">Pathfinding algorithms to solve complex mazes efficiently...</p>
-            <a href="projects/maze.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Digit Classification</h3>
-            <p class="text-gray-300 mb-4">Deep learning model for handwritten digit recognition...</p>
-            <a href="projects/digit.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Intel Edge Solutions Challenge</h3>
-            <p class="text-gray-300 mb-4">Edge AI for Smart Cities &amp; Transportation...</p>
-            <a href="projects/IESC.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Cyber Tarot</h3>
-            <p class="text-gray-300 mb-4">A unique AI-powered tarot reading experience...</p>
-            <a href="projects/tarot.html" class="project-link text-secondary flex items-center">
-              View Case Study
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- Currently Working On Section -->
-        <h3 class="text-2xl font-bold mt-12 text-center">Currently Working On</h3>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Quantitative Trading Strategy</h3>
-            <p class="text-gray-300 mb-4">Machine learning-driven trading algorithm.</p>
-            <a href="projects/invest.html" class="project-link text-secondary flex items-center">
-              View Progress
-            </a>
-          </div>
-
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Edge AI Acceleration &amp; CDN</h3>
-            <p class="text-gray-300 mb-4">Optimizing AI inference performance at the edge...</p>
-            <a href="projects/edge.html" class="project-link text-secondary flex items-center">
-              View Progress
-            </a>
-          </div>
-
-          <div class="card">
-            <h3 class="text-xl font-semibold mb-3">Hull Tactical (Kaggle Competition)</h3>
-            <p class="text-gray-300 mb-4">The equity market is not perfectly efficent by systematically predicting...</p>
-            <a href="projects/hull.html" class="project-link text-secondary flex items-center">
-              View Progress
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Investment Section -->
-  <section id="investment" class="hero">
-    <div class="section-content text-center">
-      <div class="fade-in delay-1">
-        <h2 class="text-4xl font-bold mb-8" style="color: white;">Investment Portfolio [2025.10]</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Crypto Column -->
-        <div class="space-y-6">
-          <!-- Crypto Pie Chart Card -->
-          <div class="card fade-in delay-2 p-6">
-            <h3 class="text-2xl font-bold mb-4" style="color: white;">Crypto</h3>
-            <div id="cryptoChart" style="width: 100%; height: 400px;"></div>
-          </div>
-          <!-- Crypto Prices Card -->
-          <div class="card fade-in delay-3 p-6">
-            <h3 class="text-2xl font-bold mb-4" style="color: white;">Current Crypto Prices</h3>
-            <div id="crypto-prices"></div>
-          </div>
-        </div>
-        <!-- Stock Column -->
-        <div class="space-y-6">
-          <!-- Stock Pie Chart Card -->
-          <div class="card fade-in delay-2 p-6">
-            <h3 class="text-2xl font-bold mb-4" style="color: white;">Stock</h3>
-            <div id="stocksChart" style="width: 100%; height: 400px;"></div>
-          </div>
-          <!-- Stock Prices Card -->
-          <div class="card fade-in delay-3 p-6">
-            <h3 class="text-2xl font-bold mb-4" style="color: white;">Current Stock Prices</h3>
-            <div id="stock-prices"></div>
-          </div>
-        </div>
-      </div>
-      <!-- Trading Simulation Card (Placed outside the grid) -->
-      <div class="mt-6 fade-in delay-4">
-        <div class="card p-6 mx-auto" style="max-width: 1200px;">
-          <h3 class="text-2xl font-bold mb-4" style="color: white;">Trading Simulation</h3>
-          <canvas id="tradingSimulationCanvas" width="1000" height="500" style="background: transparent;"></canvas>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="hero flex items-center justify-center">
-    <div class="section-content text-center">
-      <!-- Image -->
-      <div class="fade-in delay-1">
-        <img src="pictures/profile_picture.jpg" alt="Profile Picture" class="mx-auto mt-12 rounded-lg shadow-lg w-full max-w-lg">
-      </div>
-      <!-- Heading -->
-      <div class="fade-in delay-2">
-        <h1 class="text-4xl font-bold mt-8">Feel free to reach out via email or LinkedIn:</h1>
-      </div>
-      <!-- Contact Buttons -->
-      <div class="mt-6 fade-in delay-3">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center">
-          <a href="mailto:wangxiaoxian2016@gmail.com" 
-             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-            Personal Email
-          </a>
-          <a href="mailto:ericwang@eii-tech.com" 
-             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-            Business Email
-          </a>
-          <a href="https://www.linkedin.com/in/xiaoxianwang6" target="_blank" 
-             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-            LinkedIn
-          </a>
-          <a href="https://github.com/King7D" target="_blank" 
-             class="contact-button px-6 py-3 border-2 border-secondary text-secondary rounded-lg text-lg font-medium hover:bg-secondary hover:text-white transition">
-            GitHub
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Google Charts Scripts -->
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // ----- Update Date/Time (Pacific Time) -----
-      function updateDateTime() {
-        const now = new Date();
-        const options = {
-          timeZone: "America/Los_Angeles",
-          weekday: 'short',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric',
-          hour12: true
-        };
-        const formatter = new Intl.DateTimeFormat([], options);
-        const dtElem = document.getElementById('current-datetime');
-        if(dtElem) dtElem.textContent = formatter.format(now);
+  (() => {
+    const canvas = document.getElementById('flowCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    let particles = [];
+    let flowField = [];
+    
+    // Configuration matching WorldQuant vibe (Orange/Blue)
+    const config = {
+      particleCount: 3000,      // Very high count for density
+      zoom: 0.003,              // How "zoomed in" the noise pattern is
+      curve: 2.5,               // How curvy the lines are
+      speed: 0.8,               // Speed of flow
+      trailFade: 0.04,          // Lower = longer trails (0.04 is good balance)
+      colors: [
+        '43, 95, 230',   // WorldQuant Blue
+        '255, 110, 50',  // Deep Orange
+        '59, 130, 246',  // Primary Blue
+        '245, 158, 11'   // Secondary Orange
+      ]
+    };
+
+    // Pseudo-random noise function (Simplex-like) to create organic flow
+    // Standard Math.random is too chaotic; we need smooth gradients.
+    function createNoise3D(x, y, z) {
+      let p = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
+      for (let i=0; i < 256 ; i++) p[256+i] = p[i];
+      
+      function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+      function lerp(t, a, b) { return a + t * (b - a); }
+      function grad(hash, x, y, z) {
+        let h = hash & 15;
+        let u = h < 8 ? x : y, v = h < 4 ? y : h === 12 || h === 14 ? x : z;
+        return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
       }
-      updateDateTime();
-      setInterval(updateDateTime, 1000);
+      
+      let X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+      x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+      let u = fade(x), v = fade(y), w = fade(z);
+      let A = p[X]+Y, AA = p[A]+Z, AB = p[A+1]+Z, B = p[X+1]+Y, BA = p[B]+Z, BB = p[B+1]+Z;
 
-      // ----- Draw Google Charts -----
-      google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawCharts);
+      return lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), grad(p[BA], x-1, y, z)),
+                     lerp(u, grad(p[AB], x, y-1, z), grad(p[BB], x-1, y-1, z))),
+             lerp(v, lerp(u, grad(p[AA+1], x, y, z-1), grad(p[BA+1], x-1, y, z-1)),
+                     lerp(u, grad(p[AB+1], x, y-1, z-1), grad(p[BB+1], x-1, y-1, z-1))));
+    }
 
-      function drawCharts() {
-        // Crypto Pie Chart
-        var cryptoData = google.visualization.arrayToDataTable([
-          ['Asset', 'Allocation'],
-          ['BNB', 82.18],
-          ['BTC', 5.57],
-          ['USDC', 4.71],
-          ['WBETH', 3.1],
-          ['BNSOL', 2.58],
-          ['USDT', 1.86]
-        ]);
-        var cryptoOptions = {
-          title: 'Crypto Portfolio',
-          titleTextStyle: { color: 'white' },
-          pieHole: 0.4,
-          colors: ["#3b82f6", "#f59e0b", "#10b981", "#6366f1", "#ef4444","#a78bfa"],
-          legend: { position: 'bottom', textStyle: { color: 'white' } },
-          pieSliceTextStyle: { color: 'white' },
-          backgroundColor: 'transparent'
-        };
-        var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
-        cryptoChart.draw(cryptoData, cryptoOptions);
+    class Particle {
+      constructor() {
+        this.reset();
+        // Start somewhere random along the timeline so they don't look uniform
+        this.age = Math.random() * 100; 
+      }
 
-        // Stock Pie Chart with new allocations
-        var stockAllocations = {
-          "Cash (Bank Overdraft)": 6.4,
-          "Fixed Income": 41.2,
-          "Royal Bank of Canada": 21.2,
-          "Brookfield Asset Management Limited": 8.9,
-          "Dollarama Inc.": 10.3,
-          "Yinn": 12
-        };
-        var stockTickers = {
-          "Royal Bank of Canada": "Royal Bank of Canada",
-          "Brookfield Asset Management Limited": "Brookfield Asset Management Limited",
-          "Dollarama Inc.": "Dollarama Inc"
-        };
-        var stocksArray = [['Asset', 'Allocation']];
-        for (var key in stockAllocations) {
-          var label = stockTickers[key] || key;
-          stocksArray.push([label, stockAllocations[key]]);
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.prevX = this.x;
+        this.prevY = this.y;
+        
+        // Pick a random color from config
+        const colorStr = config.colors[Math.floor(Math.random() * config.colors.length)];
+        // Randomize opacity slightly for depth
+        this.color = `rgba(${colorStr}, ${Math.random() * 0.6 + 0.4})`;
+        
+        this.size = Math.random() * 2 + 0.5;
+        this.speed = config.speed * (Math.random() * 0.4 + 0.8);
+        this.life = Math.random() * 300 + 100; // Reset eventually to avoid "stuck" particles
+      }
+
+      update(time) {
+        this.prevX = this.x;
+        this.prevY = this.y;
+
+        // 1. Calculate Angle based on Noise
+        // We use x/y for spatial noise, and 'time' for temporal noise (animation)
+        const angle = createNoise3D(this.x * config.zoom, this.y * config.zoom, time * 0.1) * Math.PI * config.curve;
+
+        // 2. Apply Velocity
+        this.x += Math.cos(angle) * this.speed;
+        this.y += Math.sin(angle) * this.speed;
+
+        // 3. Mouse Interaction (Repulsion/Swirl)
+        if (mouse.x) {
+          const dx = this.x - mouse.x;
+          const dy = this.y - mouse.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 200) {
+            const force = (200 - dist) / 200;
+            this.x += (dx / dist) * force * 5;
+            this.y += (dy / dist) * force * 5;
+          }
         }
-        var stocksData = google.visualization.arrayToDataTable(stocksArray);
-        var stocksOptions = {
-          title: 'Stock Portfolio',
-          titleTextStyle: { color: 'white' },
-          pieHole: 0.4,
-          colors: ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6", "#14b8a6", "#f97316", "#34d399", "#a78bfa"],
-          legend: { position: 'bottom', textStyle: { color: 'white' } },
-          pieSliceTextStyle: { color: 'white' },
-          backgroundColor: 'transparent'
-        };
-        var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
-        stocksChart.draw(stocksData, stocksOptions);
+
+        // 4. Boundary Check - Wrap around
+        if (this.x > width) { this.x = 0; this.prevX = 0; }
+        if (this.x < 0) { this.x = width; this.prevX = width; }
+        if (this.y > height) { this.y = 0; this.prevY = 0; }
+        if (this.y < 0) { this.y = height; this.prevY = height; }
+
+        this.life--;
+        if (this.life < 0) this.reset();
       }
 
-      // ----- Fetch Crypto Prices from CoinGecko -----
-      function fetchCryptoPrices() {
-        const cryptoMapping = {
-          "BNB": "binancecoin",
-          "BTC": "bitcoin",
-          "WBETH": "weth",
-          "BNSOL": "solana"
-        };
-        const cryptoIds = Object.values(cryptoMapping).join(",");
-        fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`)
-          .then(response => response.json())
-          .then(data => {
-            let html = "<ul>";
-            for (let asset in cryptoMapping) {
-              const coinId = cryptoMapping[asset];
-              const price = data[coinId] && data[coinId].usd ? data[coinId].usd : "N/A";
-              html += `<li>${asset}: $${typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price}</li>`;
-            }
-            html += "</ul>";
-            document.getElementById('crypto-prices').innerHTML = html;
-          })
-          .catch(error => {
-            console.error("Error fetching crypto prices:", error);
-            document.getElementById('crypto-prices').innerHTML = "<p>Error fetching crypto prices.</p>";
-          });
+      draw() {
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = this.size;
+        ctx.beginPath();
+        ctx.moveTo(this.prevX, this.prevY);
+        ctx.lineTo(this.x, this.y);
+        ctx.stroke();
       }
-      fetchCryptoPrices();
+    }
 
-      // ----- Fetch Stock Prices from Finnhub API -----
-      function fetchStockPricesFinnhub() {
-        const stockTickersArr = ["RY", "BAM", "DOL", "YINN"];
-        const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
-        Promise.all(stockTickersArr.map(ticker =>
-          fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
-            .then(response => response.json())
-            .then(data => ({ ticker, price: data.c }))
-            .catch(error => ({ ticker, price: null }))
-        ))
-        .then(results => {
-          let html = "<ul>";
-          results.forEach(item => {
-            html += `<li>${item.ticker}: $${item.price && item.price > 0 ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "N/A"}</li>`;
-          });
-          html += "</ul>";
-          document.getElementById('stock-prices').innerHTML = html;
-        })
-        .catch(error => {
-          console.error("Error fetching stock prices via Finnhub:", error);
-          document.getElementById('stock-prices').innerHTML = "<p>Error fetching stock prices. Please try again later.</p>";
-        });
+    const mouse = { x: null, y: null };
+    let time = 0;
+
+    function init() {
+      particles = [];
+      // Dynamic particle count based on screen area (performance optimization)
+      const area = width * height;
+      const targetCount = Math.min(config.particleCount, Math.floor(area / 400));
+      
+      for (let i = 0; i < targetCount; i++) {
+        particles.push(new Particle());
       }
-      fetchStockPricesFinnhub();
-    });
-  </script>
+    }
 
-<script>
-(() => {
-  const canvas = document.getElementById('wqBgCanvas');
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      init();
+    }
 
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+    function animate() {
+      // Key Effect: Instead of clearing the canvas, draw a semi-transparent rectangle.
+      // This leaves previous frames visible for a while, creating the "Trail/Fiber" look.
+      // Black with very low opacity = long trails. High opacity = short trails.
+      ctx.fillStyle = `rgba(0, 0, 0, ${config.trailFade})`; 
+      ctx.fillRect(0, 0, width, height);
 
-  let width, height, dpr, rafId;
-  let t = 0, lastTs = performance.now();
+      time += 0.005; // Moves the noise field slowly over time
 
-  const FADE_TAU_MS = 120;           
-  const STAR_SPEED_FACTOR = 0.7;    
-
-  const particles = [];
-  let starsNear = [], starsFar = [];
-  let shooter = null, nextShootAt = 0;
-
-  const pointer = { x: 0.5, y: 0.5, active: false };
-
-  function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const rect = canvas.getBoundingClientRect();
-    width = rect.width; height = rect.height;
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    initAll();
-  }
-
-  function initAll() {
-    // flow particles
-    particles.length = 0;
-    const target = Math.floor((width * height) / 1600);
-    const count = Math.max(220, Math.min(900, target));
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        speed: 0.35 + Math.random() * 0.9,
-        life: 90 + Math.random() * 300,
-        alpha: 0.12 + Math.random() * 0.4
+      particles.forEach(p => {
+        p.update(time);
+        p.draw();
       });
+
+      requestAnimationFrame(animate);
     }
 
-    // starfield
-    const area = width * height;
-    const farCount  = Math.max(70, Math.min(240, Math.floor(area / 22000)));
-    const nearCount = Math.max(55, Math.min(160, Math.floor(area / 30000)));
-    starsFar = Array.from({ length: farCount }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 0.9 + 0.3,
-      phase: Math.random() * Math.PI * 2,
-      twinkle: 0.15 + Math.random() * 0.25,
-      speed: 0.015 + Math.random() * 0.03
-    }));
-    starsNear = Array.from({ length: nearCount }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 1.6 + 0.6,
-      phase: Math.random() * Math.PI * 2,
-      twinkle: 0.2 + Math.random() * 0.3,
-      speed: 0.04 + Math.random() * 0.08
-    }));
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
-    // shooter schedule
-    nextShootAt = performance.now() + 3000 + Math.random() * 6000;
-    shooter = null;
-  }
-
-  // ---------- Shooting star: TL -> BR, ~3–6s ----------
-  function spawnShooter(ts) {
-    const life = 180 + Math.floor(Math.random() * 180); // 3–6s @60fps
-    const x = -30 + Math.random() * 80;
-    const y = -30 + Math.random() * 80;
-    const speed = 2.2 + Math.random() * 1.6;
-    const jitter = (Math.random() - 0.5) * 0.25;
-    const len = Math.hypot(1 + jitter, 1 - jitter);
-    const vx = (1 + jitter) / len * speed;
-    const vy = (1 - jitter) / len * speed;
-    shooter = { x, y, vx, vy, life, tail: 10 + Math.random() * 12 };
-    nextShootAt = ts + 6000 + Math.random() * 4000;
-  }
-
-  function drawShooter() {
-    if (!shooter) return;
-    shooter.x += shooter.vx; shooter.y += shooter.vy; shooter.life--;
-    const tailX = shooter.x - shooter.vx * shooter.tail;
-    const tailY = shooter.y - shooter.vy * shooter.tail;
-    const grad = ctx.createLinearGradient(tailX, tailY, shooter.x, shooter.y);
-    grad.addColorStop(0, 'rgba(59,130,246,0)');
-    grad.addColorStop(1, 'rgba(255,255,255,0.95)');
-    ctx.lineWidth = 2; ctx.strokeStyle = grad;
-    ctx.beginPath(); ctx.moveTo(tailX, tailY); ctx.lineTo(shooter.x, shooter.y); ctx.stroke();
-    ctx.beginPath(); ctx.arc(shooter.x, shooter.y, 1.4, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.fill();
-    if (shooter.life <= 0 || shooter.x > width + 80 || shooter.y > height + 80) shooter = null;
-  }
-
-  // ---------- Flow field ----------
-  function fieldAngle(x, y) {
-    const s1 = 0.0015, s2 = 0.0012;
-    let base = Math.sin(y * s1 + t * 0.7) + Math.cos(x * s2 - t * 0.35);
-    if (pointer.active) {
-      const dx = x - pointer.x * width, dy = y - pointer.y * height;
-      const k = Math.min(1, 18000 / (dx*dx + dy*dy + 1));
-      base += k * Math.sin(t * 1.5);
-    }
-    return base;
-  }
-
-  function drawStars(list, parallax) {
-    for (const s of list) {
-      s.x -= s.speed * parallax * STAR_SPEED_FACTOR; // 0.7x speed
-      if (s.x < -2) s.x = width + 2;
-      const a = 0.35 + Math.sin(t * 1.8 + s.phase) * s.twinkle;
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill();
-    }
-  }
-
-  function maybeShoot(ts) { if (ts >= nextShootAt && !shooter) spawnShooter(ts); }
-
-  function drawFrame(ts) {
-    const dt = Math.max(0, Math.min(100, ts - lastTs));
-    const fade = 1 - Math.exp(-dt / FADE_TAU_MS);
-    ctx.fillStyle = `rgba(3, 7, 18, ${fade})`; ctx.fillRect(0, 0, width, height);
-
-    drawStars(starsFar, 0.4);
-    drawStars(starsNear, 1.0);
-
-    for (const p of particles) {
-      const a = fieldAngle(p.x, p.y);
-      const vx = Math.cos(a) * p.speed, vy = Math.sin(a) * p.speed;
-      const nx = p.x + vx, ny = p.y + vy;
-      const grad = ctx.createLinearGradient(p.x, p.y, nx, ny);
-      grad.addColorStop(0, `hsla(215,95%,62%,${p.alpha * 0.8})`);
-      grad.addColorStop(1, `hsla(0,0%,100%,${Math.min(1, p.alpha + 0.2)})`);
-      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny);
-      ctx.strokeStyle = grad; ctx.lineWidth = 1; ctx.stroke();
-      p.x = nx; p.y = ny;
-      if (--p.life < 0 || nx < 0 || ny < 0 || nx > width || ny > height) {
-        p.x = Math.random() * width; p.y = Math.random() * height;
-        p.speed = 0.35 + Math.random() * 0.2;
-        p.life = 90 + Math.random() * 300;
-        p.alpha = 0.12 + Math.random() * 0.4;
-      }
-    }
-
-    maybeShoot(ts);
-    drawShooter();
-
-    t += 0.0025;
-    lastTs = ts;
-    rafId = requestAnimationFrame(drawFrame);
-  }
-
-  function start() {
-    cancelAnimationFrame(rafId);
     resize();
-    ctx.fillStyle = '#030712'; ctx.fillRect(0, 0, width, height);
-    lastTs = performance.now(); requestAnimationFrame(drawFrame);
-  }
-  function stopStill() {
-    cancelAnimationFrame(rafId);
-    resize();
-    ctx.fillStyle = '#030712'; ctx.fillRect(0, 0, width, height);
-  }
+    animate();
 
-  window.addEventListener('resize', start, { passive: true });
-  window.addEventListener('pointermove', (e) => {
-    const r = canvas.getBoundingClientRect();
-    pointer.x = (e.clientX - r.left) / r.width;
-    pointer.y = (e.clientY - r.top) / r.height;
-    pointer.active = true;
-    clearTimeout(pointer._to);
-    pointer._to = setTimeout(() => pointer.active = false, 1200);
-  }, { passive: true });
-
-  const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const handleMotion = () => { mql.matches ? stopStill() : start(); };
-  if (mql.addEventListener) mql.addEventListener('change', handleMotion);
-  else mql.addListener(handleMotion);
-  handleMotion();
-})();
-</script>
-
-
-<!-- Trading Simulation (candlestick chart with random Buy/Sell signals, 50 candles, hold 3s; first candle offset from y-axis) -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    function startTradingSimulation() {
-      const canvas = document.getElementById("tradingSimulationCanvas");
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-
-      // --- Config ---
-      const HOLD_MS = 3000;           // keep the finished chart on screen for 3s
-      const NUM_CANDLES = 50;         // number of candles
-      const BULL = "#10b981";         // green
-      const BEAR = "#ef4444";         // red
-      const AXIS_COLOR = "white";
-      const SIGNAL_MIN = 5;
-      const SIGNAL_MAX = 10;          // total number of signals (B+S)
-
-      // --- Layout ---
-      const marginLeft = 60, marginRight = 20, marginTop = 20, marginBottom = 40;
-      const width = canvas.width - marginLeft - marginRight;
-      const height = canvas.height - marginTop - marginBottom;
-
-      // Clear & axes
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      function priceToY(price, minP, maxP) {
-        if (maxP === minP) return marginTop + height / 2;
-        return marginTop + ((maxP - price) / (maxP - minP)) * height;
-      }
-      function drawAxes(minP, maxP) {
-        ctx.strokeStyle = AXIS_COLOR;
-        ctx.lineWidth = 1;
-        // x-axis
-        ctx.beginPath();
-        ctx.moveTo(marginLeft, marginTop + height);
-        ctx.lineTo(marginLeft + width, marginTop + height);
-        ctx.stroke();
-        // y-axis
-        ctx.beginPath();
-        ctx.moveTo(marginLeft, marginTop);
-        ctx.lineTo(marginLeft, marginTop + height);
-        ctx.stroke();
-
-        // y labels (top/bottom only)
-        ctx.fillStyle = "white";
-        ctx.font = "12px Inter, Arial";
-        ctx.textAlign = "right";
-        ctx.fillText(maxP.toFixed(2), marginLeft - 8, marginTop + 10);
-        ctx.fillText(minP.toFixed(2), marginLeft - 8, marginTop + height - 2);
-      }
-
-      // --- Data generation (random OHLC candles) ---
-      function randNorm() {
-        let u = 0, v = 0;
-        while (u === 0) u = Math.random();
-        while (v === 0) v = Math.random();
-        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-      }
-
-      const candles = []; // {o,h,l,c}
-      let lastClose = 100;
-      for (let i = 0; i < NUM_CANDLES; i++) {
-        const open  = lastClose;
-        const delta = randNorm() * 3; // volatility
-        const close = open + delta;
-        const wickUp = Math.abs(randNorm()) * 1.5 + 0.5;
-        const wickDn = Math.abs(randNorm()) * 1.5 + 0.5;
-        const high = Math.max(open, close) + wickUp;
-        const low  = Math.min(open, close) - wickDn;
-        candles.push({ o: open, h: high, l: low, c: close });
-        lastClose = close;
-      }
-
-      // Determine y-scale with padding
-      const minPrice = Math.min(...candles.map(k => k.l));
-      const maxPrice = Math.max(...candles.map(k => k.h));
-      const pad = (maxPrice - minPrice) * 0.08 || 1;
-      const yMin = minPrice - pad;
-      const yMax = maxPrice + pad;
-
-      drawAxes(yMin, yMax);
-
-      // --- X positions & candle width ---
-      // First estimate spacing/body, compute a small right-shift offset to avoid the y-axis,
-      // then recompute spacing/body accurately across the remaining width.
-      const xSpacingRaw = width / (NUM_CANDLES - 1);
-      const tempBodyWidth = Math.max(4, Math.min(24, xSpacingRaw * 0.6));
-      const offsetX = Math.max(tempBodyWidth / 2 + 6, 12);           // shift away from y-axis
-      const xSpacing = (width - offsetX) / (NUM_CANDLES - 1);
-      const bodyWidth = Math.max(4, Math.min(24, xSpacing * 0.6));
-
-      const xCenterAt = (i) => marginLeft + offsetX + i * xSpacing;
-
-      function drawCandle(i) {
-        const { o, h, l, c } = candles[i];
-        const xCenter = xCenterAt(i);
-
-        const yOpen  = priceToY(o, yMin, yMax);
-        const yClose = priceToY(c, yMin, yMax);
-        const yHigh  = priceToY(h, yMin, yMax);
-        const yLow   = priceToY(l, yMin, yMax);
-
-        const isBull = c >= o;
-        const color = isBull ? BULL : BEAR;
-
-        // Wick
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(xCenter, yHigh);
-        ctx.lineTo(xCenter, yLow);
-        ctx.stroke();
-
-        // Body
-        const top = Math.min(yOpen, yClose);
-        const bottom = Math.max(yOpen, yClose);
-        const bodyHeight = Math.max(1, bottom - top);
-        ctx.fillStyle = color;
-        ctx.fillRect(xCenter - bodyWidth / 2, top, bodyWidth, bodyHeight);
-      }
-
-      // --- Signals generation ---
-      const meanClose = candles.reduce((s, k) => s + k.c, 0) / candles.length;
-
-      const totalSignals = Math.floor(Math.random() * (SIGNAL_MAX - SIGNAL_MIN + 1)) + SIGNAL_MIN;
-      const minEach = 1;
-      let buyTarget = Math.max(minEach, Math.floor(totalSignals / 2));
-      let sellTarget = totalSignals - buyTarget;
-
-      const buysEligible = [];
-      const sellsEligible = [];
-      for (let i = 0; i < NUM_CANDLES; i++) {
-        if (candles[i].c < meanClose) buysEligible.push(i);
-        else if (candles[i].c > meanClose) sellsEligible.push(i);
-      }
-
-      function shuffle(a){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
-      function sampleUnique(list, k, used) {
-        const out = [];
-        const arr = shuffle(list.slice());
-        for (let i = 0; i < arr.length && out.length < k; i++) {
-          if (!used.has(arr[i])) { out.push(arr[i]); used.add(arr[i]); }
-        }
-        return out;
-      }
-
-      const usedIdx = new Set();
-      const buyIdxs  = sampleUnique(buysEligible, buyTarget, usedIdx);
-      const sellIdxs = sampleUnique(sellsEligible, sellTarget, usedIdx);
-
-      function fillFromAll(targetCount, typeIdxs) {
-        if (typeIdxs.length >= targetCount) return;
-        const remaining = [];
-        for (let i = 0; i < NUM_CANDLES; i++) if (!usedIdx.has(i)) remaining.push(i);
-        shuffle(remaining);
-        while (typeIdxs.length < targetCount && remaining.length) {
-          const i = remaining.pop();
-          typeIdxs.push(i);
-          usedIdx.add(i);
-        }
-      }
-      fillFromAll(buyTarget, buyIdxs);
-      fillFromAll(sellTarget, sellIdxs);
-
-      const signalsByIndex = {};
-      buyIdxs.forEach(i => signalsByIndex[i] = 'B');
-      sellIdxs.forEach(i => signalsByIndex[i] = 'S');
-
-      function drawSignal(i, type) {
-        const xCenter = xCenterAt(i);
-        const k = candles[i];
-        if (!k) return;
-        if (type === 'B') {
-          const y = priceToY(k.l, yMin, yMax) + 14; // below candle
-          // Up triangle
-          ctx.fillStyle = BULL;
-          ctx.beginPath();
-          ctx.moveTo(xCenter, y - 8);
-          ctx.lineTo(xCenter - 7, y + 6);
-          ctx.lineTo(xCenter + 7, y + 6);
-          ctx.closePath();
-          ctx.fill();
-          // Label
-          ctx.font = "bold 14px Inter, Arial";
-          ctx.textAlign = "center";
-          ctx.fillText("B", xCenter, y + 20);
-        } else if (type === 'S') {
-          const y = priceToY(k.h, yMin, yMax) - 14; // above candle
-          // Down triangle
-          ctx.fillStyle = BEAR;
-          ctx.beginPath();
-          ctx.moveTo(xCenter, y + 8);
-          ctx.lineTo(xCenter - 7, y - 6);
-          ctx.lineTo(xCenter + 7, y - 6);
-          ctx.closePath();
-          ctx.fill();
-          // Label
-          ctx.font = "bold 14px Inter, Arial";
-          ctx.textAlign = "center";
-          ctx.fillText("S", xCenter, y - 12);
-        }
-      }
-
-      // --- Reveal candles over 5s; draw signals when their candle appears; hold 3s; regenerate ---
-      let currentIndex = -1;
-      const revealInterval = 5000 / (NUM_CANDLES - 1);
-
-      function step() {
-        currentIndex++;
-        if (currentIndex === 0) {
-          drawCandle(0);
-          if (signalsByIndex[0]) drawSignal(0, signalsByIndex[0]);
-        } else if (currentIndex < NUM_CANDLES) {
-          drawCandle(currentIndex);
-          if (signalsByIndex[currentIndex]) drawSignal(currentIndex, signalsByIndex[currentIndex]);
-        } else {
-          clearInterval(timer);
-          setTimeout(() => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            startTradingSimulation();
-          }, HOLD_MS);
-        }
-      }
-
-      const timer = setInterval(step, revealInterval);
-      step(); // draw first immediately
-    }
-
-    // kick off
-    startTradingSimulation();
-  });
-</script>
-
-
-
-
-  <!-- Section Switching Script (single source of truth) -->
-  <script>
-    function showSection(event, sectionId) {
-      if (event) event.preventDefault();
-      const sections = document.querySelectorAll('.hero');
-      sections.forEach(section => section.classList.remove('active'));
-      document.getElementById(sectionId).classList.add('active');
-      window.history.pushState(null, null, `#${sectionId}`);
-      // Scroll to top when switching sections
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const hash = window.location.hash.substring(1);
-      if (hash && document.getElementById(hash)) {
-        showSection(null, hash);
-      } else {
-        showSection(null, 'home');
-      }
-    });
+  })();
   </script>
-
 </body>
 </html>

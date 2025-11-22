@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xiaoxian Wang | Projects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <style>
+    /* Reverted to global theme colors */
+    :root { 
+      --primary: #3b82f6;   /* Standard Blue */
+      --secondary: #f59e0b; /* Standard Orange/Amber */
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #02040a; /* Deep tech dark, slightly darker than main for contrast with glowing lines */
+      min-height: 100vh; 
+      color: white; 
+      overflow-x: hidden; 
+    }
+
+    /* Canvas container */
+    #techBgCanvas { 
+      position: fixed; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%; 
+      z-index: -2; 
+      pointer-events: none;
+    }
+
+    /* Tech Circuit Texture Overlay */
+    .tech-texture { 
+      position: fixed; 
+      inset: 0; 
+      z-index: -1; 
+      pointer-events: none; 
+      background-image: 
+        linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
+      opacity: 0.4;
+    }
+
+    .hero { 
+      width: 100%; 
+      min-height: 100vh; 
+      padding: 2rem; 
+      box-sizing: border-box; 
+      animation: fadeIn 0.8s ease forwards; 
+    }
+
+    .section-content { max-width: 1200px; margin: 0 auto; padding: 80px 20px; }
+
+    /* Navigation Styles - STRICTLY ENFORCED ORANGE HIGHLIGHT */
+    .nav-item { position: relative; padding: 0.5rem 1rem; transition: all 0.3s ease; }
+    .nav-item::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+    .nav-item:hover::after { width: 100%; }
+
+    .project-link { position: relative; transition: all 0.3s ease; }
+    .project-link:hover { transform: translateX(5px); color: var(--secondary); }
+
+    /* Card Style - Techy Look adapted to Blue/Orange */
+    .card { 
+      background: rgba(5, 10, 25, 0.6); 
+      backdrop-filter: blur(8px); 
+      border: 1px solid rgba(59, 130, 246, 0.2); /* Blue border tint */
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.05) inset;
+      border-radius: 2px; 
+      padding: 2rem; 
+      transition: all 0.3s ease; 
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card:hover { 
+      transform: translateY(-5px); 
+      border-color: rgba(245, 158, 11, 0.5); /* Orange on hover */
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.15) inset, 0 10px 20px -10px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Tech decorative corner markers */
+    .card::before, .card::after {
+      content: ''; position: absolute; width: 10px; height: 10px; border: 2px solid var(--secondary); opacity: 0; transition: all 0.3s;
+    }
+    .card::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+    .card::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+    .card:hover::before, .card:hover::after { opacity: 1; width: 20px; height: 20px; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <canvas id="techBgCanvas"></canvas>
+  <div class="tech-texture"></div>
+
+  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md border-b border-white/5">
+    <nav class="container mx-auto flex justify-between items-center px-4">
+      <a href="index.html" class="text-2xl font-bold text-white hover:text-secondary transition-colors">XW</a>
+      <ul class="flex space-x-6">
+        <li><a href="about.html" class="nav-item text-white">About</a></li>
+        <li><a href="projects.html" class="nav-item text-secondary">Projects</a></li>
+        <li><a href="investment.html" class="nav-item text-white">Investment</a></li>
+        <li><a href="contact.html" class="nav-item text-white">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero pt-32">
+    <div class="section-content">
+      <div>
+        <h2 class="text-4xl font-bold mb-12 text-center tracking-tight"><span class="text-blue-500">&lt;</span> Featured Projects <span class="text-blue-500">/&gt;</span></h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[01] Campus Bullying Detection</h3>
+            <p class="text-gray-400 mb-4 text-sm">Real-time AI monitoring system using edge computing...</p>
+            <a href="projects/campus-bullying.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+              &gt; VIEW_CASE_STUDY
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[02] EvoNAS Operating System</h3>
+            <p class="text-gray-400 mb-4 text-sm">Lightweight and scalable OS designed for Edge AI...</p>
+            <a href="projects/evonas.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+              &gt; VIEW_CASE_STUDY
+            </a>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[03] Inventory Tracking System</h3>
+            <p class="text-gray-400 mb-4 text-sm">Automated inventory management using machine learning...</p>
+            <a href="projects/inventory.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+              &gt; VIEW_CASE_STUDY
+            </a>
+          </div>
+          <div class="card">
+             <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[04] Heart Disease Prediction</h3>
+             <p class="text-gray-400 mb-4 text-sm">AI-driven diagnostic tool for heart disease risk assessment...</p>
+             <a href="projects/heart-disease.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+               &gt; VIEW_CASE_STUDY
+             </a>
+           </div>
+           <div class="card">
+             <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[05] Maze Solver</h3>
+             <p class="text-gray-400 mb-4 text-sm">Pathfinding algorithms to solve complex mazes efficiently...</p>
+             <a href="projects/maze.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+               &gt; VIEW_CASE_STUDY
+             </a>
+           </div>
+           <div class="card">
+             <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[06] Digit Classification</h3>
+             <p class="text-gray-400 mb-4 text-sm">Deep learning model for handwritten digit recognition...</p>
+             <a href="projects/digit.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+               &gt; VIEW_CASE_STUDY
+             </a>
+           </div>
+           <div class="card">
+             <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[07] Intel Edge Solutions</h3>
+             <p class="text-gray-400 mb-4 text-sm">Edge AI for Smart Cities &amp; Transportation...</p>
+             <a href="projects/IESC.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+               &gt; VIEW_CASE_STUDY
+             </a>
+           </div>
+           <div class="card">
+             <h3 class="text-xl font-semibold mb-3 text-blue-400 font-mono tracking-tighter">[08] Cyber Tarot</h3>
+             <p class="text-gray-400 mb-4 text-sm">A unique AI-powered tarot reading experience...</p>
+             <a href="projects/tarot.html" class="project-link text-white hover:text-secondary flex items-center text-sm font-bold font-mono">
+               &gt; VIEW_CASE_STUDY
+             </a>
+           </div>
+        </div>
+
+        <h3 class="text-2xl font-bold mt-20 mb-8 text-center text-white tracking-tight font-mono">Let's see what's cooking...</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="card border-l-2 border-l-yellow-500">
+            <h3 class="text-xl font-semibold mb-3 text-white font-mono">Quantitative Trading Strategy</h3>
+            <p class="text-gray-400 mb-4 text-sm">Machine learning-driven trading algorithm.</p>
+            <a href="projects/invest.html" class="project-link text-yellow-500 flex items-center text-sm font-bold font-mono">INITIATE_SEQUENCE &gt;</a>
+          </div>
+          <div class="card border-l-2 border-l-yellow-500">
+            <h3 class="text-xl font-semibold mb-3 text-white font-mono">Edge AI Acceleration &amp; CDN</h3>
+            <p class="text-gray-400 mb-4 text-sm">Optimizing AI inference performance at the edge...</p>
+            <a href="projects/edge.html" class="project-link text-yellow-500 flex items-center text-sm font-bold font-mono">INITIATE_SEQUENCE &gt;</a>
+          </div>
+          <div class="card border-l-2 border-l-yellow-500">
+            <h3 class="text-xl font-semibold mb-3 text-white font-mono">Hull Tactical (Kaggle)</h3>
+            <p class="text-gray-400 mb-4 text-sm">Systematically predicting market inefficiencies...</p>
+            <a href="projects/hull.html" class="project-link text-yellow-500 flex items-center text-sm font-bold font-mono">INITIATE_SEQUENCE &gt;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <script>
+  (() => {
+    const canvas = document.getElementById('techBgCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width, height, dpr;
+
+    // --- Config ---
+    const HUB_COUNT = 6; 
+    const STREAM_COUNT = 60; 
+    const COLOR_BLUE = '59, 130, 246';   // Blue-500
+    const COLOR_ORANGE = '245, 158, 11'; // Amber-500
+
+    const hubs = [];
+    const streams = [];
+
+    // 1. Hubs (Static processing cores)
+    class Hub {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.baseSize = Math.random() * 3 + 2;
+        this.pulseOffset = Math.random() * Math.PI;
+      }
+      draw(t) {
+        const pulse = Math.sin(t * 0.002 + this.pulseOffset);
+        const size = this.baseSize + pulse * 1.5;
+        const opacity = 0.3 + pulse * 0.2;
+
+        // Outer glow ring (Blue)
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, size * 4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${COLOR_BLUE}, ${opacity * 0.1})`;
+        ctx.fill();
+
+        // Inner core
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${COLOR_BLUE}, 0.8)`;
+        ctx.fill();
+        
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = `rgba(${COLOR_BLUE}, 1)`;
+      }
+    }
+
+    // 2. Data Streams (Fast packets)
+    class DataStream {
+      constructor() {
+        this.reset();
+        this.trail = []; 
+        this.trailLength = Math.random() * 20 + 10;
+      }
+      reset() {
+        if (Math.random() > 0.7 && hubs.length > 0) {
+            const startHub = hubs[Math.floor(Math.random() * hubs.length)];
+            this.x = startHub.x;
+            this.y = startHub.y;
+        } else {
+            this.x = Math.random() < 0.5 ? (Math.random() < 0.5 ? 0 : width) : Math.random() * width;
+            this.y = (this.x === 0 || this.x === width) ? Math.random() * height : (Math.random() < 0.5 ? 0 : height);
+        }
+
+        let targetX, targetY;
+        if (Math.random() > 0.4 && hubs.length > 0) {
+             const targetHub = hubs[Math.floor(Math.random() * hubs.length)];
+             targetX = targetHub.x;
+             targetY = targetHub.y;
+        } else {
+             targetX = Math.random() * width;
+             targetY = Math.random() * height;
+        }
+
+        const dx = targetX - this.x;
+        const dy = targetY - this.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        
+        this.speed = Math.random() * 3 + 2; 
+        this.vx = (dx / dist) * this.speed || 1;
+        this.vy = (dy / dist) * this.speed || 0;
+        
+        this.trail = [];
+        this.life = 0;
+        this.maxLife = dist / this.speed + 50;
+        
+        // Randomly pick Blue or Orange
+        this.color = Math.random() > 0.3 ? COLOR_BLUE : COLOR_ORANGE;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life++;
+        
+        this.trail.unshift({x: this.x, y: this.y});
+        if (this.trail.length > this.trailLength) {
+            this.trail.pop();
+        }
+
+        if (this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50 || this.life > this.maxLife) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        if (this.trail.length < 2) return;
+
+        ctx.shadowBlur = 0; 
+        ctx.lineWidth = 1.5;
+        ctx.lineCap = 'round';
+
+        for (let i = 0; i < this.trail.length - 1; i++) {
+            const opacity = 1 - (i / this.trail.length);
+            ctx.beginPath();
+            ctx.moveTo(this.trail[i].x, this.trail[i].y);
+            ctx.lineTo(this.trail[i+1].x, this.trail[i+1].y);
+            ctx.strokeStyle = `rgba(${this.color}, ${opacity * 0.6})`;
+            ctx.stroke();
+        }
+        
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255, 255, 255, 0.9)`;
+        ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      hubs.length = 0;
+      streams.length = 0;
+      for (let i = 0; i < HUB_COUNT; i++) hubs.push(new Hub());
+      for (let i = 0; i < STREAM_COUNT; i++) streams.push(new DataStream());
+    }
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+      init();
+    }
+
+    let time = 0;
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      time++;
+
+      // Draw connections between hubs
+      ctx.lineWidth = 0.5;
+      ctx.shadowBlur = 0;
+      for (let i = 0; i < hubs.length; i++) {
+        for (let j = i + 1; j < hubs.length; j++) {
+           const dx = hubs[i].x - hubs[j].x;
+           const dy = hubs[i].y - hubs[j].y;
+           const dist = Math.sqrt(dx*dx + dy*dy);
+           if (dist < 250) {
+             ctx.strokeStyle = `rgba(${COLOR_BLUE}, ${0.1 * (1 - dist/250)})`;
+             ctx.beginPath();
+             ctx.moveTo(hubs[i].x, hubs[i].y);
+             ctx.lineTo(hubs[j].x, hubs[j].y);
+             ctx.stroke();
+           }
+        }
+      }
+
+      streams.forEach(s => { s.update(); s.draw(); });
+      hubs.forEach(h => h.draw(time));
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xiaoxian Wang | About</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --secondary: #f59e0b;
+    }
+
+    /* Background base - Using the deeper navy from the starry animation */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #030712; 
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Canvas container */
+    #wqBgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* Texture overlay - Updated to match the starry night style */
+    .wq-texture {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1.2px);
+      background-size: 12px 12px;
+      mix-blend-mode: soft-light;
+      opacity: 0.9;
+    }
+
+    .section-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    /* Navigation */
+    .nav-item {
+      position: relative;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+    }
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+    }
+    .nav-item:hover::after { width: 100%; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .section-content { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="wqBgCanvas"></canvas>
+  <div class="wq-texture"></div>
+
+  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md border-b border-white/5">
+    <nav class="container mx-auto flex justify-between items-center px-4">
+      <a href="index.html" class="text-2xl font-bold text-white hover:text-secondary transition-colors">XW</a>
+      <ul class="flex space-x-6">
+        <li><a href="about.html" class="nav-item text-secondary">About</a></li>
+        <li><a href="projects.html" class="nav-item text-white">Projects</a></li>
+        <li><a href="investment.html" class="nav-item text-white">Investment</a></li>
+        <li><a href="contact.html" class="nav-item text-white">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="pt-32 min-h-screen">
+    <div class="section-content px-4 sm:px-6 lg:px-8">
+      <div class="delay-1 opacity-0" style="animation-fill-mode: forwards; animation-name: fadeIn; animation-duration: 0.8s;">
+        <h2 class="text-4xl font-bold text-center mb-12">About Me</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="space-y-6 delay-2 opacity-0" style="animation-fill-mode: forwards; animation-name: fadeIn; animation-duration: 0.8s; animation-delay: 0.2s;">
+          <img src="pictures/intel_summit.jpg" alt="Intel Summit" class="w-full max-w-md mx-auto rounded-lg shadow-lg opacity-90 hover:opacity-100 transition-opacity border border-white/10">
+          <p class="text-sm text-center text-gray-500 font-mono">2023 Intel LOEM Summit, Macau</p>
+          
+          <div class="bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-white/5">
+            <h3 class="text-2xl font-bold text-center mb-4 text-blue-400">Who am I?</h3>
+            <p class="text-lg text-center text-gray-300 leading-relaxed mb-4">
+              I am Xiaoxian Wang, a machine learning developer, quantitative trader, and data analyst with a passion for innovation at the intersection of AI and finance.
+            </p>
+            <p class="text-lg text-center text-gray-300 leading-relaxed">
+              As an Intel Developer and Prestige member of the Intel Partner Alliance, I consistently push boundaries in tech.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-8 delay-3 opacity-0" style="animation-fill-mode: forwards; animation-name: fadeIn; animation-duration: 0.8s; animation-delay: 0.3s;">
+          <div class="bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+            <h4 class="text-2xl font-bold mb-4 text-secondary">Licenses &amp; Certifications</h4>
+            <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
+              <li>WorldQuant Brain <span class="text-yellow-400 font-bold">Gold Level</span> and <span class="text-yellow-400 font-bold">Top 10%</span></li>
+              <li>Microsoft Certified: Azure AI Fundamentals (AI-900)</li>
+              <li>Microsoft Office Specialist - Expert (Microsoft 365 Apps)</li>
+              <li>Intel Edge AI Developer Certification</li>
+              <li>Google Analytics Certification</li>
+              <li>Google IT Support Professional Certificate</li>
+            </ul>
+          </div>
+
+          <div class="bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+            <h4 class="text-2xl font-bold mb-4 text-secondary">Education &amp; Scholarship</h4>
+            <ul class="list-none text-lg text-gray-300 space-y-4">
+              <li>
+                <div class="font-semibold text-white">Certificate in Quantitative Finance, CQF Institute</div>
+                <div class="text-sm text-gray-500">2026.1 - 2026.6</div>
+                <div class="text-gray-400 text-sm mt-1 ml-2 border-l-2 border-gray-700 pl-3">Recipient of the Learning Incentive Scholarship</div>
+              </li>
+              <li>
+                <div class="font-semibold text-white">Master of Business Analytics, UBC</div>
+                <div class="text-sm text-gray-500">2025 - 2026</div>
+                <div class="text-gray-400 text-sm mt-1 ml-2 border-l-2 border-gray-700 pl-3">Recipient of the Accelerated Career Scholarship</div>
+              </li>
+              <li>
+                <div class="font-semibold text-white">MSc in Financial Engineering, WorldQuant University</div>
+                <div class="text-sm text-gray-500">2025 - 2027</div>
+              </li>
+              <li>
+                <div class="font-semibold text-white">Bachelor of Arts in Economics(Distinction), UBC</div>
+                <div class="text-sm text-gray-500">2021 - 2025</div>
+                <div class="text-gray-400 text-sm mt-1 ml-2 border-l-2 border-gray-700 pl-3">Recipient of the International Student Scholarship</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-16 text-center delay-4 opacity-0" style="animation-fill-mode: forwards; animation-name: fadeIn; animation-duration: 0.8s; animation-delay: 0.4s;">
+        <img src="pictures/group_picture.jpg" alt="Group picture" class="w-full max-w-md mx-auto rounded-lg shadow-lg opacity-90 hover:opacity-100 transition-opacity border border-white/10">
+        <p class="text-xs text-gray-500 mt-2 font-mono">With John Kalvin (Intel VP), Dave Guzzi (Intel VP), and Ye Zong (Intel PRC GM)</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  (() => {
+    const canvas = document.getElementById('wqBgCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width, height, dpr, rafId, t = 0, lastTs = performance.now();
+    const FADE_TAU_MS = 120, STAR_SPEED_FACTOR = 0.7;
+    const particles = []; let starsNear = [], starsFar = []; let shooter = null, nextShootAt = 0;
+    const pointer = { x: 0.5, y: 0.5, active: false };
+
+    function resize() { dpr = Math.min(window.devicePixelRatio || 1, 2); const rect = canvas.getBoundingClientRect(); width = rect.width; height = rect.height; canvas.width = Math.floor(width * dpr); canvas.height = Math.floor(height * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); initAll(); }
+    function initAll() { particles.length = 0; const count = Math.max(220, Math.min(900, Math.floor((width * height) / 1600))); for (let i = 0; i < count; i++) particles.push({ x: Math.random() * width, y: Math.random() * height, speed: 0.35 + Math.random() * 0.9, life: 90 + Math.random() * 300, alpha: 0.12 + Math.random() * 0.4 }); const area = width * height; starsFar = Array.from({ length: Math.max(70, Math.min(240, Math.floor(area / 22000))) }, () => ({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 0.9 + 0.3, phase: Math.random() * Math.PI * 2, twinkle: 0.15 + Math.random() * 0.25, speed: 0.015 + Math.random() * 0.03 })); starsNear = Array.from({ length: Math.max(55, Math.min(160, Math.floor(area / 30000))) }, () => ({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 1.6 + 0.6, phase: Math.random() * Math.PI * 2, twinkle: 0.2 + Math.random() * 0.3, speed: 0.04 + Math.random() * 0.08 })); nextShootAt = performance.now() + 3000 + Math.random() * 6000; shooter = null; }
+    function spawnShooter(ts) { const speed = 2.2 + Math.random() * 1.6; const jitter = (Math.random() - 0.5) * 0.25; const len = Math.hypot(1 + jitter, 1 - jitter); shooter = { x: -30 + Math.random() * 80, y: -30 + Math.random() * 80, vx: (1 + jitter) / len * speed, vy: (1 - jitter) / len * speed, life: 180 + Math.floor(Math.random() * 180), tail: 10 + Math.random() * 12 }; nextShootAt = ts + 6000 + Math.random() * 4000; }
+    function drawShooter() { if (!shooter) return; shooter.x += shooter.vx; shooter.y += shooter.vy; shooter.life--; const tailX = shooter.x - shooter.vx * shooter.tail, tailY = shooter.y - shooter.vy * shooter.tail; const grad = ctx.createLinearGradient(tailX, tailY, shooter.x, shooter.y); grad.addColorStop(0, 'rgba(59,130,246,0)'); grad.addColorStop(1, 'rgba(255,255,255,0.95)'); ctx.lineWidth = 2; ctx.strokeStyle = grad; ctx.beginPath(); ctx.moveTo(tailX, tailY); ctx.lineTo(shooter.x, shooter.y); ctx.stroke(); ctx.beginPath(); ctx.arc(shooter.x, shooter.y, 1.4, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.fill(); if (shooter.life <= 0 || shooter.x > width + 80 || shooter.y > height + 80) shooter = null; }
+    function fieldAngle(x, y) { let base = Math.sin(y * 0.0015 + t * 0.7) + Math.cos(x * 0.0012 - t * 0.35); if (pointer.active) { const dx = x - pointer.x * width, dy = y - pointer.y * height; base += Math.min(1, 18000 / (dx*dx + dy*dy + 1)) * Math.sin(t * 1.5); } return base; }
+    function drawStars(list, parallax) { for (const s of list) { s.x -= s.speed * parallax * STAR_SPEED_FACTOR; if (s.x < -2) s.x = width + 2; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(t * 1.8 + s.phase) * s.twinkle})`; ctx.fill(); } }
+    function drawFrame(ts) { const dt = Math.max(0, Math.min(100, ts - lastTs)); const fade = 1 - Math.exp(-dt / FADE_TAU_MS); ctx.fillStyle = `rgba(3, 7, 18, ${fade})`; ctx.fillRect(0, 0, width, height); drawStars(starsFar, 0.4); drawStars(starsNear, 1.0); for (const p of particles) { const a = fieldAngle(p.x, p.y); const vx = Math.cos(a) * p.speed, vy = Math.sin(a) * p.speed; const nx = p.x + vx, ny = p.y + vy; const grad = ctx.createLinearGradient(p.x, p.y, nx, ny); grad.addColorStop(0, `hsla(215,95%,62%,${p.alpha * 0.8})`); grad.addColorStop(1, `hsla(0,0%,100%,${Math.min(1, p.alpha + 0.2)})`); ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.strokeStyle = grad; ctx.lineWidth = 1; ctx.stroke(); p.x = nx; p.y = ny; if (--p.life < 0 || nx < 0 || ny < 0 || nx > width || ny > height) { p.x = Math.random() * width; p.y = Math.random() * height; p.life = 90 + Math.random() * 300; } } if (ts >= nextShootAt && !shooter) spawnShooter(ts); drawShooter(); t += 0.0025; lastTs = ts; rafId = requestAnimationFrame(drawFrame); }
+    window.addEventListener('resize', () => { resize(); ctx.fillStyle = '#030712'; ctx.fillRect(0, 0, width, height); }, { passive: true });
+    window.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); pointer.x = (e.clientX - r.left) / r.width; pointer.y = (e.clientY - r.top) / r.height; pointer.active = true; clearTimeout(pointer._to); pointer._to = setTimeout(() => pointer.active = false, 1200); }, { passive: true });
+    resize(); ctx.fillStyle = '#030712'; ctx.fillRect(0, 0, width, height); requestAnimationFrame(drawFrame);
+  })();
+  </script>
+</body>
+</html>

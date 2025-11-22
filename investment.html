@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xiaoxian Wang | Investment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <style>
+    :root { 
+      --primary: #3b82f6; 
+      --secondary: #f59e0b; 
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #050814; /* Deep specialized navy for finance */
+      min-height: 100vh; 
+      color: white; 
+      overflow-x: hidden; 
+    }
+
+    /* Canvas container */
+    #globeCanvas { 
+      position: fixed; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%; 
+      z-index: -2; 
+      pointer-events: none; 
+    }
+
+    /* Map/Grid Texture Overlay */
+    .world-texture { 
+      position: fixed; 
+      inset: 0; 
+      z-index: -1; 
+      pointer-events: none; 
+      /* Abstract world map dots or grid */
+      background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+      opacity: 0.6;
+    }
+
+    .hero { 
+      width: 100%; 
+      min-height: 100vh; 
+      padding: 2rem; 
+      box-sizing: border-box; 
+      animation: fadeIn 0.8s ease forwards; 
+    }
+
+    .section-content { max-width: 1200px; margin: 0 auto; padding: 80px 20px; }
+
+    /* Navigation */
+    .nav-item { position: relative; padding: 0.5rem 1rem; transition: all 0.3s ease; }
+    .nav-item::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+    .nav-item:hover::after { width: 100%; }
+
+    /* Card Styles - Financial Glassmorphism */
+    .card { 
+      background: rgba(15, 23, 42, 0.6); 
+      backdrop-filter: blur(16px); 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 8px; 
+      padding: 2rem; 
+      transition: transform 0.3s ease, border-color 0.3s ease; 
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+    .card:hover { 
+      transform: translateY(-5px); 
+      border-color: rgba(245, 158, 11, 0.3); /* Gold hint on hover */
+    }
+
+    /* Scrollbar for data lists */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <canvas id="globeCanvas"></canvas>
+  <div class="world-texture"></div>
+
+  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md border-b border-white/5">
+    <nav class="container mx-auto flex justify-between items-center px-4">
+      <a href="index.html" class="text-2xl font-bold text-white hover:text-secondary transition-colors">XW</a>
+      <ul class="flex space-x-6">
+        <li><a href="about.html" class="nav-item text-white">About</a></li>
+        <li><a href="projects.html" class="nav-item text-white">Projects</a></li>
+        <li><a href="investment.html" class="nav-item text-secondary">Investment</a></li>
+        <li><a href="contact.html" class="nav-item text-white">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero pt-32">
+    <div class="section-content text-center">
+      <div>
+        <h2 class="text-4xl font-bold mb-2 tracking-tight text-white">Investment Portfolio</h2>
+        <p class="text-secondary font-mono text-sm mb-12">[Snapshot: 2025.10]</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-6">
+          <div class="card p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-white">Crypto Allocation</h3>
+                <span class="text-xs font-mono text-green-400">● LIVE</span>
+            </div>
+            <div id="cryptoChart" style="width: 100%; height: 350px;"></div>
+          </div>
+          <div class="card p-6 text-left">
+            <h3 class="text-xl font-bold mb-4 text-gray-200">Real-time Prices (24h)</h3>
+            <div id="crypto-prices" class="text-gray-300 font-mono text-sm h-48 overflow-y-auto custom-scrollbar">Loading...</div>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="card p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-white">Equity Allocation</h3>
+                <span class="text-xs font-mono text-blue-400">● DELAYED 15M</span>
+            </div>
+            <div id="stocksChart" style="width: 100%; height: 350px;"></div>
+          </div>
+          <div class="card p-6 text-left">
+            <h3 class="text-xl font-bold mb-4 text-gray-200">Market Data (24h)</h3>
+            <div id="stock-prices" class="text-gray-300 font-mono text-sm h-48 overflow-y-auto custom-scrollbar">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 fade-in">
+        <div class="card p-6 mx-auto" style="max-width: 1200px;">
+          <div class="flex justify-between items-end mb-4">
+             <div class="text-left">
+                <h3 class="text-2xl font-bold text-white">Alpha Strategy Simulation</h3>
+                <p class="text-xs text-gray-400 font-mono mt-1">High-Frequency Algo // Mean Reversion</p>
+             </div>
+             <div class="text-right">
+                <div class="text-xs text-gray-500">Signal Confidence</div>
+                <div class="text-xl text-secondary font-bold font-mono">94.2%</div>
+             </div>
+          </div>
+          <canvas id="tradingSimulationCanvas" width="1000" height="400" style="background: transparent; width: 100%;"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      google.charts.load('current', { packages: ['corechart'] });
+      google.charts.setOnLoadCallback(drawCharts);
+
+      const commonChartOptions = {
+        titleTextStyle: { color: '#e5e7eb', fontName: 'Inter', fontSize: 16 },
+        pieHole: 0.6, // Thinner donut for modern look
+        legend: { position: 'right', textStyle: { color: '#9ca3af', fontSize: 12 } },
+        pieSliceTextStyle: { color: 'transparent' }, // Hide text inside pie
+        backgroundColor: 'transparent',
+        chartArea: { width: '90%', height: '90%' },
+        pieSliceBorderColor: '#0f172a' // Match card background for separation
+      };
+
+      function drawCharts() {
+        // Crypto
+        var cryptoData = google.visualization.arrayToDataTable([ ['Asset', 'Allocation'], ['BNB', 82.18], ['BTC', 5.57], ['USDC', 4.71], ['WBETH', 3.1], ['BNSOL', 2.58], ['USDT', 1.86] ]);
+        var cryptoOptions = { ...commonChartOptions, colors: ["#3b82f6", "#f59e0b", "#10b981", "#6366f1", "#ef4444","#a78bfa"] };
+        var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
+        cryptoChart.draw(cryptoData, cryptoOptions);
+
+        // Stocks
+        var stockAllocations = { "Cash (Margin)": 6.4, "Fixed Income": 41.2, "Royal Bank (RY)": 21.2, "Brookfield (BAM)": 8.9, "Dollarama (DOL)": 10.3, "Yinn ETF": 12 };
+        var stocksArray = [['Asset', 'Allocation']];
+        for (var key in stockAllocations) stocksArray.push([key, stockAllocations[key]]);
+        var stocksData = google.visualization.arrayToDataTable(stocksArray);
+        var stocksOptions = { ...commonChartOptions, colors: ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6", "#14b8a6", "#f97316"] };
+        var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
+        stocksChart.draw(stocksData, stocksOptions);
+      }
+
+      // ----- Fetch Data with 24h Change Logic -----
+
+      // 1. Crypto Prices
+      function fetchCryptoPrices() {
+        const cryptoMapping = { "BNB": "binancecoin", "BTC": "bitcoin", "WBETH": "weth", "BNSOL": "solana" };
+        const cryptoIds = Object.values(cryptoMapping).join(",");
+        // Added: include_24hr_change=true
+        fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd&include_24hr_change=true`)
+          .then(response => response.json())
+          .then(data => {
+            let html = "<div class='space-y-3'>";
+            for (let asset in cryptoMapping) {
+              const coinId = cryptoMapping[asset];
+              if(data[coinId]) {
+                  const price = data[coinId].usd;
+                  const change = data[coinId].usd_24h_change || 0;
+                  
+                  // Formatting
+                  const priceStr = typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price;
+                  const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
+                  const changeSign = change >= 0 ? "+" : "";
+                  
+                  html += `
+                    <div class='flex justify-between items-center border-b border-white/5 pb-2'>
+                        <span class="font-medium">${asset}</span> 
+                        <div class="text-right">
+                            <div class='text-blue-400 font-bold'>$${priceStr}</div>
+                            <div class='text-xs ${changeColor}'>${changeSign}${change.toFixed(2)}%</div>
+                        </div>
+                    </div>`;
+              }
+            }
+            html += "</div>";
+            document.getElementById('crypto-prices').innerHTML = html;
+          }).catch(err => document.getElementById('crypto-prices').innerHTML = "<span class='text-red-400'>Feed Disconnected</span>");
+      }
+      fetchCryptoPrices();
+
+      // 2. Stock Prices
+      function fetchStockPricesFinnhub() {
+        const stockTickersArr = ["RY", "BAM", "DOL", "YINN"]; 
+        const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
+        
+        // Finnhub Quote Endpoint returns: c (current), d (change), dp (percent change)
+        Promise.all(stockTickersArr.map(ticker => 
+            fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
+            .then(r => r.json())
+            .then(d => ({ ticker, price: d.c, change: d.dp }))
+            .catch(e => ({ ticker, price: null, change: 0 }))
+        ))
+        .then(results => {
+          let html = "<div class='space-y-3'>";
+          results.forEach(item => { 
+             const priceStr = item.price && item.price > 0 ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "N/A";
+             const change = item.change || 0;
+             const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
+             const changeSign = change >= 0 ? "+" : "";
+
+             html += `
+                <div class='flex justify-between items-center border-b border-white/5 pb-2'>
+                    <span class="font-medium">${item.ticker}</span> 
+                    <div class="text-right">
+                        <div class='text-green-400 font-bold'>$${priceStr}</div>
+                        <div class='text-xs ${changeColor}'>${changeSign}${change.toFixed(2)}%</div>
+                    </div>
+                </div>`;
+          });
+          html += "</div>";
+          document.getElementById('stock-prices').innerHTML = html;
+        }).catch(err => document.getElementById('stock-prices').innerHTML = "<span class='text-red-400'>Feed Disconnected</span>");
+      }
+      fetchStockPricesFinnhub();
+    });
+  </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    function startTradingSimulation() {
+      const canvas = document.getElementById("tradingSimulationCanvas");
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(dpr, dpr);
+
+      const HOLD_MS = 3000, NUM_CANDLES = 60, BULL = "#10b981", BEAR = "#ef4444", AXIS_COLOR = "rgba(255,255,255,0.1)";
+      const marginLeft = 50, marginRight = 10, marginTop = 20, marginBottom = 30;
+      const width = rect.width - marginLeft - marginRight, height = rect.height - marginTop - marginBottom;
+
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      function priceToY(price, minP, maxP) { return maxP === minP ? marginTop + height / 2 : marginTop + ((maxP - price) / (maxP - minP)) * height; }
+      
+      // Draw Grid
+      function drawGrid(yMin, yMax) {
+        ctx.strokeStyle = AXIS_COLOR; ctx.lineWidth = 1;
+        // Horiz lines
+        for(let i=0; i<5; i++) {
+            let y = marginTop + (height/4)*i;
+            ctx.beginPath(); ctx.moveTo(marginLeft, y); ctx.lineTo(marginLeft + width, y); ctx.stroke();
+        }
+        // Labels
+        ctx.fillStyle = "rgba(255,255,255,0.4)"; ctx.font = "10px monospace"; ctx.textAlign = "right";
+        ctx.fillText(yMax.toFixed(2), marginLeft - 10, marginTop + 4);
+        ctx.fillText(yMin.toFixed(2), marginLeft - 10, marginTop + height + 4);
+      }
+
+      function randNorm() { let u = 0, v = 0; while (u === 0) u = Math.random(); while (v === 0) v = Math.random(); return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v); }
+      
+      const candles = []; let lastClose = 100;
+      for (let i = 0; i < NUM_CANDLES; i++) {
+        const open = lastClose; const delta = randNorm() * 2; const close = open + delta;
+        candles.push({ o: open, h: Math.max(open, close) + Math.abs(randNorm()), l: Math.min(open, close) - Math.abs(randNorm()), c: close });
+        lastClose = close;
+      }
+      const minPrice = Math.min(...candles.map(k => k.l)), maxPrice = Math.max(...candles.map(k => k.h));
+      const pad = (maxPrice - minPrice) * 0.1; const yMin = minPrice - pad, yMax = maxPrice + pad;
+      
+      drawGrid(yMin, yMax);
+
+      const xSpacing = width / NUM_CANDLES;
+      const bodyWidth = xSpacing * 0.6;
+
+      function drawCandle(i) {
+        const { o, h, l, c } = candles[i]; 
+        const xCenter = marginLeft + i * xSpacing + xSpacing/2;
+        const yOpen = priceToY(o, yMin, yMax), yClose = priceToY(c, yMin, yMax), yHigh = priceToY(h, yMin, yMax), yLow = priceToY(l, yMin, yMax);
+        const color = c >= o ? BULL : BEAR;
+        
+        ctx.strokeStyle = color; ctx.lineWidth = 1; 
+        ctx.beginPath(); ctx.moveTo(xCenter, yHigh); ctx.lineTo(xCenter, yLow); ctx.stroke();
+        ctx.fillStyle = color; 
+        const candleH = Math.max(1, Math.abs(yOpen - yClose));
+        ctx.fillRect(xCenter - bodyWidth / 2, Math.min(yOpen, yClose), bodyWidth, candleH);
+        
+        // Draw SMA line roughly
+        if (i > 0) {
+            const prev = candles[i-1];
+            const prevX = marginLeft + (i-1)*xSpacing + xSpacing/2;
+            const prevY = priceToY(prev.c, yMin, yMax);
+            ctx.strokeStyle = "#3b82f6"; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(prevX, prevY); ctx.lineTo(xCenter, yClose); ctx.stroke();
+        }
+      }
+
+      let i = 0;
+      const timer = setInterval(() => {
+        if (i >= NUM_CANDLES) { clearInterval(timer); setTimeout(startTradingSimulation, HOLD_MS); return; }
+        drawCandle(i);
+        
+        // Random Buy/Sell Signals
+        if (Math.random() < 0.15) {
+            const type = Math.random() > 0.5 ? 'B' : 'S';
+            const x = marginLeft + i * xSpacing + xSpacing/2;
+            const k = candles[i];
+            ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center";
+            if (type === 'B') {
+                ctx.fillStyle = BULL; // Now using #10b981 (Green)
+                ctx.fillText("▲", x, priceToY(k.l, yMin, yMax) + 15);
+            } else {
+                ctx.fillStyle = BEAR;
+                ctx.fillText("▼", x, priceToY(k.h, yMin, yMax) - 8);
+            }
+        }
+        i++;
+      }, 50);
+    }
+    startTradingSimulation();
+    let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(startTradingSimulation, 250); });
+  });
+  </script>
+
+  <script>
+  (() => {
+    const canvas = document.getElementById('globeCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    // Config
+    const CONFIG = {
+      radius: 0, // calculated on resize
+      dotCount: 600,
+      dotSize: 1.5,
+      rotationSpeed: 0.002,
+      colorBlue: '59, 130, 246', // Blue-500
+      colorGold: '245, 158, 11', // Amber-500
+      connectionDist: 0, // calculated on resize
+    };
+
+    let dots = [];
+    let angleY = 0; // Rotation around Y axis
+
+    class Dot3D {
+      constructor() {
+        // Random point on sphere surface using spherical coordinates
+        this.theta = Math.random() * Math.PI * 2; // Longitude
+        this.phi = Math.acos((Math.random() * 2) - 1); // Latitude
+        
+        // Base color chance
+        this.isGold = Math.random() > 0.9; // 10% Gold dots (Alpha opportunities)
+      }
+
+      project(radius, rotation) {
+        // 1. Rotate around Y axis
+        // x = r * sin(phi) * cos(theta)
+        // y = r * cos(phi)
+        // z = r * sin(phi) * sin(theta)
+        
+        let x = radius * Math.sin(this.phi) * Math.cos(this.theta + rotation);
+        let y = radius * Math.cos(this.phi);
+        let z = radius * Math.sin(this.phi) * Math.sin(this.theta + rotation);
+
+        // 2. 3D to 2D Projection
+        const scale = 400 / (400 - z); // Perspective transform
+        const x2d = x * scale + width / 2;
+        const y2d = y * scale + height / 2;
+
+        return { x: x2d, y: y2d, z: z, scale: scale };
+      }
+    }
+
+    function init() {
+      dots = [];
+      for (let i = 0; i < CONFIG.dotCount; i++) {
+        dots.push(new Dot3D());
+      }
+    }
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      
+      // Radius depends on screen size, generally 35% of min dimension
+      CONFIG.radius = Math.min(width, height) * 0.35;
+      CONFIG.connectionDist = CONFIG.radius * 0.4; 
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // Update rotation
+      angleY += CONFIG.rotationSpeed;
+
+      // Project all dots first
+      const projectedDots = dots.map(dot => {
+        const proj = dot.project(CONFIG.radius, angleY);
+        return { ...proj, dot: dot };
+      });
+
+      // Sort by Z (depth sorting) so back dots draw first
+      projectedDots.sort((a, b) => a.z - b.z);
+
+      // Draw Lines (Arcs) between close dots
+      // Optimization: Only draw lines for dots in front (z < 0 is front in this perspective math usually, or check logic)
+      // In this projection: z moves from -radius to +radius. +radius is closer to viewer (larger scale).
+      ctx.lineWidth = 0.5;
+      
+      for (let i = 0; i < projectedDots.length; i++) {
+        const p1 = projectedDots[i];
+        // Only draw if dot is roughly facing us or slightly side
+        if (p1.z < -CONFIG.radius * 0.2) continue; // Skip back dots lines for clarity
+
+        // Connect to nearest neighbors
+        // This is O(N^2) roughly, keep count low or optimize loop
+        // Optimization: only check next 20 sorted dots? No, spatial locality isn't guaranteed by Z-sort.
+        // Just check random sample or restrict distance heavily.
+        
+        // Let's just draw lines for "Gold" nodes to emphasize "Alpha" paths
+        if (p1.dot.isGold) {
+           for (let j = 0; j < projectedDots.length; j++) {
+             if (i === j) continue;
+             const p2 = projectedDots[j];
+             if (p2.z < -CONFIG.radius * 0.2) continue;
+
+             const dx = p1.x - p2.x;
+             const dy = p1.y - p2.y;
+             const distSq = dx*dx + dy*dy;
+
+             if (distSq < 3000) { // Close enough on screen
+                const alpha = 1 - (distSq / 3000);
+                ctx.strokeStyle = `rgba(${CONFIG.colorGold}, ${alpha * 0.4})`;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+             }
+           }
+        }
+      }
+
+      // Draw Dots
+      for (let i = 0; i < projectedDots.length; i++) {
+        const p = projectedDots[i];
+        const alpha = (p.z + CONFIG.radius) / (2 * CONFIG.radius); // Back dots faded
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, CONFIG.dotSize * p.scale, 0, Math.PI * 2);
+        
+        if (p.dot.isGold) {
+            ctx.fillStyle = `rgba(${CONFIG.colorGold}, ${alpha})`;
+            // Add glow for gold dots
+            if (p.z > 0) {
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgba(${CONFIG.colorGold}, 0.8)`;
+            } else {
+                ctx.shadowBlur = 0;
+            }
+        } else {
+            ctx.fillStyle = `rgba(${CONFIG.colorBlue}, ${alpha * 0.6})`;
+            ctx.shadowBlur = 0;
+        }
+        
+        ctx.fill();
+      }
+      
+      // Reset shadow
+      ctx.shadowBlur = 0;
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => { resize(); init(); });
+    resize();
+    init();
+    animate();
+  })();
+  </script>
+</body>
+</html>
