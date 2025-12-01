@@ -102,7 +102,7 @@
     <div class="section-content text-center">
       <div>
         <h2 class="text-4xl font-bold mb-2 tracking-tight text-white">Investment Portfolio</h2>
-        <p class="text-secondary font-mono text-sm mb-12">[Snapshot: 2025.10]</p>
+        <p class="text-secondary font-mono text-sm mb-12">[Snapshot: 2025.12]</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -176,12 +176,52 @@
         var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
         cryptoChart.draw(cryptoData, cryptoOptions);
 
-        // Stocks
-        var stockAllocations = { "Cash (Margin)": 6.4, "Fixed Income": 41.2, "Royal Bank (RY)": 21.2, "Brookfield (BAM)": 8.9, "Dollarama (DOL)": 10.3, "Yinn ETF": 12 };
+        // --- STOCKS REDESIGN ---
+        // Logic: Fixed Income reduced by 50% (41.2 -> 20.6).
+        // Remaining 20.6% split into BMO Canadian Banks & BMO US Dividend holdings.
+        var stockAllocations = { 
+            "Cash (Margin)": 6.4, 
+            "Fixed Income": 20.6, 
+            "Royal Bank (RY)": 21.2, 
+            "Brookfield (BAM)": 8.9, 
+            "Dollarama (DOL)": 10.3, 
+            "Yinn ETF": 12,
+            // New: BMO Canadian Banks Components (~10.3%)
+            "TD Bank (TD)": 2.6,
+            "Bank of Montreal (BMO)": 2.6,
+            "Scotiabank (BNS)": 2.6,
+            "CIBC (CM)": 2.5,
+            // New: BMO US Dividend Components (~10.3%)
+            "Microsoft (MSFT)": 4.1,
+            "JPMorgan (JPM)": 3.2,
+            "Chevron (CVX)": 1.8,
+            "Cisco (CSCO)": 1.2
+        };
+
         var stocksArray = [['Asset', 'Allocation']];
         for (var key in stockAllocations) stocksArray.push([key, stockAllocations[key]]);
         var stocksData = google.visualization.arrayToDataTable(stocksArray);
-        var stocksOptions = { ...commonChartOptions, colors: ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6", "#14b8a6", "#f97316"] };
+        
+        // Expanded color palette for new holdings
+        var stocksOptions = { 
+            ...commonChartOptions, 
+            colors: [
+                "#6366f1", // Cash
+                "#10b981", // Fixed Income
+                "#f59e0b", // RY
+                "#ef4444", // BAM
+                "#3b82f6", // DOL
+                "#8b5cf6", // YINN
+                "#06b6d4", // TD
+                "#38bdf8", // BMO
+                "#0ea5e9", // BNS
+                "#0284c7", // CM
+                "#ec4899", // MSFT
+                "#d946ef", // JPM
+                "#a855f7", // CVX
+                "#c084fc"  // CSCO
+            ] 
+        };
         var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
         stocksChart.draw(stocksData, stocksOptions);
       }
@@ -200,9 +240,7 @@
               if(data[coinId]) {
                   const price = data[coinId].usd;
                   const change = data[coinId].usd_24h_change || 0;
-                  
                   const priceStr = typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price;
-                  // Color Coding
                   const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
                   const changeSign = change >= 0 ? "+" : "";
                   
@@ -223,8 +261,9 @@
       fetchCryptoPrices();
 
       // --- Fetch Stocks (Finnhub) ---
+      // UPDATED: Added new tickers to the fetch list
       function fetchStockPricesFinnhub() {
-        const stockTickersArr = ["RY", "BAM", "DOL", "YINN"]; 
+        const stockTickersArr = ["RY", "BAM", "DOL", "YINN", "TD", "BMO", "MSFT", "JPM"]; 
         const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
         
         Promise.all(stockTickersArr.map(ticker => 
@@ -236,9 +275,11 @@
         .then(results => {
           let html = "<div class='space-y-3'>";
           results.forEach(item => { 
-             const priceStr = item.price && item.price > 0 ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "N/A";
+             // Filter out items that failed to load correctly
+             if(item.price === 0 || item.price === null) return;
+             
+             const priceStr = item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
              const change = item.change || 0;
-             // Color Coding
              const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
              const changeSign = change >= 0 ? "+" : "";
 
