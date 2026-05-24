@@ -116,7 +116,7 @@
           </div>
           <div>
             <span class="text-gray-500 block mb-1">METEO</span>
-            <span class="text-white font-medium">14°C // OVERCAST</span>
+            <span id="telemetry-meteo" class="text-white font-medium uppercase animate-pulse">LOADING...</span>
           </div>
         </div>
       </div>
@@ -365,6 +365,63 @@
           }, 1500);
         });
       }
+    });
+  </script>
+
+  <!-- Live Vancouver Weather Telemetry (Open-Meteo API) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const meteoEl = document.getElementById('telemetry-meteo');
+      if (!meteoEl) return;
+
+      // Weather codes map based on WMO standards
+      const wmoCodes = {
+        0: 'CLEAR',
+        1: 'MAINLY CLEAR', 2: 'PARTLY CLOUDY', 3: 'OVERCAST',
+        45: 'FOGGY', 48: 'DEPOSITING RIME FOG',
+        51: 'LIGHT DRIZZLE', 53: 'MODERATE DRIZZLE', 55: 'DENSE DRIZZLE',
+        61: 'LIGHT RAIN', 63: 'MODERATE RAIN', 65: 'HEAVY RAIN',
+        71: 'LIGHT SNOW', 73: 'MODERATE SNOW', 75: 'HEAVY SNOW',
+        77: 'SNOW GRAINS',
+        80: 'LIGHT SHOWER', 81: 'MODERATE SHOWER', 82: 'HEAVY SHOWER',
+        85: 'SNOW SHOWER', 86: 'HEAVY SNOW SHOWER',
+        95: 'THUNDERSTORM', 96: 'THUNDERSTORM WITH HAIL'
+      };
+
+      // Check cache first to avoid spaming API (15-min cache)
+      const cache = localStorage.getItem('cache_weather');
+      const cacheTime = localStorage.getItem('cache_weather_ts');
+      
+      if (cache && cacheTime && (Date.now() - cacheTime < 15 * 60 * 1000)) {
+        meteoEl.textContent = cache;
+        meteoEl.classList.remove('animate-pulse');
+        return;
+      }
+
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=49.2827&longitude=-123.1207&current_weather=true')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.current_weather) {
+            const temp = Math.round(data.current_weather.temperature);
+            const code = data.current_weather.weathercode;
+            const status = wmoCodes[code] || 'ACTIVE';
+            
+            const output = `${temp}°C // ${status}`;
+            meteoEl.textContent = output;
+            meteoEl.classList.remove('animate-pulse');
+            
+            // Cache it
+            localStorage.setItem('cache_weather', output);
+            localStorage.setItem('cache_weather_ts', Date.now());
+          } else {
+            throw new Error();
+          }
+        })
+        .catch(() => {
+          // Fallback to beautiful static mock
+          meteoEl.textContent = '14°C // OVERCAST';
+          meteoEl.classList.remove('animate-pulse');
+        });
     });
   </script>
 </body>
