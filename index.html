@@ -4,152 +4,146 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Xiaoxian Wang - Machine Learning Developer & Quantitative Trader" />
-  <title>Xiaoxian Wang | Home</title>
+  <title>Xiaoxian Wang | Quantum Quant Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="global.css" />
+  <script src="global.js"></script>
   <style>
-    :root { --primary: #3b82f6; --secondary: #f59e0b; }
-    
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background: #000000; /* Pure black for better contrast with particles */
-      min-height: 100vh; 
-      color: white; 
-      overflow-x: hidden; 
-      margin: 0;
-    }
-
-    /* Canvas is fixed to background */
-    #flowCanvas { 
-      position: fixed; 
-      inset: 0; 
-      width: 100%; 
-      height: 100%; 
-      z-index: -2; 
-    }
-
-    /* Overlay text styles */
-    .hero { 
-      width: 100%; 
-      min-height: 100vh; 
-      padding: 2rem; 
-      box-sizing: border-box; 
+    .hero {
+      width: 100%;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      z-index: 1;
-      /* Subtle text shadow to separate from the busy background */
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      z-index: 10;
+      padding-top: 80px;
     }
-
-    .section-content { 
-      max-width: 1200px; 
-      margin: 0 auto; 
-      padding: 80px 20px; 
-      text-align: center;
-      opacity: 0; 
-      animation: fadeIn 1.5s ease forwards 0.5s; 
-    }
-
-    .nav-item { position: relative; padding: 0.5rem 1rem; transition: all 0.3s ease; }
-    .nav-item::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
-    .nav-item:hover::after { width: 100%; }
-
-    .contact-button { 
-      position: relative; 
-      overflow: hidden; 
-      transition: all 0.4s ease; 
-      backdrop-filter: blur(5px);
-      background: rgba(0,0,0,0.3);
-    }
-    .contact-button::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.6s; }
-    .contact-button:hover::after { left: 100%; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    
-    /* Make the main title HUGE like the "Future Faster" text */
-    .main-title {
-      font-size: 4rem;
-      line-height: 1.1;
-    }
-    @media (min-width: 768px) {
-      .main-title { font-size: 6rem; }
+    #flowCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
     }
   </style>
 </head>
-<body>
+<body class="scanlines-overlay">
 
   <canvas id="flowCanvas"></canvas>
 
-  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-sm border-b border-white/5">
-    <nav class="container mx-auto flex justify-between items-center px-4">
-      <a href="index.html" class="text-2xl font-bold text-white hover:text-secondary transition-colors">XW</a>
-      <ul class="flex space-x-6">
-        <li><a href="about.html" class="nav-item text-white">About</a></li>
-        <li><a href="projects.html" class="nav-item text-white">Projects</a></li>
-        <li><a href="investment.html" class="nav-item text-white">Investment</a></li>
-        <li><a href="contact.html" class="nav-item text-white">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <div class="section-content">
-      <div>
-        <p class="text-secondary text-lg mb-4 font-mono tracking-[0.2em] uppercase">Quantitative Strategies // AI</p>
-        <h1 class="main-title font-bold mb-6 tracking-tighter text-white mix-blend-screen">
-          Xiaoxian<br>Wang
-        </h1>
-        <div class="overflow-hidden">
-          <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto font-light">
-            Developing high-frequency algorithmic trading strategies and scalable machine learning systems.
-          </p>
+  <section class="hero px-4">
+    <div class="max-w-4xl w-full text-center">
+      <div class="cyber-card p-8 md:p-12 mb-8 inline-block w-full text-left relative fade-in-up">
+        <!-- Floating Telemetry Indicator -->
+        <div class="absolute top-4 right-4 text-[9px] font-mono text-cyan-400/40 select-none">
+          SECURE_ID // 0x4D7A9B
         </div>
-        <a href="about.html" class="contact-button inline-block px-10 py-4 border border-white/30 text-white rounded-full text-lg font-medium hover:bg-white hover:text-black transition-all duration-300">
-          Explore Work
-        </a>
+
+        <p class="tech-label mb-2">// QUANTITATIVE SYSTEMS // MACHINE LEARNING</p>
+        
+        <h1 class="tech-title text-4xl md:text-6xl font-black mb-6 tracking-tighter text-white uppercase glow-text-cyan leading-tight">
+          Xiaoxian<br><span class="text-cyan-400">Wang</span>
+        </h1>
+        
+        <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl font-light leading-relaxed">
+          Developing state-of-the-art high-frequency algorithmic trading pipelines and scalable, deep-learning models for market inefficiencies.
+        </p>
+
+        <!-- Simulated Terminal Shell -->
+        <div class="bg-black/60 border border-white/5 rounded p-4 mb-8 font-mono text-xs text-cyan-400/90 shadow-inner select-none">
+          <div class="flex items-center gap-2 border-b border-white/5 pb-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500/60"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-green-500/60"></span>
+            <span class="text-[9px] text-gray-600 ml-2">quant_terminal_v1.0.8 // host: local</span>
+          </div>
+          <div id="terminal-stdout" class="space-y-1">
+            <div>&gt; Initializing algorithmic trading nodes... <span class="text-green-400">[SUCCESS]</span></div>
+            <div>&gt; Connecting to global low-latency feeds... <span class="text-green-400">[ESTABLISHED]</span></div>
+            <div id="terminal-typing">&gt; Loading strategy alpha matrices... <span class="animate-pulse">_</span></div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <a href="about.html" class="cyber-btn w-full sm:w-auto">
+            INITIATE WORK &gt;
+          </a>
+          <div class="flex gap-6 text-[10px] font-mono text-gray-500 mt-4 sm:mt-0 select-none">
+            <span>MEM // 89.2%</span>
+            <span>GPU // 92.4%</span>
+            <span>PING // ACTIVE</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <script>
   (() => {
+    // --- 1. Terminal Typing Simulation ---
+    const typingEl = document.getElementById('terminal-typing');
+    const outputs = [
+      "&gt; Loading strategy alpha matrices... <span class='text-green-400'>[LOADED]</span>",
+      "&gt; Fetching real-time market coordinates... <span class='text-green-400'>[SYNCED]</span>",
+      "&gt; Compiling mathematical model representations... <span class='text-green-400'>[ACTIVE]</span>",
+      "&gt; SYS_OK: Standing by for user instruction..."
+    ];
+    let outputIdx = 0;
+    
+    function nextStdoutLine() {
+      if (outputIdx < outputs.length) {
+        setTimeout(() => {
+          const div = document.createElement('div');
+          div.innerHTML = outputs[outputIdx];
+          typingEl.before(div);
+          outputIdx++;
+          
+          if (outputIdx === outputs.length) {
+            typingEl.remove();
+          } else {
+            nextStdoutLine();
+          }
+        }, 1500 + Math.random() * 1000);
+      }
+    }
+    nextStdoutLine();
+
+    // --- 2. Canvas Animation Core ---
     const canvas = document.getElementById('flowCanvas');
     const ctx = canvas.getContext('2d');
     
-    let width, height;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
     let particles = [];
-    let flowField = [];
     
-    // Configuration matching WorldQuant vibe (Orange/Blue)
     const config = {
-      particleCount: 3000,      // Very high count for density
-      zoom: 0.003,              // How "zoomed in" the noise pattern is
-      curve: 2.5,               // How curvy the lines are
-      speed: 0.8,               // Speed of flow
-      trailFade: 0.04,          // Lower = longer trails (0.04 is good balance)
+      particleCount: 1500,     // Smart cap for performance
+      zoom: 0.002,             // Noise pattern scale
+      curve: 3.0,              // Flow field curving
+      speed: 0.65,             // Base speed
+      trailFade: 0.08,         // Trail length (higher = shorter trails)
       colors: [
-        '43, 95, 230',   // WorldQuant Blue
-        '255, 110, 50',  // Deep Orange
-        '59, 130, 246',  // Primary Blue
-        '245, 158, 11'   // Secondary Orange
+        '0, 102, 255',   // Cyber Blue
+        '0, 240, 255',   // Neon Cyan
+        '255, 85, 0',    // Cyber Orange
+        '255, 255, 255'  // Pure White
       ]
     };
 
-    // Pseudo-random noise function (Simplex-like) to create organic flow
-    // Standard Math.random is too chaotic; we need smooth gradients.
-    function createNoise3D(x, y, z) {
-      let p = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
+    // Fast Pseudo-random noise function (Simplex approximation)
+    function noise3D(x, y, z) {
+      let p = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
       for (let i=0; i < 256 ; i++) p[256+i] = p[i];
       
-      function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-      function lerp(t, a, b) { return a + t * (b - a); }
-      function grad(hash, x, y, z) {
+      const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
+      const lerp = (t, a, b) => a + t * (b - a);
+      const grad = (hash, x, y, z) => {
         let h = hash & 15;
         let u = h < 8 ? x : y, v = h < 4 ? y : h === 12 || h === 14 ? x : z;
         return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
-      }
+      };
       
       let X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
       x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
@@ -165,7 +159,6 @@
     class Particle {
       constructor() {
         this.reset();
-        // Start somewhere random along the timeline so they don't look uniform
         this.age = Math.random() * 100; 
       }
 
@@ -175,41 +168,40 @@
         this.prevX = this.x;
         this.prevY = this.y;
         
-        // Pick a random color from config
         const colorStr = config.colors[Math.floor(Math.random() * config.colors.length)];
-        // Randomize opacity slightly for depth
-        this.color = `rgba(${colorStr}, ${Math.random() * 0.6 + 0.4})`;
+        this.colorRaw = colorStr;
+        this.alpha = Math.random() * 0.45 + 0.25;
+        this.color = `rgba(${colorStr}, ${this.alpha})`;
         
-        this.size = Math.random() * 2 + 0.5;
-        this.speed = config.speed * (Math.random() * 0.4 + 0.8);
-        this.life = Math.random() * 300 + 100; // Reset eventually to avoid "stuck" particles
+        this.size = Math.random() * 1.5 + 0.5;
+        this.speed = config.speed * (Math.random() * 0.5 + 0.75);
+        this.life = Math.random() * 200 + 100;
       }
 
       update(time) {
         this.prevX = this.x;
         this.prevY = this.y;
 
-        // 1. Calculate Angle based on Noise
-        // We use x/y for spatial noise, and 'time' for temporal noise (animation)
-        const angle = createNoise3D(this.x * config.zoom, this.y * config.zoom, time * 0.1) * Math.PI * config.curve;
+        // Angle derived from spatial and temporal noise
+        const angle = noise3D(this.x * config.zoom, this.y * config.zoom, time * 0.05) * Math.PI * config.curve;
 
-        // 2. Apply Velocity
         this.x += Math.cos(angle) * this.speed;
         this.y += Math.sin(angle) * this.speed;
 
-        // 3. Mouse Interaction (Repulsion/Swirl)
-        if (mouse.x) {
+        // Interactive mouse gravitation
+        if (mouse.x !== null) {
           const dx = this.x - mouse.x;
           const dy = this.y - mouse.y;
           const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 200) {
-            const force = (200 - dist) / 200;
-            this.x += (dx / dist) * force * 5;
-            this.y += (dy / dist) * force * 5;
+          if (dist < 150) {
+            const force = (150 - dist) / 150;
+            // Draw particles into a mild vortex swirl around the cursor
+            this.x += (-dy / dist) * force * 3 + (dx / dist) * force * 1.5;
+            this.y += (dx / dist) * force * 3 + (dy / dist) * force * 1.5;
           }
         }
 
-        // 4. Boundary Check - Wrap around
+        // Boundary checks (warp around edge)
         if (this.x > width) { this.x = 0; this.prevX = 0; }
         if (this.x < 0) { this.x = width; this.prevX = width; }
         if (this.y > height) { this.y = 0; this.prevY = 0; }
@@ -232,50 +224,77 @@
     const mouse = { x: null, y: null };
     let time = 0;
 
+    // Initialization logic
     function init() {
       particles = [];
-      // Dynamic particle count based on screen area (performance optimization)
       const area = width * height;
-      const targetCount = Math.min(config.particleCount, Math.floor(area / 400));
-      
+      const targetCount = Math.min(config.particleCount, Math.floor(area / 650));
       for (let i = 0; i < targetCount; i++) {
         particles.push(new Particle());
       }
     }
 
+    // High-DPI Resizing wrapper
     function resize() {
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-      init();
+      window.scaleCanvasForDPI(canvas, ctx, width, height);
     }
 
-    function animate() {
-      // Key Effect: Instead of clearing the canvas, draw a semi-transparent rectangle.
-      // This leaves previous frames visible for a while, creating the "Trail/Fiber" look.
-      // Black with very low opacity = long trails. High opacity = short trails.
-      ctx.fillStyle = `rgba(0, 0, 0, ${config.trailFade})`; 
+    // Core Drawing Cycle
+    function draw(timestamp, elapsed) {
+      // Trail effect (semi-transparent clear overlay)
+      ctx.fillStyle = `rgba(2, 2, 4, ${config.trailFade})`; 
       ctx.fillRect(0, 0, width, height);
 
-      time += 0.005; // Moves the noise field slowly over time
+      time += 0.003; 
 
+      // Connect close nodes of matching coordinates (Quant network lines)
+      ctx.lineWidth = 0.4;
+      const length = particles.length;
+      for (let i = 0; i < length; i += 8) { // Skip steps for optimal O(N) calculations
+        const p1 = particles[i];
+        for (let j = i + 1; j < length; j += 15) {
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distSq = dx*dx + dy*dy;
+          if (distSq < 3200) { // Connect particles that are within 56px
+            const alpha = (1 - distSq / 3200) * 0.12;
+            ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw all particles
       particles.forEach(p => {
         p.update(time);
         p.draw();
       });
-
-      requestAnimationFrame(animate);
     }
 
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
-    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+    // Listeners
+    window.addEventListener('resize', () => {
+      resize();
+      init();
+    });
+    window.addEventListener('mousemove', e => { 
+      mouse.x = e.clientX; 
+      mouse.y = e.clientY; 
+    });
+    window.addEventListener('mouseout', () => { 
+      mouse.x = null; 
+      mouse.y = null; 
+    });
 
-    resize();
-    animate();
+    // Register canvas with performance Registry
+    window.CanvasRegistry.register('indexParticles', init, draw, resize);
 
   })();
   </script>
 </body>
-</html>
+</html>

@@ -1,0 +1,377 @@
+/* 
+ * global.css - Cyber Quant Theme Stylesheet 
+ * Inspired by worldquant.com and high-tech trading interfaces
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-obsidian: #020204;
+  --cyber-blue: #0066ff;
+  --cyber-cyan: #00f0ff;
+  --cyber-orange: #ff5500;
+  --cyber-gold: #ffaa00;
+  --text-primary: #ffffff;
+  --text-muted: #8a8f98;
+  --font-cyber: 'Orbitron', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Inter', sans-serif;
+  --neon-shadow-blue: 0 0 10px rgba(0, 102, 255, 0.4), 0 0 20px rgba(0, 102, 255, 0.2);
+  --neon-shadow-cyan: 0 0 10px rgba(0, 240, 255, 0.4), 0 0 20px rgba(0, 240, 255, 0.2);
+  --neon-shadow-orange: 0 0 10px rgba(255, 85, 0, 0.4), 0 0 20px rgba(255, 85, 0, 0.2);
+}
+
+/* Global Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.9);
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 102, 255, 0.3);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 240, 255, 0.1);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.5);
+  box-shadow: var(--neon-shadow-cyan);
+}
+
+/* Global Reset & Body styling */
+body {
+  background-color: var(--bg-obsidian);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Background Grid System --- */
+.cyber-grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 102, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 102, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+  z-index: -10;
+  pointer-events: none;
+}
+.cyber-grid-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(2, 2, 4, 0.8) 90%);
+}
+
+/* --- Scanline Animation --- */
+.scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to bottom, rgba(0, 240, 255, 0) 0%, rgba(0, 240, 255, 0.04) 50%, rgba(0, 240, 255, 0) 100%);
+  opacity: 0.8;
+  z-index: 100;
+  pointer-events: none;
+  animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* --- Glassmorphic Cyber Cards --- */
+.cyber-card {
+  background: rgba(4, 4, 8, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 102, 255, 0.15);
+  border-radius: 4px;
+  padding: 1.75rem;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 0 15px rgba(0, 102, 255, 0.03);
+}
+
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 6px; height: 6px;
+  border-top: 2px solid var(--cyber-cyan);
+  border-left: 2px solid var(--cyber-cyan);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.cyber-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0; width: 6px; height: 6px;
+  border-bottom: 2px solid var(--cyber-cyan);
+  border-right: 2px solid var(--cyber-cyan);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.cyber-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 102, 255, 0.25),
+    inset 0 0 20px rgba(0, 240, 255, 0.08);
+}
+
+.cyber-card:hover::before {
+  width: 14px;
+  height: 14px;
+  border-color: var(--cyber-cyan);
+  filter: drop-shadow(0 0 2px var(--cyber-cyan));
+}
+
+.cyber-card:hover::after {
+  width: 14px;
+  height: 14px;
+  border-color: var(--cyber-cyan);
+  filter: drop-shadow(0 0 2px var(--cyber-cyan));
+}
+
+/* Orange Cyber Card variant */
+.cyber-card-orange {
+  border-color: rgba(255, 85, 0, 0.15);
+  box-shadow: inset 0 0 15px rgba(255, 85, 0, 0.03);
+}
+.cyber-card-orange::before, .cyber-card-orange::after {
+  border-color: var(--cyber-orange);
+}
+.cyber-card-orange:hover {
+  border-color: rgba(255, 85, 0, 0.4);
+  box-shadow: 
+    0 10px 30px -10px rgba(255, 85, 0, 0.25),
+    inset 0 0 20px rgba(255, 85, 0, 0.08);
+}
+.cyber-card-orange:hover::before, .cyber-card-orange:hover::after {
+  border-color: var(--cyber-orange);
+  filter: drop-shadow(0 0 2px var(--cyber-orange));
+}
+
+/* --- Cyber Buttons --- */
+.cyber-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  font-family: var(--font-cyber);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(0, 102, 255, 0.05);
+  border: 1px solid rgba(0, 102, 255, 0.3);
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(4px);
+}
+
+.cyber-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.cyber-btn:hover {
+  background: rgba(0, 102, 255, 0.15);
+  border-color: var(--cyber-cyan);
+  box-shadow: var(--neon-shadow-cyan);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+.cyber-btn:hover::before {
+  left: 100%;
+}
+
+.cyber-btn-orange {
+  background: rgba(255, 85, 0, 0.05);
+  border-color: rgba(255, 85, 0, 0.3);
+}
+.cyber-btn-orange:hover {
+  background: rgba(255, 85, 0, 0.15);
+  border-color: var(--cyber-orange);
+  box-shadow: var(--neon-shadow-orange);
+}
+
+/* --- High-Tech Header HUD Navigation --- */
+.hud-nav {
+  background: rgba(2, 2, 4, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 102, 255, 0.15);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.hud-nav-logo {
+  font-family: var(--font-cyber);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  background: linear-gradient(90deg, #ffffff 0%, var(--cyber-cyan) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hud-nav-item {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 1rem;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.hud-nav-item:hover, .hud-nav-item.active {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+.hud-nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  background: var(--cyber-cyan);
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--neon-shadow-cyan);
+}
+
+.hud-nav-item:hover::after, .hud-nav-item.active::after {
+  transform: scaleX(1);
+}
+
+/* --- Live Telemetry (PST Clock & Interactive Ping Meter) --- */
+.hud-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.telemetry-val {
+  color: var(--cyber-cyan);
+  font-weight: bold;
+}
+
+.telemetry-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.telemetry-dot.pinging {
+  animation: ping-pulse 1.5s infinite;
+}
+
+@keyframes ping-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+  70% { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* --- Common UI elements --- */
+.tech-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--cyber-orange);
+  margin-bottom: 0.5rem;
+}
+
+.tech-title {
+  font-family: var(--font-cyber);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.glow-text-cyan {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+.glow-text-blue {
+  text-shadow: 0 0 10px rgba(0, 102, 255, 0.4);
+}
+
+.glow-text-orange {
+  text-shadow: 0 0 10px rgba(255, 85, 0, 0.4);
+}
+
+/* --- Scanline grid mask for items --- */
+.scanlines-overlay {
+  position: relative;
+}
+.scanlines-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.06),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* Fade In animations */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

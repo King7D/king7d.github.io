@@ -3,546 +3,829 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xiaoxian Wang | Investment</title>
+  <title>Xiaoxian Wang | Strategy Telemetry &amp; Assets</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="global.css" />
+  <script src="global.js"></script>
   <style>
-    :root { 
-      --primary: #3b82f6; 
-      --secondary: #f59e0b; 
+    .invest-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 20px 60px 20px;
     }
-    
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background: #050814; /* Deep specialized navy for finance */
-      min-height: 100vh; 
-      color: white; 
-      overflow-x: hidden; 
+    #globeCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
     }
-
-    /* Canvas container */
-    #globeCanvas { 
-      position: fixed; 
-      inset: 0; 
-      width: 100%; 
-      height: 100%; 
-      z-index: -2; 
-      pointer-events: none; 
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 102, 255, 0.3); border-radius: 2px; }
+    .ticker-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      padding: 0.5rem 0;
+      font-size: 0.75rem;
     }
-
-    /* Map/Grid Texture Overlay */
-    .world-texture { 
-      position: fixed; 
-      inset: 0; 
-      z-index: -1; 
-      pointer-events: none; 
-      /* Abstract world map dots or grid */
-      background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 30px 30px;
-      mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-      opacity: 0.6;
-    }
-
-    .hero { 
-      width: 100%; 
-      min-height: 100vh; 
-      padding: 2rem; 
-      box-sizing: border-box; 
-      animation: fadeIn 0.8s ease forwards; 
-    }
-
-    .section-content { max-width: 1200px; margin: 0 auto; padding: 80px 20px; }
-
-    /* Navigation */
-    .nav-item { position: relative; padding: 0.5rem 1rem; transition: all 0.3s ease; }
-    .nav-item::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
-    .nav-item:hover::after { width: 100%; }
-
-    /* Card Styles - Financial Glassmorphism */
-    .card { 
-      background: rgba(15, 23, 42, 0.6); 
-      backdrop-filter: blur(16px); 
-      border: 1px solid rgba(255, 255, 255, 0.08); 
-      border-radius: 8px; 
-      padding: 2rem; 
-      transition: transform 0.3s ease, border-color 0.3s ease; 
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    }
-    .card:hover { 
-      transform: translateY(-5px); 
-      border-color: rgba(245, 158, 11, 0.3); /* Gold hint on hover */
-    }
-
-    /* Scrollbar for data lists */
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
-<body>
+<body class="scanlines-overlay">
 
   <canvas id="globeCanvas"></canvas>
-  <div class="world-texture"></div>
 
-  <header class="fixed top-0 w-full z-50 py-4 backdrop-blur-md border-b border-white/5">
-    <nav class="container mx-auto flex justify-between items-center px-4">
-      <a href="index.html" class="text-2xl font-bold text-white hover:text-secondary transition-colors">XW</a>
-      <ul class="flex space-x-6">
-        <li><a href="about.html" class="nav-item text-white">About</a></li>
-        <li><a href="projects.html" class="nav-item text-white">Projects</a></li>
-        <li><a href="investment.html" class="nav-item text-secondary">Investment</a></li>
-        <li><a href="contact.html" class="nav-item text-white">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+  <main class="invest-container">
+    <!-- Title Header -->
+    <div class="mb-12 text-center fade-in-up">
+      <p class="tech-label">// ASSET MATRIX SYSTEM // ALPHA ENGINE TELEMETRY</p>
+      <h2 class="tech-title text-4xl md:text-5xl font-black text-white glow-text-cyan uppercase">STRATEGY PORTFOLIO</h2>
+    </div>
 
-  <section class="hero pt-32">
-    <div class="section-content text-center">
-      <div>
-        <h2 class="text-4xl font-bold mb-2 tracking-tight text-white">Investment Portfolio</h2>
-        <p class="text-secondary font-mono text-sm mb-12">[Snapshot: 2025.12]</p>
-      </div>
+    <!-- Allocations Bento Box -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in-up">
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="space-y-6">
-          <div class="card p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-bold text-white">Crypto Allocation</h3>
-                <span class="text-xs font-mono text-green-400">● LIVE</span>
-            </div>
-            <div id="cryptoChart" style="width: 100%; height: 350px;"></div>
+      <!-- Crypto Allocation Glass Card -->
+      <div class="space-y-6">
+        <div class="cyber-card">
+          <div class="flex justify-between items-center mb-4 border-b border-cyan-500/20 pb-2">
+            <h3 class="text-lg font-bold font-cyber text-cyan-400 uppercase tracking-tight">CRYPTO ASSET ALLOCATION</h3>
+            <span class="text-[9px] font-mono text-cyan-400/60 border border-cyan-400/20 px-2 py-0.5 rounded animate-pulse">● LIVE_FEED</span>
           </div>
-          <div class="card p-6 text-left">
-            <h3 class="text-xl font-bold mb-4 text-gray-200">Real-time Prices (24h)</h3>
-            <div id="crypto-prices" class="text-gray-300 font-mono text-sm h-48 overflow-y-auto custom-scrollbar">Loading...</div>
-          </div>
+          <div id="cryptoChart" style="width: 100%; height: 320px;" class="mx-auto"></div>
         </div>
-        
-        <div class="space-y-6">
-          <div class="card p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-bold text-white">Equity Allocation</h3>
-                <span class="text-xs font-mono text-blue-400">● DELAYED 15M</span>
-            </div>
-            <div id="stocksChart" style="width: 100%; height: 350px;"></div>
-          </div>
-          <div class="card p-6 text-left">
-            <h3 class="text-xl font-bold mb-4 text-gray-200">Market Data (24h)</h3>
-            <div id="stock-prices" class="text-gray-300 font-mono text-sm h-48 overflow-y-auto custom-scrollbar">Loading...</div>
+
+        <div class="cyber-card">
+          <h4 class="text-xs font-mono text-gray-500 mb-3 uppercase tracking-wider">// LOC // REALTIME_COIN_INDEX</h4>
+          <div id="crypto-prices" class="font-mono text-xs max-h-48 overflow-y-auto custom-scrollbar space-y-1">
+            <div class="text-cyan-400/60 animate-pulse">&gt;&gt; ESTABLISHING FEED CONNECTION...</div>
           </div>
         </div>
       </div>
 
-      <div class="mt-6 fade-in">
-        <div class="card p-6 mx-auto" style="max-width: 1200px;">
-          <div class="flex justify-between items-end mb-4">
-             <div class="text-left">
-                <h3 class="text-2xl font-bold text-white">Alpha Strategy Simulation</h3>
-                <p class="text-xs text-gray-400 font-mono mt-1">High-Frequency Algo // Mean Reversion</p>
-             </div>
-             <div class="text-right">
-                <div class="text-xs text-gray-500">Signal Confidence</div>
-                <div class="text-xl text-secondary font-bold font-mono">94.2%</div>
-             </div>
+      <!-- Equities Allocation Glass Card -->
+      <div class="space-y-6">
+        <div class="cyber-card cyber-card-orange">
+          <div class="flex justify-between items-center mb-4 border-b border-orange-500/20 pb-2">
+            <h3 class="text-lg font-bold font-cyber text-orange-500 uppercase tracking-tight">EQUITIES PORTFOLIO</h3>
+            <span class="text-[9px] font-mono text-orange-500/60 border border-orange-500/20 px-2 py-0.5 rounded">● DELAYED_15M</span>
           </div>
-          <canvas id="tradingSimulationCanvas" style="width: 100%; height: 400px; background: transparent;"></canvas>
+          <div id="stocksChart" style="width: 100%; height: 320px;" class="mx-auto"></div>
+        </div>
+
+        <div class="cyber-card cyber-card-orange">
+          <h4 class="text-xs font-mono text-gray-500 mb-3 uppercase tracking-wider">// LOC // FINANCIAL_EQUITY_INDEX</h4>
+          <div id="stock-prices" class="font-mono text-xs max-h-48 overflow-y-auto custom-scrollbar space-y-1">
+            <div class="text-orange-500/60 animate-pulse">&gt;&gt; ESTABLISHING FEED CONNECTION...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HFT Alpha Simulator Terminal -->
+    <div class="cyber-card p-6 fade-in-up" style="animation-delay: 0.15s;">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 border-b border-white/5 pb-2 gap-4">
+        <div>
+          <h3 class="text-xl font-bold font-cyber text-white uppercase tracking-tight">ALPHA MEAN-REVERSION SIMULATION</h3>
+          <p class="text-[10px] text-gray-400 font-mono mt-1">// CHANNEL_07 // ACCELERATED MULTI-FACTOR EXECUTION LOG</p>
+        </div>
+        <div class="flex items-center gap-4 font-mono text-[10px] select-none text-gray-500">
+          <span>CONFIDENCE // <strong class="text-green-400 font-bold">94.2%</strong></span>
+          <span>STATUS // <strong class="text-cyan-400 font-bold animate-pulse">TRADING</strong></span>
+        </div>
+      </div>
+
+      <!-- Quant Metrics Telemetry Dashboard -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono text-[9px] text-gray-500 border-b border-white/5 pb-4 mb-4 select-none">
+        <div class="bg-black/30 border border-white/5 rounded p-2">
+          <span class="block mb-1">ANNUAL RETURN</span>
+          <span id="metric-return" class="text-green-400 font-bold text-xs glow-text-green">+24.80%</span>
+        </div>
+        <div class="bg-black/30 border border-white/5 rounded p-2">
+          <span class="block mb-1">SHARPE RATIO</span>
+          <span id="metric-sharpe" class="text-cyan-400 font-bold text-xs glow-text-cyan">3.24</span>
+        </div>
+        <div class="bg-black/30 border border-white/5 rounded p-2">
+          <span class="block mb-1">MAX DRAWDOWN</span>
+          <span id="metric-drawdown" class="text-orange-500 font-bold text-xs glow-text-orange">-4.15%</span>
+        </div>
+        <div class="bg-black/30 border border-white/5 rounded p-2">
+          <span class="block mb-1">WIN RATE</span>
+          <span id="metric-winrate" class="text-cyan-400 font-bold text-xs glow-text-cyan">68.2%</span>
+        </div>
+        <div class="bg-black/30 border border-white/5 rounded p-2">
+          <span class="block mb-1">VOLATILITY</span>
+          <span id="metric-volatility" class="text-white font-bold text-xs">14.50%</span>
+        </div>
+        <div class="bg-black/30 border border-white/5 rounded p-2">
+          <span class="block mb-1">BETA TO BENCH</span>
+          <span id="metric-beta" class="text-white font-bold text-xs">0.12</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Candlestick Visualizer -->
+        <div class="lg:col-span-8">
+          <canvas id="tradingSimulationCanvas" style="width: 100%; height: 350px; background: rgba(2, 2, 4, 0.4); border: 1px solid rgba(0, 102, 255, 0.1);" class="rounded"></canvas>
+        </div>
+        <!-- Live Trade execution terminal -->
+        <div class="lg:col-span-4 flex flex-col">
+          <div class="bg-black/60 border border-white/5 rounded p-4 font-mono text-[10px] text-green-400/90 shadow-inner flex-1 flex flex-col justify-between select-none">
+            <div>
+              <div class="border-b border-white/5 pb-2 mb-2 text-gray-500 flex justify-between items-center">
+                <span>SIMULATED ORDER BOOK</span>
+                <span class="text-[8px] border border-green-500/20 px-1 rounded animate-pulse">● LIVE_FEED</span>
+              </div>
+              <div id="hft-order-logs" class="space-y-1.5 max-h-[220px] overflow-y-auto custom-scrollbar">
+                <div class="text-gray-600">&gt; Starting Alpha Simulation...</div>
+                <div class="text-gray-600">&gt; Signal Pipeline: MeanReversion.cpp loaded.</div>
+              </div>
+            </div>
+            <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between text-[11px]">
+              <div>
+                <span class="text-gray-500">ACCUM // </span>
+                <span id="hft-pnl" class="text-white font-bold">$0.00</span>
+              </div>
+              <div>
+                <span class="text-gray-500">STATUS // </span>
+                <span class="text-green-400 font-bold">TRADING</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </main>
 
+  <!-- Google Charts Loader -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawCharts);
-
-      const commonChartOptions = {
-        titleTextStyle: { color: '#e5e7eb', fontName: 'Inter', fontSize: 16 },
-        pieHole: 0.6, 
-        legend: { position: 'right', textStyle: { color: '#9ca3af', fontSize: 12 } },
-        pieSliceTextStyle: { color: 'transparent' }, 
-        backgroundColor: 'transparent',
-        chartArea: { width: '90%', height: '90%' },
-        pieSliceBorderColor: '#0f172a' 
+    // --- 1. Resilient API Pricing Engine with Local Caching & Mock Simulation ---
+    document.addEventListener("DOMContentLoaded", () => {
+      // API Settings
+      const cryptoMapping = { "BNB": "binancecoin", "BTC": "bitcoin", "WBETH": "weth", "BNSOL": "solana" };
+      const stockTickers = ["RY", "BAM", "DOL", "YINN", "TD", "BMO", "MSFT", "JPM"];
+      const FINNHUB_KEY = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
+      
+      const cacheTimeout = 60 * 1000; // 1 minute cache
+      
+      // Starting base prices for mock simulation (fallback)
+      const mockPrices = {
+        BNB: { price: 592.40, change: 1.42 },
+        BTC: { price: 68430.50, change: -0.24 },
+        WBETH: { price: 3480.20, change: 0.85 },
+        BNSOL: { price: 168.10, change: -1.15 },
+        RY: { price: 135.20, change: 0.42 },
+        BAM: { price: 54.10, change: -0.68 },
+        DOL: { price: 112.50, change: 1.15 },
+        YINN: { price: 28.90, change: -3.40 },
+        TD: { price: 78.40, change: 0.05 },
+        BMO: { price: 114.60, change: 0.22 },
+        MSFT: { price: 420.30, change: 0.95 },
+        JPM: { price: 198.80, change: -0.15 }
       };
 
-      function drawCharts() {
-        // Crypto
-        var cryptoData = google.visualization.arrayToDataTable([ ['Asset', 'Allocation'], ['BNB', 82.18], ['BTC', 5.57], ['USDC', 4.71], ['WBETH', 3.1], ['BNSOL', 2.58], ['USDT', 1.86] ]);
-        var cryptoOptions = { ...commonChartOptions, colors: ["#3b82f6", "#f59e0b", "#10b981", "#6366f1", "#ef4444","#a78bfa"] };
-        var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
-        cryptoChart.draw(cryptoData, cryptoOptions);
-
-        // --- STOCKS REDESIGN ---
-        // Logic: Fixed Income reduced by 50% (41.2 -> 20.6).
-        // Remaining 20.6% split into BMO Canadian Banks & BMO US Dividend holdings.
-        var stockAllocations = { 
-            "Cash (Margin)": 6.4, 
-            "Fixed Income": 20.6, 
-            "Royal Bank (RY)": 21.2, 
-            "Brookfield (BAM)": 8.9, 
-            "Dollarama (DOL)": 10.3, 
-            "Yinn ETF": 12,
-            // New: BMO Canadian Banks Components (~10.3%)
-            "TD Bank (TD)": 2.6,
-            "Bank of Montreal (BMO)": 2.6,
-            "Scotiabank (BNS)": 2.6,
-            "CIBC (CM)": 2.5,
-            // New: BMO US Dividend Components (~10.3%)
-            "Microsoft (MSFT)": 4.1,
-            "JPMorgan (JPM)": 3.2,
-            "Chevron (CVX)": 1.8,
-            "Cisco (CSCO)": 1.2
-        };
-
-        var stocksArray = [['Asset', 'Allocation']];
-        for (var key in stockAllocations) stocksArray.push([key, stockAllocations[key]]);
-        var stocksData = google.visualization.arrayToDataTable(stocksArray);
+      function updateUI(targetId, dataList, isCrypto = true) {
+        const el = document.getElementById(targetId);
+        if (!el) return;
         
-        // Expanded color palette for new holdings
-        var stocksOptions = { 
-            ...commonChartOptions, 
-            colors: [
-                "#6366f1", // Cash
-                "#10b981", // Fixed Income
-                "#f59e0b", // RY
-                "#ef4444", // BAM
-                "#3b82f6", // DOL
-                "#8b5cf6", // YINN
-                "#06b6d4", // TD
-                "#38bdf8", // BMO
-                "#0ea5e9", // BNS
-                "#0284c7", // CM
-                "#ec4899", // MSFT
-                "#d946ef", // JPM
-                "#a855f7", // CVX
-                "#c084fc"  // CSCO
-            ] 
-        };
-        var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
-        stocksChart.draw(stocksData, stocksOptions);
+        let html = "<div class='space-y-2'>";
+        dataList.forEach(item => {
+          const colorClass = item.change >= 0 ? 'text-green-400' : 'text-red-400';
+          const sign = item.change >= 0 ? '+' : '';
+          const borderClass = isCrypto ? 'border-cyan-500/10' : 'border-orange-500/10';
+          const textGlow = isCrypto ? 'text-cyan-400' : 'text-green-400';
+          
+          html += `
+            <div class='flex justify-between items-center border-b ${borderClass} pb-2'>
+              <span class="font-medium text-gray-300">${item.ticker}</span>
+              <div class="text-right">
+                <div class="${textGlow} font-bold">$${item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div class="text-[10px] ${colorClass}">${sign}${item.change.toFixed(2)}%</div>
+              </div>
+            </div>`;
+        });
+        html += "</div>";
+        el.innerHTML = html;
       }
 
-      // --- Fetch Crypto (CoinGecko) ---
-      function fetchCryptoPrices() {
-        const cryptoMapping = { "BNB": "binancecoin", "BTC": "bitcoin", "WBETH": "weth", "BNSOL": "solana" };
-        const cryptoIds = Object.values(cryptoMapping).join(",");
+      // Simulate realistic small micro-ticks for absolute HFT realism
+      function startMicroTicking() {
+        setInterval(() => {
+          // Update one random asset's price slightly
+          const tickers = Object.keys(mockPrices);
+          const randTicker = tickers[Math.floor(Math.random() * tickers.length)];
+          const item = mockPrices[randTicker];
+          
+          const tick = (Math.random() - 0.5) * (item.price * 0.0008); // Max 0.08% fluctuation
+          item.price = Math.max(1, item.price + tick);
+          
+          // Re-render
+          const cryptos = [];
+          const equities = [];
+          
+          for (let ticker in mockPrices) {
+            const data = { ticker, price: mockPrices[ticker].price, change: mockPrices[ticker].change };
+            if (["BNB", "BTC", "WBETH", "BNSOL"].includes(ticker)) {
+              cryptos.push(data);
+            } else {
+              equities.push(data);
+            }
+          }
+          
+          updateUI('crypto-prices', cryptos, true);
+          updateUI('stock-prices', equities, false);
+        }, 1800);
+      }
+
+      function loadMockPrices() {
+        console.log("QuantEngine: Launching mock real-time simulation backup...");
+        const cryptos = [];
+        const equities = [];
         
-        fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd&include_24hr_change=true`)
-          .then(response => response.json())
+        for (let ticker in mockPrices) {
+          const data = { ticker, price: mockPrices[ticker].price, change: mockPrices[ticker].change };
+          if (["BNB", "BTC", "WBETH", "BNSOL"].includes(ticker)) {
+            cryptos.push(data);
+          } else {
+            equities.push(data);
+          }
+        }
+        updateUI('crypto-prices', cryptos, true);
+        updateUI('stock-prices', equities, false);
+        startMicroTicking();
+      }
+
+      // Load Cryptocurrencies
+      function getCryptoPrices() {
+        const cache = localStorage.getItem('cache_crypto');
+        const cacheTime = localStorage.getItem('cache_crypto_ts');
+        
+        if (cache && cacheTime && (Date.now() - cacheTime < cacheTimeout)) {
+          const parsed = JSON.parse(cache);
+          updateUI('crypto-prices', parsed, true);
+          // Sync mock core base prices
+          parsed.forEach(p => {
+            if (mockPrices[p.ticker]) {
+              mockPrices[p.ticker].price = p.price;
+              mockPrices[p.ticker].change = p.change;
+            }
+          });
+          startMicroTicking();
+          return;
+        }
+
+        const ids = Object.values(cryptoMapping).join(",");
+        fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`)
+          .then(res => {
+            if (!res.ok) throw new Error("Rate limit / failure");
+            return res.json();
+          })
           .then(data => {
-            let html = "<div class='space-y-3'>";
-            for (let asset in cryptoMapping) {
-              const coinId = cryptoMapping[asset];
-              if(data[coinId]) {
-                  const price = data[coinId].usd;
-                  const change = data[coinId].usd_24h_change || 0;
-                  const priceStr = typeof price === 'number' ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price;
-                  const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
-                  const changeSign = change >= 0 ? "+" : "";
-                  
-                  html += `
-                    <div class='flex justify-between items-center border-b border-white/5 pb-2'>
-                        <span class="font-medium">${asset}</span> 
-                        <div class="text-right">
-                            <div class='text-blue-400 font-bold'>$${priceStr}</div>
-                            <div class='text-xs ${changeColor}'>${changeSign}${change.toFixed(2)}%</div>
-                        </div>
-                    </div>`;
+            const results = [];
+            for (let ticker in cryptoMapping) {
+              const id = cryptoMapping[ticker];
+              if (data[id]) {
+                const item = {
+                  ticker: ticker,
+                  price: data[id].usd,
+                  change: data[id].usd_24h_change || 0
+                };
+                results.push(item);
+                if (mockPrices[ticker]) {
+                  mockPrices[ticker].price = item.price;
+                  mockPrices[ticker].change = item.change;
+                }
               }
             }
-            html += "</div>";
-            document.getElementById('crypto-prices').innerHTML = html;
-          }).catch(err => document.getElementById('crypto-prices').innerHTML = "<span class='text-red-400'>Feed Disconnected</span>");
+            
+            localStorage.setItem('cache_crypto', JSON.stringify(results));
+            localStorage.setItem('cache_crypto_ts', Date.now());
+            updateUI('crypto-prices', results, true);
+            startMicroTicking();
+          })
+          .catch(() => {
+            // Load fallbacks directly
+            loadMockPrices();
+          });
       }
-      fetchCryptoPrices();
 
-      // --- Fetch Stocks (Finnhub) ---
-      // UPDATED: Added new tickers to the fetch list
-      function fetchStockPricesFinnhub() {
-        const stockTickersArr = ["RY", "BAM", "DOL", "YINN", "TD", "BMO", "MSFT", "JPM"]; 
-        const finnhubAPIKey  = "cuunf39r01qk88s9t980cuunf39r01qk88s9t98g";
+      // Load Equities
+      function getStockPrices() {
+        const cache = localStorage.getItem('cache_stocks');
+        const cacheTime = localStorage.getItem('cache_stocks_ts');
         
-        Promise.all(stockTickersArr.map(ticker => 
-            fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhubAPIKey}`)
-            .then(r => r.json())
-            .then(d => ({ ticker, price: d.c, change: d.dp }))
-            .catch(e => ({ ticker, price: null, change: 0 }))
+        if (cache && cacheTime && (Date.now() - cacheTime < cacheTimeout)) {
+          const parsed = JSON.parse(cache);
+          updateUI('stock-prices', parsed, false);
+          parsed.forEach(p => {
+            if (mockPrices[p.ticker]) {
+              mockPrices[p.ticker].price = p.price;
+              mockPrices[p.ticker].change = p.change;
+            }
+          });
+          return;
+        }
+
+        Promise.all(stockTickers.map(ticker => 
+          fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_KEY}`)
+            .then(res => {
+              if (!res.ok) throw new Error("Limit reached");
+              return res.json();
+            })
+            .then(d => {
+              if (d.c === 0 || d.c === null) throw new Error("Empty API return");
+              return { ticker, price: d.c, change: d.dp };
+            })
+            .catch(() => {
+              // Return standard base fallback
+              return { ticker, price: mockPrices[ticker].price, change: mockPrices[ticker].change };
+            })
         ))
         .then(results => {
-          let html = "<div class='space-y-3'>";
-          results.forEach(item => { 
-             // Filter out items that failed to load correctly
-             if(item.price === 0 || item.price === null) return;
-             
-             const priceStr = item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-             const change = item.change || 0;
-             const changeColor = change >= 0 ? "text-green-400" : "text-red-400";
-             const changeSign = change >= 0 ? "+" : "";
-
-             html += `
-                <div class='flex justify-between items-center border-b border-white/5 pb-2'>
-                    <span class="font-medium">${item.ticker}</span> 
-                    <div class="text-right">
-                        <div class='text-green-400 font-bold'>$${priceStr}</div>
-                        <div class='text-xs ${changeColor}'>${changeSign}${change.toFixed(2)}%</div>
-                    </div>
-                </div>`;
-          });
-          html += "</div>";
-          document.getElementById('stock-prices').innerHTML = html;
-        }).catch(err => document.getElementById('stock-prices').innerHTML = "<span class='text-red-400'>Feed Disconnected</span>");
-      }
-      fetchStockPricesFinnhub();
-    });
-  </script>
-
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    function startTradingSimulation() {
-      const canvas = document.getElementById("tradingSimulationCanvas");
-      if (!canvas) return;
-      
-      // --- HIGH-DPI SCALING FIX ---
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      
-      // Set physical pixels
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      
-      const ctx = canvas.getContext("2d");
-      // Scale all drawing operations
-      ctx.scale(dpr, dpr);
-
-      const HOLD_MS = 3000, NUM_CANDLES = 60, BULL = "#10b981", BEAR = "#ef4444", AXIS_COLOR = "rgba(255,255,255,0.1)";
-      const marginLeft = 50, marginRight = 10, marginTop = 20, marginBottom = 30;
-      // Use logical CSS width for calculation
-      const width = rect.width - marginLeft - marginRight, height = rect.height - marginTop - marginBottom;
-
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      
-      function priceToY(price, minP, maxP) { return maxP === minP ? marginTop + height / 2 : marginTop + ((maxP - price) / (maxP - minP)) * height; }
-      
-      function drawGrid(yMin, yMax) {
-        ctx.strokeStyle = AXIS_COLOR; ctx.lineWidth = 1;
-        for(let i=0; i<5; i++) {
-            let y = marginTop + (height/4)*i;
-            ctx.beginPath(); ctx.moveTo(marginLeft, y); ctx.lineTo(marginLeft + width, y); ctx.stroke();
-        }
-        ctx.fillStyle = "rgba(255,255,255,0.4)"; ctx.font = "10px monospace"; ctx.textAlign = "right";
-        ctx.fillText(yMax.toFixed(2), marginLeft - 10, marginTop + 4);
-        ctx.fillText(yMin.toFixed(2), marginLeft - 10, marginTop + height + 4);
-      }
-
-      function randNorm() { let u = 0, v = 0; while (u === 0) u = Math.random(); while (v === 0) v = Math.random(); return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v); }
-      
-      const candles = []; let lastClose = 100;
-      for (let i = 0; i < NUM_CANDLES; i++) {
-        const open = lastClose; const delta = randNorm() * 2; const close = open + delta;
-        candles.push({ o: open, h: Math.max(open, close) + Math.abs(randNorm()), l: Math.min(open, close) - Math.abs(randNorm()), c: close });
-        lastClose = close;
-      }
-      const minPrice = Math.min(...candles.map(k => k.l)), maxPrice = Math.max(...candles.map(k => k.h));
-      const pad = (maxPrice - minPrice) * 0.1; const yMin = minPrice - pad, yMax = maxPrice + pad;
-      
-      drawGrid(yMin, yMax);
-
-      const xSpacing = width / NUM_CANDLES;
-      const bodyWidth = xSpacing * 0.6;
-
-      function drawCandle(i) {
-        const { o, h, l, c } = candles[i]; 
-        const xCenter = marginLeft + i * xSpacing + xSpacing/2;
-        const yOpen = priceToY(o, yMin, yMax), yClose = priceToY(c, yMin, yMax), yHigh = priceToY(h, yMin, yMax), yLow = priceToY(l, yMin, yMax);
-        const color = c >= o ? BULL : BEAR;
-        
-        ctx.strokeStyle = color; ctx.lineWidth = 1; 
-        ctx.beginPath(); ctx.moveTo(xCenter, yHigh); ctx.lineTo(xCenter, yLow); ctx.stroke();
-        ctx.fillStyle = color; 
-        const candleH = Math.max(1, Math.abs(yOpen - yClose));
-        ctx.fillRect(xCenter - bodyWidth / 2, Math.min(yOpen, yClose), bodyWidth, candleH);
-        
-        if (i > 0) {
-            const prev = candles[i-1];
-            const prevX = marginLeft + (i-1)*xSpacing + xSpacing/2;
-            const prevY = priceToY(prev.c, yMin, yMax);
-            ctx.strokeStyle = "#3b82f6"; ctx.lineWidth = 1.5;
-            ctx.beginPath(); ctx.moveTo(prevX, prevY); ctx.lineTo(xCenter, yClose); ctx.stroke();
-        }
-      }
-
-      let i = 0;
-      const timer = setInterval(() => {
-        if (i >= NUM_CANDLES) { clearInterval(timer); setTimeout(startTradingSimulation, HOLD_MS); return; }
-        drawCandle(i);
-        
-        // Random Buy/Sell Signals
-        if (Math.random() < 0.15) {
-            const type = Math.random() > 0.5 ? 'B' : 'S';
-            const x = marginLeft + i * xSpacing + xSpacing/2;
-            const k = candles[i];
-            ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center";
-            if (type === 'B') {
-                // FIXED: GREEN BUY SIGNAL
-                ctx.fillStyle = "#10b981"; 
-                ctx.fillText("▲", x, priceToY(k.l, yMin, yMax) + 15);
-            } else {
-                ctx.fillStyle = "#ef4444";
-                ctx.fillText("▼", x, priceToY(k.h, yMin, yMax) - 8);
+          // Filter valid
+          const valid = results.filter(r => r.price !== null && r.price > 0);
+          localStorage.setItem('cache_stocks', JSON.stringify(valid));
+          localStorage.setItem('cache_stocks_ts', Date.now());
+          updateUI('stock-prices', valid, false);
+          
+          valid.forEach(p => {
+            if (mockPrices[p.ticker]) {
+              mockPrices[p.ticker].price = p.price;
+              mockPrices[p.ticker].change = p.change;
             }
-        }
-        i++;
-      }, 50);
-    }
-    
-    startTradingSimulation();
-    
-    // Resize Listener with debounce
-    let resizeTimer; 
-    window.addEventListener('resize', () => { 
-        clearTimeout(resizeTimer); 
-        resizeTimer = setTimeout(startTradingSimulation, 250); 
+          });
+        })
+        .catch(() => {
+          // Already handled via fallback array
+        });
+      }
+
+      // Run Prices
+      getCryptoPrices();
+      getStockPrices();
     });
-  });
-  </script>
 
-  <script>
-  (() => {
-    const canvas = document.getElementById('globeCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let width, height;
+    // --- 2. Google Charts Redesign ---
+    google.charts.load('current', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawCharts);
 
-    const CONFIG = {
-      radius: 0, 
-      dotCount: 600,
-      dotSize: 1.5,
-      rotationSpeed: 0.002,
-      colorBlue: '59, 130, 246', 
-      colorGold: '245, 158, 11', 
-      connectionDist: 0, 
+    const commonChartOptions = {
+      titleTextStyle: { color: '#e5e7eb', fontName: 'Orbitron', fontSize: 13, bold: true },
+      pieHole: 0.55, 
+      legend: { position: 'right', textStyle: { color: '#8a8f98', fontSize: 10, fontName: 'JetBrains Mono' } },
+      pieSliceTextStyle: { color: 'transparent' }, 
+      backgroundColor: 'transparent',
+      chartArea: { width: '85%', height: '85%' },
+      pieSliceBorderColor: '#04040c'
     };
 
-    let dots = [];
-    let angleY = 0; 
+    function drawCharts() {
+      // Cryptos
+      var cryptoData = google.visualization.arrayToDataTable([ ['Asset', 'Allocation'], ['BNB', 82.18], ['BTC', 5.57], ['USDC', 4.71], ['WBETH', 3.1], ['BNSOL', 2.58], ['USDT', 1.86] ]);
+      var cryptoOptions = { ...commonChartOptions, colors: ["#0066ff", "#ffaa00", "#10b981", "#8b5cf6", "#ff5500", "#ec4899"] };
+      var cryptoChart = new google.visualization.PieChart(document.getElementById('cryptoChart'));
+      cryptoChart.draw(cryptoData, cryptoOptions);
 
-    class Dot3D {
-      constructor() {
-        this.theta = Math.random() * Math.PI * 2; 
-        this.phi = Math.acos((Math.random() * 2) - 1); 
-        this.isGold = Math.random() > 0.9; 
-      }
-
-      project(radius, rotation) {
-        let x = radius * Math.sin(this.phi) * Math.cos(this.theta + rotation);
-        let y = radius * Math.cos(this.phi);
-        let z = radius * Math.sin(this.phi) * Math.sin(this.theta + rotation);
-
-        const scale = 400 / (400 - z); 
-        const x2d = x * scale + width / 2;
-        const y2d = y * scale + height / 2;
-
-        return { x: x2d, y: y2d, z: z, scale: scale };
-      }
+      // Stocks
+      var stocksData = google.visualization.arrayToDataTable([
+        ['Asset', 'Allocation'],
+        ["Cash", 6.4], 
+        ["Fixed Income", 20.6], 
+        ["Royal Bank (RY)", 21.2], 
+        ["Brookfield (BAM)", 8.9], 
+        ["Dollarama (DOL)", 10.3], 
+        ["Yinn ETF", 12.0],
+        ["TD Bank (TD)", 2.6],
+        ["BMO", 2.6],
+        ["Scotiabank (BNS)", 2.6],
+        ["CIBC (CM)", 2.5],
+        ["Microsoft (MSFT)", 4.1],
+        ["JPMorgan (JPM)", 3.2],
+        ["Chevron (CVX)", 1.8],
+        ["Cisco (CSCO)", 1.2]
+      ]);
+      var stocksOptions = { 
+        ...commonChartOptions, 
+        colors: [
+          "#6366f1", "#10b981", "#ffaa00", "#ff5500", "#0066ff", "#8b5cf6", 
+          "#06b6d4", "#38bdf8", "#0ea5e9", "#0284c7", "#ec4899", "#d946ef", 
+          "#a855f7", "#c084fc"
+        ] 
+      };
+      var stocksChart = new google.visualization.PieChart(document.getElementById('stocksChart'));
+      stocksChart.draw(stocksData, stocksOptions);
     }
 
-    function init() {
-      dots = [];
-      for (let i = 0; i < CONFIG.dotCount; i++) {
-        dots.push(new Dot3D());
+    // Debounce resize redrawing
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(drawCharts, 250);
+    });
+  </script>
+
+  <script>
+    // --- 3. Dual-Chart Strategy Simulation & L2 Order Book Terminal ---
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById("tradingSimulationCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      
+      const orderLogEl = document.getElementById('hft-order-logs');
+      const pnlEl = document.getElementById('hft-pnl');
+
+      let width, height;
+      const NUM_CANDLES = 65;
+      const BULL = "#10b981";
+      const BEAR = "#ff5500";
+      const AXIS_COLOR = "rgba(0, 102, 255, 0.08)";
+
+      let candles = [];
+      let lastClose = 100;
+      let tickIndex = 0;
+      let cumPnl = 0;
+
+      // Base Quant Values to fluctuate from
+      let baseReturn = 24.80;
+      let baseSharpe = 3.24;
+      let baseDrawdown = -4.15;
+      let totalTrades = 85; 
+      let winTrades = 58; // winrate = 68.2%
+      let baseVolatility = 14.50;
+      let baseBeta = 0.12;
+      let maxPnl = 0;
+
+      // high-DPI sizing
+      function resizeSim() {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        window.scaleCanvasForDPI(canvas, ctx, width, height);
+        drawSim();
       }
-    }
 
-    function resize() {
-      // --- HIGH-DPI FIX ---
-      const dpr = window.devicePixelRatio || 1;
-      width = window.innerWidth;
-      height = window.innerHeight;
-      
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      
-      ctx.scale(dpr, dpr);
-      // --------------------
-      
-      CONFIG.radius = Math.min(width, height) * 0.35;
-      CONFIG.connectionDist = CONFIG.radius * 0.4; 
-    }
+      function randNorm() {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      }
 
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      angleY += CONFIG.rotationSpeed;
+      function initSim() {
+        candles = [];
+        lastClose = 100;
+        for (let i = 0; i < NUM_CANDLES; i++) {
+          const open = lastClose;
+          const delta = randNorm() * 1.8;
+          const close = open + delta;
+          candles.push({
+            o: open,
+            h: Math.max(open, close) + Math.abs(randNorm() * 0.8),
+            l: Math.min(open, close) - Math.abs(randNorm() * 0.8),
+            c: close,
+            signal: Math.random() < 0.1 ? (Math.random() > 0.5 ? 'B' : 'S') : null
+          });
+          lastClose = close;
+        }
+        tickIndex = 0;
+      }
 
-      const projectedDots = dots.map(dot => {
-        const proj = dot.project(CONFIG.radius, angleY);
-        return { ...proj, dot: dot };
-      });
+      function drawSim() {
+        ctx.clearRect(0, 0, width, height);
 
-      projectedDots.sort((a, b) => a.z - b.z);
+        const margin = { top: 20, bottom: 25, left: 45, right: 10 };
+        const chartW = width - margin.left - margin.right;
+        const chartH = height - margin.top - margin.bottom;
 
-      ctx.lineWidth = 0.5;
-      
-      for (let i = 0; i < projectedDots.length; i++) {
-        const p1 = projectedDots[i];
-        if (p1.z < -CONFIG.radius * 0.2) continue; 
+        // Min-Max Prices for view bounding
+        const pricesL = candles.map(k => k.l);
+        const pricesH = candles.map(k => k.h);
+        const minPrice = Math.min(...pricesL);
+        const maxPrice = Math.max(...pricesH);
+        const pad = (maxPrice - minPrice) * 0.1 || 1;
+        const yMin = minPrice - pad;
+        const yMax = maxPrice + pad;
 
-        if (p1.dot.isGold) {
-           for (let j = 0; j < projectedDots.length; j++) {
-             if (i === j) continue;
-             const p2 = projectedDots[j];
-             if (p2.z < -CONFIG.radius * 0.2) continue;
+        const priceToY = (p) => margin.top + ((yMax - p) / (yMax - yMin)) * chartH;
 
-             const dx = p1.x - p2.x;
-             const dy = p1.y - p2.y;
-             const distSq = dx*dx + dy*dy;
+        // Draw horizontal grid lines
+        ctx.strokeStyle = AXIS_COLOR;
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i <= 4; i++) {
+          const y = margin.top + (chartH / 4) * i;
+          ctx.beginPath();
+          ctx.moveTo(margin.left, y);
+          ctx.lineTo(margin.left + chartW, y);
+          ctx.stroke();
 
-             if (distSq < 3000) { 
-                const alpha = 1 - (distSq / 3000);
-                ctx.strokeStyle = `rgba(${CONFIG.colorGold}, ${alpha * 0.4})`;
+          // Draw grid labels
+          const priceLabel = yMax - ((yMax - yMin) / 4) * i;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+          ctx.font = '8px monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText(priceLabel.toFixed(2), margin.left - 8, y + 3);
+        }
+
+        // Draw Candles
+        const spacing = chartW / NUM_CANDLES;
+        const bodyWidth = spacing * 0.65;
+
+        for (let i = 0; i < tickIndex; i++) {
+          const k = candles[i];
+          const x = margin.left + i * spacing + spacing / 2;
+          
+          const yOpen = priceToY(k.o);
+          const yClose = priceToY(k.c);
+          const yHigh = priceToY(k.h);
+          const yLow = priceToY(k.l);
+          
+          const color = k.c >= k.o ? BULL : BEAR;
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1;
+
+          // High/Low Wick
+          ctx.beginPath();
+          ctx.moveTo(x, yHigh);
+          ctx.lineTo(x, yLow);
+          ctx.stroke();
+
+          // Open/Close Body
+          ctx.fillStyle = color;
+          const bodyH = Math.max(1.5, Math.abs(yOpen - yClose));
+          ctx.fillRect(x - bodyWidth/2, Math.min(yOpen, yClose), bodyWidth, bodyH);
+
+          // Connecting Moving Average Line (Quant Overlay)
+          if (i > 0) {
+            const prev = candles[i-1];
+            const prevX = margin.left + (i-1) * spacing + spacing/2;
+            ctx.strokeStyle = 'rgba(0, 102, 255, 0.7)';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(prevX, priceToY(prev.c));
+            ctx.lineTo(x, yClose);
+            ctx.stroke();
+          }
+
+          // Signals indicators
+          if (k.signal) {
+            ctx.font = 'bold 9px sans-serif';
+            ctx.textAlign = 'center';
+            if (k.signal === 'B') {
+              ctx.fillStyle = BULL;
+              ctx.fillText("▲", x, yLow + 12);
+            } else {
+              ctx.fillStyle = BEAR;
+              ctx.fillText("▼", x, yHigh - 5);
+            }
+          }
+        }
+      }
+
+      // Realtime Simulation loop run within page cycle
+      let simInterval = null;
+      function runLoop() {
+        simInterval = setInterval(() => {
+          if (tickIndex >= NUM_CANDLES) {
+            initSim();
+            return;
+          }
+          
+          tickIndex++;
+          drawSim();
+
+          // Trigger simulated trade logs when signals fire
+          const currentCandle = candles[tickIndex - 1];
+          if (currentCandle && currentCandle.signal) {
+            const type = currentCandle.signal === 'B' ? 'BUY' : 'SELL';
+            const price = currentCandle.c;
+            const size = (Math.random() * 0.8 + 0.1).toFixed(3);
+            const timeStr = new Date().toTimeString().split(' ')[0];
+            
+            const logDiv = document.createElement('div');
+            const colorClass = type === 'BUY' ? 'text-green-400' : 'text-red-500';
+            logDiv.innerHTML = `[${timeStr}] <span class="${colorClass} font-bold">ORDER_${type}</span>: size ${size} @ $${price.toFixed(2)} [FILLED]`;
+            
+            if (orderLogEl) {
+              orderLogEl.appendChild(logDiv);
+              orderLogEl.scrollTop = orderLogEl.scrollHeight;
+              if (orderLogEl.children.length > 25) {
+                orderLogEl.children[0].remove();
+              }
+            }
+
+            // PnL updates
+            const profit = (Math.random() - 0.4) * 45; // slightly positive drift
+            cumPnl += profit;
+            
+            // Stats updates
+            totalTrades++;
+            if (profit > 0) winTrades++;
+            
+            // Peak drawdown check
+            if (cumPnl > maxPnl) maxPnl = cumPnl;
+            const currentDd = maxPnl > 0 ? ((cumPnl - maxPnl) / maxPnl) * 100 : 0;
+            const simulatedDrawdown = Math.min(-0.2, baseDrawdown + (currentDd * 0.08));
+            
+            // Sharpe fluctuates on positive/negative velocity
+            const simulatedSharpe = Math.min(3.65, Math.max(2.75, baseSharpe + (cumPnl * 0.0005)));
+            
+            // Return shifts proportional to PnL
+            const simulatedReturn = baseReturn + (cumPnl * 0.006);
+            
+            // Volatility & Beta drift slightly on noise
+            const simulatedVol = baseVolatility + (Math.random() - 0.5) * 0.12;
+            const simulatedBeta = Math.max(0.01, baseBeta + (Math.random() - 0.5) * 0.012);
+
+            // Update UI elements dynamically!
+            const returnEl = document.getElementById('metric-return');
+            const sharpeEl = document.getElementById('metric-sharpe');
+            const drawdownEl = document.getElementById('metric-drawdown');
+            const winrateEl = document.getElementById('metric-winrate');
+            const volatilityEl = document.getElementById('metric-volatility');
+            const betaEl = document.getElementById('metric-beta');
+            
+            if (returnEl) {
+              const sign = simulatedReturn >= 0 ? '+' : '';
+              returnEl.textContent = `${sign}${simulatedReturn.toFixed(2)}%`;
+              returnEl.className = simulatedReturn >= 0 ? 'text-green-400 font-bold text-xs glow-text-green' : 'text-red-500 font-bold text-xs';
+            }
+            if (sharpeEl) sharpeEl.textContent = simulatedSharpe.toFixed(2);
+            if (drawdownEl) drawdownEl.textContent = `${simulatedDrawdown.toFixed(2)}%`;
+            if (winrateEl) winrateEl.textContent = `${((winTrades / totalTrades) * 100).toFixed(1)}%`;
+            if (volatilityEl) volatilityEl.textContent = `${simulatedVol.toFixed(2)}%`;
+            if (betaEl) betaEl.textContent = simulatedBeta.toFixed(2);
+
+            if (pnlEl) {
+              const sign = cumPnl >= 0 ? '+' : '';
+              pnlEl.textContent = `${sign}$${cumPnl.toFixed(2)}`;
+              pnlEl.className = cumPnl >= 0 ? 'text-green-400 font-bold' : 'text-red-500 font-bold';
+            }
+          }
+        }, 300);
+      }
+
+      // Initialize
+      resizeSim();
+      initSim();
+      runLoop();
+
+      window.addEventListener('resize', resizeSim);
+    });
+  </script>
+
+  <script>
+    // --- 4. Holographic World Globe ---
+    (() => {
+      const canvas = document.getElementById('globeCanvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+
+      const CONFIG = {
+        radius: 0,
+        dotCount: 520,
+        dotSize: 1.4,
+        rotationSpeed: 0.0015,
+        colorBlue: '0, 102, 255',
+        colorCyan: '0, 240, 255',
+        colorOrange: '255, 85, 0'
+      };
+
+      let dots = [];
+      let angleY = 0;
+
+      // Coordinate mapping for global financial hubs (NY, London, Tokyo, Singapore, Vancouver)
+      const hubs3D = [
+        { theta: 0.8, phi: 0.7, name: 'NY_NYSE', isGold: true },
+        { theta: 2.1, phi: 0.5, name: 'LON_LSE', isGold: true },
+        { theta: -1.2, phi: 0.9, name: 'TKY_TSE', isGold: true },
+        { theta: -0.8, phi: 1.1, name: 'SGP_SGX', isGold: true },
+        { theta: 0.2, phi: 0.6, name: 'YVR_PORT', isGold: true }
+      ];
+
+      class Dot3D {
+        constructor(theta = null, phi = null, isGold = false, name = '') {
+          this.theta = theta !== null ? theta : Math.random() * Math.PI * 2;
+          this.phi = phi !== null ? phi : Math.acos((Math.random() * 2) - 1);
+          this.isGold = isGold;
+          this.name = name;
+          this.alpha = Math.random() * 0.45 + 0.35;
+        }
+
+        project(radius, rotation) {
+          let x = radius * Math.sin(this.phi) * Math.cos(this.theta + rotation);
+          let y = radius * Math.cos(this.phi);
+          let z = radius * Math.sin(this.phi) * Math.sin(this.theta + rotation);
+
+          const scale = 450 / (450 - z); // Simple perspective projection
+          const x2d = x * scale + width / 2;
+          const y2d = y * scale + height / 2;
+
+          return { x: x2d, y: y2d, z: z, scale: scale };
+        }
+      }
+
+      function init() {
+        dots = [];
+        // Global mesh dots
+        for (let i = 0; i < CONFIG.dotCount; i++) {
+          dots.push(new Dot3D());
+        }
+        // Inject high-contrast hub connections
+        hubs3D.forEach(h => {
+          dots.push(new Dot3D(h.theta, h.phi, true, h.name));
+        });
+      }
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        window.scaleCanvasForDPI(canvas, ctx, width, height);
+        CONFIG.radius = Math.min(width, height) * 0.36;
+      }
+
+      function drawFrame(timestamp, elapsed) {
+        ctx.clearRect(0, 0, width, height);
+        angleY += CONFIG.rotationSpeed;
+
+        const projected = dots.map(dot => {
+          const proj = dot.project(CONFIG.radius, angleY);
+          return { ...proj, dot: dot };
+        });
+
+        // Depth sorting (painter algorithm)
+        projected.sort((a, b) => a.z - b.z);
+
+        // 1. Draw connecting mesh rings (correlated orbits)
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < projected.length; i++) {
+          const p1 = projected[i];
+          if (p1.z < -CONFIG.radius * 0.1) continue; // Skip backside for high rendering performance
+          
+          if (p1.dot.isGold) {
+            for (let j = 0; j < projected.length; j++) {
+              if (i === j) continue;
+              const p2 = projected[j];
+              if (p2.z < -CONFIG.radius * 0.1) continue;
+
+              const dx = p1.x - p2.x;
+              const dy = p1.y - p2.y;
+              const distSq = dx*dx + dy*dy;
+
+              if (distSq < 4200) { // Faint node lines
+                const alpha = (1 - distSq / 4200) * 0.28;
+                ctx.strokeStyle = `rgba(${CONFIG.colorCyan}, ${alpha})`;
                 ctx.beginPath();
                 ctx.moveTo(p1.x, p1.y);
                 ctx.lineTo(p2.x, p2.y);
                 ctx.stroke();
-             }
-           }
-        }
-      }
-
-      for (let i = 0; i < projectedDots.length; i++) {
-        const p = projectedDots[i];
-        const alpha = (p.z + CONFIG.radius) / (2 * CONFIG.radius); 
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, CONFIG.dotSize * p.scale, 0, Math.PI * 2);
-        
-        if (p.dot.isGold) {
-            ctx.fillStyle = `rgba(${CONFIG.colorGold}, ${alpha})`;
-            if (p.z > 0) {
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = `rgba(${CONFIG.colorGold}, 0.8)`;
-            } else {
-                ctx.shadowBlur = 0;
+              }
             }
-        } else {
-            ctx.fillStyle = `rgba(${CONFIG.colorBlue}, ${alpha * 0.6})`;
-            ctx.shadowBlur = 0;
+          }
         }
-        
-        ctx.fill();
-      }
-      ctx.shadowBlur = 0;
-      requestAnimationFrame(animate);
-    }
 
-    window.addEventListener('resize', () => { resize(); init(); });
-    resize();
-    init();
-    animate();
-  })();
+        // 2. Draw Vector Globe Nodes
+        for (let i = 0; i < projected.length; i++) {
+          const p = projected[i];
+          const alpha = (p.z + CONFIG.radius) / (2 * CONFIG.radius) * p.dot.alpha;
+          
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, CONFIG.dotSize * p.scale, 0, Math.PI * 2);
+          
+          if (p.dot.isGold) {
+            ctx.fillStyle = `rgba(${CONFIG.colorOrange}, ${alpha * 1.5})`;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = `rgba(${CONFIG.colorOrange}, 0.8)`;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Render hub tag labels
+            if (p.z > 0) {
+              ctx.font = '8px monospace';
+              ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.75})`;
+              ctx.fillText(`[${p.dot.name}]`, p.x + 8, p.y + 3);
+            }
+          } else {
+            ctx.fillStyle = `rgba(${CONFIG.colorBlue}, ${alpha * 0.65})`;
+            ctx.fill();
+          }
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+        init();
+      });
+
+      // Register canvas with performance Registry
+      window.CanvasRegistry.register('investmentGlobe', init, drawFrame, resize);
+
+    })();
   </script>
 </body>
 </html>
