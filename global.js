@@ -1,4 +1,4 @@
-/**
+﻿/**
  * global.js — NEURAQUANT Framework v2
  * HUD nav · market ticker · telemetry · page transitions
  * Three.js WebGL backgrounds · GSAP scroll animations · card tilt
@@ -13,6 +13,8 @@ const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 
 // Relative prefix so nav/links work from /projects/ subpages too
 const PATH_PREFIX = window.location.pathname.replace(/\\/g, '/').includes('/projects/') ? '../' : '';
+const SITE_ROOT = new URL(PATH_PREFIX, window.location.href).href;
+const siteHref = (page) => new URL(page, SITE_ROOT).href;
 
 window.scaleCanvasForDPI = function (canvas, ctx, width, height) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
@@ -97,24 +99,22 @@ function injectHUDHeader() {
 
   const isActive = (t) => (pageName.includes(t) || (t === 'projects' && inProjects)) ? 'active' : '';
   const isHomeActive = (!inProjects && (pageName === 'index.html' || pageName === '')) ? 'active' : '';
-  const P = PATH_PREFIX;
-
   const header = document.createElement('header');
   header.className = 'hud-nav';
   header.innerHTML = `
     <nav class="container mx-auto flex flex-col md:flex-row justify-between items-center py-3 px-6 gap-3">
       <div class="flex items-center gap-4">
-        <a href="${P}index.html" class="text-2xl font-bold flex items-center gap-2 group transition-colors">
+        <a href="${siteHref('index.html')}" class="text-2xl font-bold flex items-center gap-2 group transition-colors">
           <span class="hud-nav-logo font-black">[XW]</span>
           <span class="hidden sm:inline text-[9px] font-mono text-cyan-400/60 border border-cyan-400/20 px-1.5 py-0.5 rounded tracking-widest uppercase">SYS: ACTIVE</span>
         </a>
       </div>
       <ul class="flex items-center space-x-1 sm:space-x-4 list-none p-0 m-0">
-        <li><a href="${P}index.html" class="hud-nav-item ${isHomeActive}">HOME</a></li>
-        <li><a href="${P}about.html" class="hud-nav-item ${isActive('about')}">ABOUT</a></li>
-        <li><a href="${P}projects.html" class="hud-nav-item ${isActive('projects')}">PROJECTS</a></li>
-        <li><a href="${P}investment.html" class="hud-nav-item ${isActive('investment')}">INVESTMENT</a></li>
-        <li><a href="${P}contact.html" class="hud-nav-item ${isActive('contact')}">CONTACT</a></li>
+        <li><a href="${siteHref('index.html')}" class="hud-nav-item ${isHomeActive}">HOME</a></li>
+        <li><a href="${siteHref('about.html')}" class="hud-nav-item ${isActive('about')}">ABOUT</a></li>
+        <li><a href="${siteHref('projects.html')}" class="hud-nav-item ${isActive('projects')}">PROJECTS</a></li>
+        <li><a href="${siteHref('investment.html')}" class="hud-nav-item ${isActive('investment')}">INVESTMENT</a></li>
+        <li><a href="${siteHref('contact.html')}" class="hud-nav-item ${isActive('contact')}">CONTACT</a></li>
       </ul>
       <div class="hud-telemetry hidden lg:flex items-center gap-6 border-l border-white/10 pl-6">
         <div class="telemetry-item">
@@ -142,13 +142,25 @@ function injectTicker() {
   if (document.querySelector('.ticker-tape')) return;
   const header = document.querySelector('.hud-nav');
   if (!header) return;
+  const storageKey = 'neuraquantTickerState';
+  const saved = (() => {
+    try { return JSON.parse(sessionStorage.getItem(storageKey)); }
+    catch (e) { return null; }
+  })();
 
   const symbols = [
     ['SPX', 6120], ['NDX', 22240], ['VIX', 14.2], ['BTC', 97400], ['ETH', 3420],
     ['SOL', 172], ['BNB', 615], ['MSFT', 448], ['NVDA', 1180], ['JPM', 224],
     ['GOLD', 2660], ['WTI', 71.4], ['US10Y', 4.21], ['EURUSD', 1.062], ['DXY', 106.1]
   ];
-  const state = symbols.map(([s, p]) => ({ s, p, chg: (Math.random() - 0.42) * 3 }));
+  const fallbackState = symbols.map(([s, p]) => ({ s, p, chg: (Math.random() - 0.42) * 3 }));
+  const state = Array.isArray(saved?.state) && saved.state.length === symbols.length ? saved.state : fallbackState;
+  const startedAt = Number(saved?.startedAt) || Date.now();
+
+  const saveTicker = () => {
+    try { sessionStorage.setItem(storageKey, JSON.stringify({ startedAt, state })); }
+    catch (e) {}
+  };
 
   const renderItems = () => state.map(({ s, p, chg }) => {
     const up = chg >= 0;
@@ -162,7 +174,10 @@ function injectTicker() {
   const tape = document.createElement('div');
   tape.className = 'ticker-tape';
   tape.innerHTML = `<div class="ticker-track" id="ticker-track">${renderItems()}${renderItems()}</div>`;
+  const track = tape.querySelector('.ticker-track');
+  track.style.animationDelay = `-${((Date.now() - startedAt) % 42000) / 1000}s`;
   header.appendChild(tape);
+  saveTicker();
 
   // decorative micro-ticks
   setInterval(() => {
@@ -172,6 +187,7 @@ function injectTicker() {
     item.chg += (Math.random() - 0.5) * 0.06;
     const track = document.getElementById('ticker-track');
     if (track) track.innerHTML = renderItems() + renderItems();
+    saveTicker();
   }, 4000);
 }
 
@@ -540,15 +556,141 @@ function initTilt() {
 }
 
 /* ----------------------------------------- page fade transitions */
+let isNavigating = false;
+
 function initPageTransitions() {
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (!a) return;
     const href = a.getAttribute('href');
-    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || a.target === '_blank') return;
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || a.target === '_blank') return;
+
+    const url = new URL(href, window.location.href);
+    if (url.origin !== window.location.origin) return;
+
     e.preventDefault();
-    document.body.classList.remove('page-ready');
-    setTimeout(() => { window.location.href = href; }, 380);
+    navigateTo(url);
+  });
+
+  window.addEventListener('popstate', () => {
+    navigateTo(new URL(window.location.href), false);
+  });
+}
+
+async function navigateTo(url, push = true) {
+  if (isNavigating) return;
+  isNavigating = true;
+  let swapped = false;
+  const currentPage = document.querySelector('main, .hero');
+  if (currentPage) {
+    currentPage.style.opacity = '0';
+    currentPage.style.pointerEvents = 'none';
+  }
+
+  try {
+    const response = await fetch(url.href);
+    if (!response.ok) throw new Error(response.statusText);
+    const nextDoc = new DOMParser().parseFromString(await response.text(), 'text/html');
+    const nextPage = nextDoc.querySelector('main, .hero');
+    if (!nextPage) throw new Error('Missing page content');
+
+    await new Promise((resolve) => setTimeout(resolve, 180));
+    syncPageStyles(nextDoc);
+    document.title = nextDoc.title;
+    document.body.className = nextDoc.body.className;
+    document.body.classList.add('page-ready');
+    document.body.dataset.bg = nextDoc.body.dataset.bg || '';
+    document.body.dataset.accent = nextDoc.body.dataset.accent || '';
+    if (push) history.pushState({}, '', url.href);
+
+    const importedPage = document.importNode(nextPage, true);
+    currentPage ? currentPage.replaceWith(importedPage) : document.body.appendChild(importedPage);
+    swapped = true;
+    const insertedPage = document.querySelector('main, .hero');
+    insertedPage.style.opacity = '0';
+    insertedPage.style.pointerEvents = '';
+    window.scrollTo(0, 0);
+
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    }
+    initGSAP();
+    initTilt();
+    updateHUDActiveState();
+    await runPageScripts(nextDoc);
+    requestAnimationFrame(() => { insertedPage.style.opacity = '1'; });
+  } catch (e) {
+    if (!swapped) {
+      window.location.href = url.href;
+      return;
+    }
+    console.warn('Page script failed after partial navigation:', e);
+    const page = document.querySelector('main, .hero');
+    if (page) page.style.opacity = '1';
+  } finally {
+    isNavigating = false;
+  }
+}
+
+function syncPageStyles(nextDoc) {
+  document.head.querySelectorAll('style[data-page-style]').forEach((style) => style.remove());
+  nextDoc.head.querySelectorAll('style').forEach((style) => {
+    const clone = document.importNode(style, true);
+    clone.dataset.pageStyle = 'true';
+    document.head.appendChild(clone);
+  });
+}
+
+async function runPageScripts(nextDoc) {
+  document.body.querySelectorAll('script[data-page-script]').forEach((script) => script.remove());
+  const scripts = Array.from(nextDoc.body.querySelectorAll('script'));
+  const addEventListener = document.addEventListener.bind(document);
+  document.addEventListener = (type, listener, options) => {
+    if (type === 'DOMContentLoaded') {
+      setTimeout(() => {
+        if (typeof listener === 'function') listener.call(document, new Event('DOMContentLoaded'));
+        else if (listener && typeof listener.handleEvent === 'function') listener.handleEvent(new Event('DOMContentLoaded'));
+      }, 0);
+      return;
+    }
+    addEventListener(type, listener, options);
+  };
+
+  try {
+    for (const script of scripts) {
+      await new Promise((resolve, reject) => {
+        const clone = document.createElement('script');
+        Array.from(script.attributes).forEach((attr) => clone.setAttribute(attr.name, attr.value));
+        clone.dataset.pageScript = 'true';
+        clone.async = false;
+        if (script.src) {
+          clone.onload = resolve;
+          clone.onerror = resolve;
+          clone.src = script.src;
+        } else {
+          clone.textContent = script.textContent;
+          resolve();
+        }
+        document.body.appendChild(clone);
+      });
+    }
+  } finally {
+    document.addEventListener = addEventListener;
+  }
+}
+
+function updateHUDActiveState() {
+  const path = window.location.pathname.replace(/\\/g, '/');
+  const pageName = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+  const inProjects = path.includes('/projects/');
+  document.querySelectorAll('.hud-nav-item').forEach((link) => {
+    const label = link.textContent.trim().toLowerCase();
+    const active = label === 'home'
+      ? !inProjects && pageName === 'index.html'
+      : label === 'projects'
+        ? inProjects || pageName === 'projects.html'
+        : pageName.includes(label);
+    link.classList.toggle('active', active);
   });
 }
 /* END OF FILE */

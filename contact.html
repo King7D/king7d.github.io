@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,8 +8,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <link rel="stylesheet" href="global.css" />
-  <script src="global.js"></script>
+  <link rel="stylesheet" href="global.css?v=20260702" />
+  <script src="global.js?v=20260702"></script>
   <style>
     .contact-container {
       max-width: 1150px;
@@ -33,6 +33,35 @@
     .cyber-input:focus {
       border-color: var(--q-cyan);
       box-shadow: 0 0 14px rgba(0, 240, 255, .18);
+    }
+    .contact-card-head {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: .75rem;
+    }
+    .contact-icon {
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(0, 240, 255, .28);
+      border-radius: 4px;
+      color: var(--q-cyan);
+      background: rgba(0, 240, 255, .06);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      box-shadow: var(--glow-cyan);
+      flex: 0 0 auto;
+    }
+    .contact-icon.gold {
+      border-color: rgba(255, 170, 0, .32);
+      color: var(--q-gold);
+      background: rgba(255, 170, 0, .07);
+      box-shadow: var(--glow-gold);
     }
     .profile-ring {
       position: relative;
@@ -97,22 +126,26 @@
       <!-- Channel cards -->
       <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <a href="https://www.linkedin.com/in/xiaoxianwang6" target="_blank" rel="noopener" class="cyber-card block" data-animate="up" data-delay="0.05">
-          <p class="text-[9px] font-mono text-gray-500 mb-2">// LINKEDIN</p>
+          <div class="contact-card-head">
+            <span class="contact-icon">in</span>
+            <p class="text-[9px] font-mono text-gray-500 m-0">// LINKEDIN</p>
+          </div>
           <h4 class="tech-title text-sm text-cyan-400 mb-1">CONNECT PROFILE</h4>
           <p class="text-xs font-mono text-gray-300 m-0 break-all">/in/xiaoxianwang6</p>
         </a>
         <a href="https://github.com/King7D" target="_blank" rel="noopener" class="cyber-card block" data-animate="up" data-delay="0.1">
-          <p class="text-[9px] font-mono text-gray-500 mb-2">// GITHUB</p>
+          <div class="contact-card-head">
+            <span class="contact-icon">GH</span>
+            <p class="text-[9px] font-mono text-gray-500 m-0">// GITHUB</p>
+          </div>
           <h4 class="tech-title text-sm text-cyan-400 mb-1">DECRYPT REPOSITORIES</h4>
           <p class="text-xs font-mono text-gray-300 m-0 break-all">github.com/King7D</p>
         </a>
-        <a href="mailto:ericwang@eii-tech.com" class="cyber-card cyber-card-gold block" data-animate="up" data-delay="0.15">
-          <p class="text-[9px] font-mono text-gray-500 mb-2">// BUSINESS</p>
-          <h4 class="tech-title text-sm text-yellow-500 mb-1">WORK TELESTREAM</h4>
-          <p class="text-xs font-mono text-gray-300 m-0 break-all">ericwang@eii-tech.com</p>
-        </a>
-        <a href="mailto:wangxiaoxian2016@gmail.com" class="cyber-card cyber-card-gold block" data-animate="up" data-delay="0.2">
-          <p class="text-[9px] font-mono text-gray-500 mb-2">// PERSONAL</p>
+        <a href="mailto:wangxiaoxian2016@gmail.com" class="cyber-card cyber-card-gold block sm:col-span-2" data-animate="up" data-delay="0.15">
+          <div class="contact-card-head">
+            <span class="contact-icon gold">@</span>
+            <p class="text-[9px] font-mono text-gray-500 m-0">// EMAIL</p>
+          </div>
           <h4 class="tech-title text-sm text-yellow-500 mb-1">DIRECT CHANNEL</h4>
           <p class="text-xs font-mono text-gray-300 m-0 break-all">wangxiaoxian2016@gmail.com</p>
         </a>
@@ -158,7 +191,7 @@
         <div class="p-4 font-mono text-[11px] text-green-400/85 space-y-1.5 flex-1" id="sys-logger">
           <div>&gt; PORT: 8443 established...</div>
           <div>&gt; TLS: V1.3 encryption valid.</div>
-          <div>&gt; ROUTE: secure.eii-tech.com</div>
+          <div>&gt; ROUTE: personal inbox</div>
           <div class="text-gray-500">&gt; status: waiting_payload_input... <span class="animate-pulse">_</span></div>
         </div>
         <div class="border-t border-white/5 px-4 py-2 font-mono text-[9px] text-gray-600">
@@ -181,7 +214,7 @@
         const log = document.createElement('div');
         log.innerHTML = '&gt; payload encrypted... <span class="text-cyan-400">routing via mail client</span>';
         logger.appendChild(log);
-        const mailtoLink = `mailto:ericwang@eii-tech.com?subject=${encodeURIComponent(subjVal)}&body=${encodeURIComponent("Sender: " + fromVal + "\n\n" + bodyVal)}`;
+        const mailtoLink = `mailto:wangxiaoxian2016@gmail.com?subject=${encodeURIComponent(subjVal)}&body=${encodeURIComponent("Sender: " + fromVal + "\n\n" + bodyVal)}`;
         setTimeout(() => { window.location.href = mailtoLink; }, 500);
       });
 

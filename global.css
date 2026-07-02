@@ -1,4 +1,4 @@
-/*
+﻿/*
  * global.css — NEURAQUANT Design System v2
  * Pure-black quant finance theme · Three.js / GSAP powered
  */
@@ -36,10 +36,13 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  opacity: 0;                       /* page transition fade-in (global.js) */
-  transition: opacity .45s ease;
+  opacity: 1;
 }
 body.page-ready { opacity: 1; }
+
+main, .hero {
+  transition: opacity .38s ease;
+}
 
 ::selection { background: rgba(0, 240, 255, 0.25); color: #fff; }
 
