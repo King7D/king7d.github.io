@@ -58,13 +58,13 @@ body.page-ready { opacity: 1; }
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: -10;
+  z-index: 0;
   pointer-events: none;
 }
 
 /* Layered atmosphere above WebGL, below content */
 .grid-overlay {
-  position: fixed; inset: 0; z-index: -8; pointer-events: none;
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
   background-image:
     linear-gradient(rgba(0, 102, 255, 0.045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 102, 255, 0.045) 1px, transparent 1px);
@@ -73,7 +73,7 @@ body.page-ready { opacity: 1; }
   -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
 }
 .vignette-overlay {
-  position: fixed; inset: 0; z-index: -7; pointer-events: none;
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
   background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.72) 100%);
 }
 .noise-overlay {
