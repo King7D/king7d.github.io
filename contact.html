@@ -5,422 +5,197 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xiaoxian Wang | Secure Datastream Connect</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="stylesheet" href="global.css" />
   <script src="global.js"></script>
   <style>
     .contact-container {
-      max-width: 1100px;
+      max-width: 1150px;
       margin: 0 auto;
-      padding: 100px 20px 60px 20px;
-    }
-    #globeCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      pointer-events: none;
-    }
-    /* Bento Grid overrides */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-    @media (min-width: 768px) {
-      .bento-grid {
-        grid-template-columns: repeat(3, 1fr);
-        grid-auto-rows: minmax(180px, auto);
-      }
-      .col-span-2 { grid-column: span 2; }
-      .row-span-2 { grid-row: span 2; }
-    }
-    /* Laser scanner hover */
-    .avatar-wrap {
+      padding: 150px 20px 80px;
       position: relative;
-      border: 1px solid rgba(0, 102, 255, 0.2);
-      padding: 4px;
-      background: rgba(4, 4, 8, 0.5);
-      border-radius: 50%;
-      overflow: hidden;
-    }
-    .avatar-wrap::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 1px;
-      background: var(--cyber-cyan);
-      box-shadow: 0 0 6px var(--cyber-cyan);
-      animation: avatar-scan 4s linear infinite;
       z-index: 10;
     }
-    @keyframes avatar-scan {
-      0% { top: 0%; }
-      50% { top: 100%; }
-      100% { top: 0%; }
+    .cyber-input {
+      width: 100%;
+      background: rgba(0, 0, 0, .55);
+      border: 1px solid rgba(0, 240, 255, .15);
+      border-radius: 2px;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      padding: .65rem .9rem;
+      outline: none;
+      transition: border-color .3s, box-shadow .3s;
     }
+    .cyber-input:focus {
+      border-color: var(--q-cyan);
+      box-shadow: 0 0 14px rgba(0, 240, 255, .18);
+    }
+    .profile-ring {
+      position: relative;
+      width: 132px; height: 132px;
+      border-radius: 50%;
+      padding: 4px;
+      background: conic-gradient(from 0deg, var(--q-cyan), transparent 30%, var(--q-blue) 60%, transparent 80%, var(--q-cyan));
+      animation: spin-ring 7s linear infinite;
+    }
+    .profile-ring img {
+      width: 100%; height: 100%;
+      border-radius: 50%; object-fit: cover;
+      border: 3px solid #000;
+      animation: spin-ring 7s linear infinite reverse;
+    }
+    @keyframes spin-ring { to { transform: rotate(360deg); } }
   </style>
 </head>
-<body class="scanlines-overlay">
-
-  <canvas id="globeCanvas"></canvas>
+<body class="scanlines-overlay" data-bg="warp" data-accent="green">
 
   <main class="contact-container">
-    <!-- Title Section -->
-    <div class="mb-10 text-center fade-in-up">
+    <!-- Title -->
+    <div class="mb-12 text-center" data-animate="down">
       <p class="tech-label">// ESTABLISHING INTERACTIVE COMMS CHANNEL</p>
-      <h2 class="tech-title text-4xl md:text-5xl font-black text-white glow-text-cyan uppercase">DATALINK CONNECTION</h2>
+      <h2 class="tech-title text-4xl md:text-5xl font-black text-white glow-text-green uppercase" data-scramble>DATALINK NODE</h2>
+      <p class="font-mono text-[10px] text-gray-500 mt-2">// SECURE_ESTABLISHED // NO_TRACE</p>
     </div>
 
-    <!-- Interactive Bento Grid Console -->
-    <div class="bento-grid fade-in-up" style="animation-delay: 0.1s;">
-      
-      <!-- Profile bento panel (Spans 2 columns, 2 rows) -->
-      <div class="cyber-card col-span-2 row-span-2 flex flex-col justify-between relative overflow-hidden">
-        <div class="absolute top-4 right-4 text-[9px] font-mono text-cyan-400/30">
-          NODE // SECURE_ESTABLISHED
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-10">
+
+      <!-- ID card -->
+      <div class="lg:col-span-5 cyber-card holo-sweep flex flex-col items-center text-center" data-tilt data-animate="left">
+        <span class="sweep"></span>
+        <p class="text-[9px] font-mono text-gray-500 self-start mb-4">// QUANT_TRADER // SYS_DEV</p>
+        <div class="profile-ring mb-5">
+          <img src="pictures/profile_picture.jpg" alt="Xiaoxian Wang" />
         </div>
-
-        <div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-6">
-          <div class="relative flex-shrink-0">
-            <div class="w-24 h-24 avatar-wrap">
-              <img src="pictures/profile_picture.jpg" alt="Xiaoxian Wang" class="w-full h-full object-cover rounded-full">
-            </div>
-            <div class="absolute bottom-1 right-1 w-6 h-6 bg-black border border-white/10 rounded-full flex items-center justify-center">
-              <span class="telemetry-dot pinging w-2.5 h-2.5 rounded-full bg-green-500"></span>
-            </div>
+        <h3 class="tech-title text-xl text-white glow-text-cyan mb-2">XIAOXIAN WANG</h3>
+        <p class="text-xs text-gray-400 leading-relaxed mb-5 max-w-xs">
+          Developing high-frequency quantitative systems &amp; scalable neural architectures.
+        </p>
+        <div class="grid grid-cols-2 gap-3 w-full text-left">
+          <div class="metric-block">
+            <div class="metric-label">Status</div>
+            <div class="metric-value text-green-400 text-xs">● ONLINE // OPEN</div>
           </div>
-
-          <div class="text-center md:text-left">
-            <p class="tech-label mb-1">// QUANT_TRADER // SYS_DEV</p>
-            <h3 class="text-2xl font-bold font-cyber text-white">XIAOXIAN WANG</h3>
-            <p class="text-xs text-gray-400 font-sans mt-1">Developing high-frequency quantitative systems &amp; scalable neural architectures.</p>
-            
-            <div class="inline-flex items-center px-2.5 py-0.5 rounded-full border border-green-500/20 bg-green-500/5 text-green-400 font-mono text-[9px] mt-4">
-              ● STAT // ONLINE // OPEN_TO_COLLECTION
-            </div>
+          <div class="metric-block">
+            <div class="metric-label">Location</div>
+            <div class="metric-value text-white text-xs">VANCOUVER, CA</div>
           </div>
-        </div>
-
-        <div class="border-t border-white/5 pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
-          <div>
-            <span class="text-gray-500 block mb-1">LOCATION</span>
-            <span class="text-white font-medium uppercase">Vancouver, CA</span>
+          <div class="metric-block">
+            <div class="metric-label">Timezone</div>
+            <div class="metric-value text-white text-xs">PST (UTC-08)</div>
           </div>
-          <div>
-            <span class="text-gray-500 block mb-1">TIMEZONE</span>
-            <span class="text-cyan-400 font-medium font-bold uppercase">PST (UTC-08)</span>
-          </div>
-          <div>
-            <span class="text-gray-500 block mb-1">CORES</span>
-            <span class="text-white font-medium">32 // DEPLOYED</span>
-          </div>
-          <div>
-            <span class="text-gray-500 block mb-1">METEO</span>
-            <span id="telemetry-meteo" class="text-white font-medium uppercase animate-pulse">LOADING...</span>
+          <div class="metric-block">
+            <div class="metric-label">Meteo</div>
+            <div class="metric-value text-cyan-400 text-xs" id="weather-val">LOADING...</div>
           </div>
         </div>
       </div>
 
-      <!-- LinkedIn brand panel -->
-      <a href="https://www.linkedin.com/in/xiaoxianwang6" target="_blank" class="cyber-card group flex flex-col justify-between hover:border-blue-500/40 cursor-pointer">
-        <div class="flex justify-between items-start">
-          <span class="text-[9px] font-mono text-gray-500">// LINKEDIN</span>
-          <span class="text-gray-600 group-hover:text-blue-400 transition-colors">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          </span>
-        </div>
-        <div class="mt-4">
-          <h4 class="text-base font-bold font-cyber text-white group-hover:text-blue-400 transition-colors">CONNECT PROFILE</h4>
-          <p class="text-[10px] text-gray-400 font-mono mt-0.5">/in/xiaoxianwang6</p>
-        </div>
-      </a>
+      <!-- Channel cards -->
+      <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="https://www.linkedin.com/in/xiaoxianwang6" target="_blank" rel="noopener" class="cyber-card block" data-animate="up" data-delay="0.05">
+          <p class="text-[9px] font-mono text-gray-500 mb-2">// LINKEDIN</p>
+          <h4 class="tech-title text-sm text-cyan-400 mb-1">CONNECT PROFILE</h4>
+          <p class="text-xs font-mono text-gray-300 m-0 break-all">/in/xiaoxianwang6</p>
+        </a>
+        <a href="https://github.com/King7D" target="_blank" rel="noopener" class="cyber-card block" data-animate="up" data-delay="0.1">
+          <p class="text-[9px] font-mono text-gray-500 mb-2">// GITHUB</p>
+          <h4 class="tech-title text-sm text-cyan-400 mb-1">DECRYPT REPOSITORIES</h4>
+          <p class="text-xs font-mono text-gray-300 m-0 break-all">github.com/King7D</p>
+        </a>
+        <a href="mailto:ericwang@eii-tech.com" class="cyber-card cyber-card-gold block" data-animate="up" data-delay="0.15">
+          <p class="text-[9px] font-mono text-gray-500 mb-2">// BUSINESS</p>
+          <h4 class="tech-title text-sm text-yellow-500 mb-1">WORK TELESTREAM</h4>
+          <p class="text-xs font-mono text-gray-300 m-0 break-all">ericwang@eii-tech.com</p>
+        </a>
+        <a href="mailto:wangxiaoxian2016@gmail.com" class="cyber-card cyber-card-gold block" data-animate="up" data-delay="0.2">
+          <p class="text-[9px] font-mono text-gray-500 mb-2">// PERSONAL</p>
+          <h4 class="tech-title text-sm text-yellow-500 mb-1">DIRECT CHANNEL</h4>
+          <p class="text-xs font-mono text-gray-300 m-0 break-all">wangxiaoxian2016@gmail.com</p>
+        </a>
+      </div>
+    </div>
 
-      <!-- GitHub brand panel -->
-      <a href="https://github.com/King7D" target="_blank" class="cyber-card group flex flex-col justify-between hover:border-white/40 cursor-pointer">
-        <div class="flex justify-between items-start">
-          <span class="text-[9px] font-mono text-gray-500">// GITHUB</span>
-          <span class="text-gray-600 group-hover:text-white transition-colors">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          </span>
+    <!-- Secure form terminal -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-7 cyber-card" data-animate="up">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="tech-title text-base text-white m-0">// SECURE_DATALINK_TERMINAL</h3>
+          <span class="status-chip chip-green">ACTIVE // NO_TRACE</span>
         </div>
-        <div class="mt-4">
-          <h4 class="text-base font-bold font-cyber text-white group-hover:text-gray-300 transition-colors">DECRYPT REPOSITORIES</h4>
-          <p class="text-[10px] text-gray-400 font-mono mt-0.5">github.com/King7D</p>
-        </div>
-      </a>
-
-      <!-- Corporate Email panel -->
-      <a href="mailto:ericwang@eii-tech.com" class="cyber-card cyber-card-orange group flex flex-col justify-between hover:border-orange-500/40 cursor-pointer">
-        <div class="flex justify-between items-start">
-          <span class="text-[9px] font-mono text-gray-500">// BUSINESS</span>
-          <span class="text-gray-600 group-hover:text-orange-500 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          </span>
-        </div>
-        <div class="mt-4">
-          <h4 class="text-base font-bold font-cyber text-white group-hover:text-orange-500 transition-colors">WORK TELESTREAM</h4>
-          <p class="text-[10px] text-gray-400 font-mono mt-0.5 break-all">ericwang@eii-tech.com</p>
-        </div>
-      </a>
-
-      <!-- Personal Email panel -->
-      <a href="mailto:wangxiaoxian2016@gmail.com" class="cyber-card cyber-card-orange group flex flex-col justify-between hover:border-orange-500/40 cursor-pointer">
-        <div class="flex justify-between items-start">
-          <span class="text-[9px] font-mono text-gray-500">// PERSONAL</span>
-          <span class="text-gray-600 group-hover:text-orange-500 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          </span>
-        </div>
-        <div class="mt-4">
-          <h4 class="text-base font-bold font-cyber text-white group-hover:text-orange-500 transition-colors">DIRECT CHANNEL</h4>
-          <p class="text-[10px] text-gray-400 font-mono mt-0.5 break-all">wangxiaoxian2016@gmail.com</p>
-        </div>
-      </a>
-
-      <!-- Interactive Datalink message console (Spans 3 columns) -->
-      <div class="cyber-card col-span-2 md:col-span-3 p-6 flex flex-col">
-        <div class="flex items-center justify-between border-b border-cyan-500/20 pb-3 mb-4">
-          <h3 class="text-lg font-bold font-cyber text-cyan-400 uppercase tracking-tight">// SECURE_DATALINK_TERMINAL</h3>
-          <span class="text-[9px] font-mono text-green-400/80">STAT // ACTIVE // NO_TRACE</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <div class="md:col-span-8 space-y-4">
-            <p class="text-xs text-gray-400 font-sans leading-relaxed">
-              If you require secure algorithmic collaboration, quantitative consulting, or systems consulting, establish a datalink using the form. All datastreams are routed immediately.
-            </p>
-            
-            <form class="space-y-3 font-mono text-xs text-cyan-400">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="flex items-center border border-white/10 rounded px-3 bg-black/40">
-                  <span class="text-gray-500 mr-2">FROM &gt;</span>
-                  <input type="email" placeholder="client@address.com" required class="bg-transparent border-none outline-none py-2 text-white w-full">
-                </div>
-                <div class="flex items-center border border-white/10 rounded px-3 bg-black/40">
-                  <span class="text-gray-500 mr-2">SUBJ &gt;</span>
-                  <input type="text" placeholder="quant_collaboration" required class="bg-transparent border-none outline-none py-2 text-white w-full">
-                </div>
-              </div>
-              <div class="flex items-start border border-white/10 rounded px-3 py-2 bg-black/40">
-                <span class="text-gray-500 mr-2 mt-1">BODY &gt;</span>
-                <textarea placeholder="Type your datalink message..." rows="3" required class="bg-transparent border-none outline-none text-white w-full resize-none custom-scrollbar"></textarea>
-              </div>
-              <button type="submit" class="cyber-btn w-full text-center">
-                SEND SECURE DATASTREAM &gt;&gt;
-              </button>
-            </form>
+        <p class="text-xs text-gray-400 leading-relaxed mb-5">
+          For algorithmic collaboration, quantitative consulting, or systems engineering,
+          establish a datalink using the form. All datastreams are routed immediately.
+        </p>
+        <form id="datalink-form" class="space-y-4">
+          <div>
+            <label class="font-mono text-[10px] text-cyan-400/80 block mb-1">FROM &gt;</label>
+            <input type="email" id="dl-from" class="cyber-input" placeholder="your@email.com" required />
           </div>
-          
-          <div class="md:col-span-4 bg-black/60 border border-white/5 rounded p-4 font-mono text-[9px] text-cyan-400/80 shadow-inner select-none h-full flex flex-col justify-between min-h-[170px]">
-            <div>
-              <div class="text-gray-600 border-b border-white/5 pb-1.5 mb-1.5">// TEL_SYS_LOGGER</div>
-              <div class="space-y-1">
-                <div>&gt; PORT: 8443 established...</div>
-                <div>&gt; TLS: V1.3 encryption valid.</div>
-                <div>&gt; ROUTE: secure.eii-tech.com</div>
-                <div>&gt; status: waiting_payload_input...</div>
-              </div>
-            </div>
-            <div class="text-right text-[8px] text-gray-600">ID: SEC_DATA_CON_7D</div>
+          <div>
+            <label class="font-mono text-[10px] text-cyan-400/80 block mb-1">SUBJ &gt;</label>
+            <input type="text" id="dl-subj" class="cyber-input" placeholder="Transmission subject" required />
           </div>
-        </div>
+          <div>
+            <label class="font-mono text-[10px] text-cyan-400/80 block mb-1">BODY &gt;</label>
+            <textarea id="dl-body" rows="5" class="cyber-input" placeholder="Encrypted payload..." required></textarea>
+          </div>
+          <button type="submit" class="cyber-btn w-full">SEND SECURE DATASTREAM &gt;&gt;</button>
+        </form>
       </div>
 
+      <!-- System logger -->
+      <div class="lg:col-span-5 terminal-panel flex flex-col" data-animate="right">
+        <div class="terminal-head">
+          <span class="term-dot bg-red-500/60"></span>
+          <span class="term-dot bg-yellow-500/60"></span>
+          <span class="term-dot bg-green-500/60"></span>
+          <span class="text-[9px] text-gray-600 ml-2 font-mono">// TEL_SYS_LOGGER</span>
+        </div>
+        <div class="p-4 font-mono text-[11px] text-green-400/85 space-y-1.5 flex-1" id="sys-logger">
+          <div>&gt; PORT: 8443 established...</div>
+          <div>&gt; TLS: V1.3 encryption valid.</div>
+          <div>&gt; ROUTE: secure.eii-tech.com</div>
+          <div class="text-gray-500">&gt; status: waiting_payload_input... <span class="animate-pulse">_</span></div>
+        </div>
+        <div class="border-t border-white/5 px-4 py-2 font-mono text-[9px] text-gray-600">
+          ID: SEC_DATA_CON_7D
+        </div>
+      </div>
     </div>
   </main>
 
   <script>
-    // --- Background Holographic Grid Sphere ---
-    (() => {
-      const canvas = document.getElementById('globeCanvas');
-      const ctx = canvas.getContext('2d');
-      let width, height;
+    document.addEventListener('DOMContentLoaded', () => {
+      // Secure datalink form → mailto
+      const form = document.getElementById('datalink-form');
+      const logger = document.getElementById('sys-logger');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fromVal = document.getElementById('dl-from').value;
+        const subjVal = document.getElementById('dl-subj').value;
+        const bodyVal = document.getElementById('dl-body').value;
+        const log = document.createElement('div');
+        log.innerHTML = '&gt; payload encrypted... <span class="text-cyan-400">routing via mail client</span>';
+        logger.appendChild(log);
+        const mailtoLink = `mailto:ericwang@eii-tech.com?subject=${encodeURIComponent(subjVal)}&body=${encodeURIComponent("Sender: " + fromVal + "\n\n" + bodyVal)}`;
+        setTimeout(() => { window.location.href = mailtoLink; }, 500);
+      });
 
-      const CONFIG = {
-        radius: 0,
-        dotCount: 300,
-        dotSize: 1.1,
-        rotationSpeed: 0.0004,
-        colorDot: '100, 116, 139',
-        colorLine: '0, 102, 255'
-      };
-
-      let dots = [];
-      let angleY = 0;
-
-      class Dot3D {
-        constructor() {
-          this.theta = Math.random() * Math.PI * 2;
-          this.phi = Math.acos((Math.random() * 2) - 1);
-        }
-        project(radius, rotation) {
-          let x = radius * Math.sin(this.phi) * Math.cos(this.theta + rotation);
-          let y = radius * Math.cos(this.phi);
-          let z = radius * Math.sin(this.phi) * Math.sin(this.theta + rotation);
-          const scale = 400 / (400 - z);
-          return { x: x * scale + width / 2, y: y * scale + height / 2, z: z, scale: scale };
-        }
-      }
-
-      function init() {
-        dots = [];
-        for (let i = 0; i < CONFIG.dotCount; i++) dots.push(new Dot3D());
-      }
-
-      function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        window.scaleCanvasForDPI(canvas, ctx, width, height);
-        CONFIG.radius = Math.min(width, height) * 0.44;
-      }
-
-      function drawFrame(timestamp, elapsed) {
-        ctx.clearRect(0, 0, width, height);
-        angleY += CONFIG.rotationSpeed;
-
-        const projected = dots.map(d => d.project(CONFIG.radius, angleY));
-        projected.sort((a, b) => a.z - b.z);
-
-        // Draw connections
-        ctx.lineWidth = 0.5;
-        const maxDistSq = Math.pow(CONFIG.radius * 0.23, 2);
-        
-        for (let i = 0; i < projected.length; i++) {
-          if (projected[i].z < 0) continue; // Skip backsides
-          for (let j = i + 1; j < projected.length; j++) {
-            if (projected[j].z < 0) continue;
-            
-            const dx = projected[i].x - projected[j].x;
-            const dy = projected[i].y - projected[j].y;
-            const distSq = dx*dx + dy*dy;
-            
-            if (distSq < maxDistSq) {
-              const alpha = (1 - distSq / maxDistSq) * 0.12;
-              ctx.strokeStyle = `rgba(${CONFIG.colorLine}, ${alpha})`;
-              ctx.beginPath();
-              ctx.moveTo(projected[i].x, projected[i].y);
-              ctx.lineTo(projected[j].x, projected[j].y);
-              ctx.stroke();
-            }
-          }
-        }
-
-        // Draw dots
-        for (let p of projected) {
-          const alpha = (p.z + CONFIG.radius) / (2 * CONFIG.radius);
-          ctx.fillStyle = `rgba(${CONFIG.colorDot}, ${alpha * 0.6})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, CONFIG.dotSize * p.scale, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      window.addEventListener('resize', () => { resize(); init(); });
-      
-      // Register canvas with performance Registry
-      window.CanvasRegistry.register('contactGlobe', init, drawFrame, resize);
-
-    })();
-  </script>
-
-  <!-- Interactive Terminal Message Submission Handler -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.querySelector('form');
-      const loggerEl = document.querySelector('.space-y-1'); 
-      
-      if (form && loggerEl) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          
-          const fromVal = form.querySelector('input[type="email"]').value;
-          const subjVal = form.querySelector('input[type="text"]').value;
-          const bodyVal = form.querySelector('textarea').value;
-          
-          // Inject transmission logs into terminal panel
-          loggerEl.innerHTML = `
-            <div class="text-yellow-400">&gt; PAYLOAD RECVD. INGESTING PACKETS...</div>
-            <div class="text-yellow-400">&gt; COMPRESSING DATA: 1.2Kb -> 0.4Kb</div>
-            <div class="text-cyan-400">&gt; ENCRYPTING PAYLOAD // SHA-256 [SECURE]</div>
-          `;
-          
-          setTimeout(() => {
-            loggerEl.innerHTML += `
-              <div class="text-cyan-400">&gt; SECURE TLS TUNNEL OPENED ON PORT 8443</div>
-              <div class="text-green-400 font-bold">&gt; TRANSMITTING DATASTREAM TO GATEWAY...</div>
-            `;
-          }, 600);
-
-          setTimeout(() => {
-            loggerEl.innerHTML += `
-              <div class="text-green-400 font-bold">&gt; TRANSFER SUCCESSFUL // REDIRECTING OUT</div>
-              <div class="text-white">&gt; OPENING LOCAL SYSTEM MAIL CLIENT...</div>
-            `;
-            
-            // Generate standard mailto link
-            const mailtoLink = `mailto:ericwang@eii-tech.com?subject=${encodeURIComponent(subjVal)}&body=${encodeURIComponent("Sender: " + fromVal + "\n\n" + bodyVal)}`;
-            
-            // Redirect browser after simulated logs complete
-            window.location.href = mailtoLink;
-          }, 1500);
-        });
-      }
-    });
-  </script>
-
-  <!-- Live Vancouver Weather Telemetry (Open-Meteo API) -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const meteoEl = document.getElementById('telemetry-meteo');
-      if (!meteoEl) return;
-
-      // Weather codes map based on WMO standards
-      const wmoCodes = {
-        0: 'CLEAR',
-        1: 'MAINLY CLEAR', 2: 'PARTLY CLOUDY', 3: 'OVERCAST',
-        45: 'FOGGY', 48: 'DEPOSITING RIME FOG',
-        51: 'LIGHT DRIZZLE', 53: 'MODERATE DRIZZLE', 55: 'DENSE DRIZZLE',
-        61: 'LIGHT RAIN', 63: 'MODERATE RAIN', 65: 'HEAVY RAIN',
-        71: 'LIGHT SNOW', 73: 'MODERATE SNOW', 75: 'HEAVY SNOW',
-        77: 'SNOW GRAINS',
-        80: 'LIGHT SHOWER', 81: 'MODERATE SHOWER', 82: 'HEAVY SHOWER',
-        85: 'SNOW SHOWER', 86: 'HEAVY SNOW SHOWER',
-        95: 'THUNDERSTORM', 96: 'THUNDERSTORM WITH HAIL'
-      };
-
-      // Check cache first to avoid spaming API (15-min cache)
-      const cache = localStorage.getItem('cache_weather');
-      const cacheTime = localStorage.getItem('cache_weather_ts');
-      
-      if (cache && cacheTime && (Date.now() - cacheTime < 15 * 60 * 1000)) {
-        meteoEl.textContent = cache;
-        meteoEl.classList.remove('animate-pulse');
-        return;
-      }
-
+      // Vancouver weather telemetry
       fetch('https://api.open-meteo.com/v1/forecast?latitude=49.2827&longitude=-123.1207&current_weather=true')
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.current_weather) {
-            const temp = Math.round(data.current_weather.temperature);
-            const code = data.current_weather.weathercode;
-            const status = wmoCodes[code] || 'ACTIVE';
-            
-            const output = `${temp}°C // ${status}`;
-            meteoEl.textContent = output;
-            meteoEl.classList.remove('animate-pulse');
-            
-            // Cache it
-            localStorage.setItem('cache_weather', output);
-            localStorage.setItem('cache_weather_ts', Date.now());
-          } else {
-            throw new Error();
-          }
+        .then((r) => r.json())
+        .then((d) => {
+          const w = d.current_weather;
+          const el = document.getElementById('weather-val');
+          if (w && el) el.textContent = `${Math.round(w.temperature)}°C // ${Math.round(w.windspeed)}KM/H`;
         })
         .catch(() => {
-          // Fallback to beautiful static mock
-          meteoEl.textContent = '14°C // OVERCAST';
-          meteoEl.classList.remove('animate-pulse');
+          const el = document.getElementById('weather-val');
+          if (el) el.textContent = 'OFFLINE';
         });
     });
   </script>

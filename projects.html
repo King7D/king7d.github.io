@@ -5,435 +5,213 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xiaoxian Wang | Project Telemetry Modules</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="stylesheet" href="global.css" />
   <script src="global.js"></script>
   <style>
     .projects-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 100px 20px 60px 20px;
+      padding: 150px 20px 60px 20px;
+      position: relative;
+      z-index: 10;
     }
-    #techBgCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      pointer-events: none;
-    }
-    /* Technical Circuit grid texture */
-    .tech-grid-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      background-image: 
-        linear-gradient(rgba(0, 102, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 102, 255, 0.04) 1px, transparent 1px);
-      background-size: 50px 50px;
-      mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
-      opacity: 0.5;
-    }
-    /* Blade card customized layout */
     .blade-card {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
-    }
-    .blade-status-green {
-      color: #10b981;
-      border-color: rgba(16, 185, 129, 0.2);
-      background: rgba(16, 185, 129, 0.05);
-    }
-    .blade-status-blue {
-      color: #00f0ff;
-      border-color: rgba(0, 240, 255, 0.2);
-      background: rgba(0, 240, 255, 0.05);
-    }
-    .blade-status-orange {
-      color: #ff5500;
-      border-color: rgba(255, 85, 0, 0.2);
-      background: rgba(255, 85, 0, 0.05);
+      text-decoration: none;
     }
   </style>
 </head>
-<body class="scanlines-overlay">
-
-  <canvas id="techBgCanvas"></canvas>
-  <div class="tech-grid-overlay"></div>
+<body class="scanlines-overlay" data-bg="cubes" data-accent="cyan">
 
   <main class="projects-container">
     <!-- Title Section -->
-    <div class="mb-12 text-center fade-in-up">
+    <div class="mb-12 text-center" data-animate="down">
       <p class="tech-label">// QUANTUM PROJECT BLADES // PIPELINE DEPLOYMENTS</p>
-      <h2 class="tech-title text-4xl md:text-5xl font-black text-white glow-text-cyan uppercase">PROJECT ARCHIVE</h2>
+      <h2 class="tech-title text-4xl md:text-5xl font-black text-white glow-text-cyan uppercase" data-scramble>PROJECT ARCHIVE</h2>
     </div>
 
     <!-- Active Projects Rack -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 fade-in-up">
-      
-      <!-- Module 01 (Previously EvoNAS) -->
-      <div class="cyber-card blade-card">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+
+      <!-- Module 01 : EvoNAS -->
+      <a href="projects/evonas.html" class="cyber-card blade-card holo-sweep" data-tilt data-animate="up" data-delay="0">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// MODULE_01</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-green">ONLINE // STABLE</span>
+            <span class="status-chip chip-green">ONLINE // STABLE</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-cyan-400 mb-2">EVONAS OPERATING SYSTEM</h3>
+          <h3 class="text-lg font-bold tech-title text-cyan-400 mb-2">EVONAS OPERATING SYSTEM</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            Lightweight, high-throughput operating system architecture specialized for edge artificial intelligence processing and decentralized database coordination.
+            Lightweight, high-throughput NAS operating system architecture specialized for edge
+            artificial intelligence processing and decentralized database coordination.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/evonas.html" class="text-xs font-mono font-bold text-white hover:text-cyan-400 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; RUN_DIAGNOSTICS
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">PORT: 8443</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white hover:text-cyan-400 transition-colors select-none">&gt;&gt; RUN_DIAGNOSTICS</span>
+          <span class="text-[9px] font-mono text-gray-600">PORT: 8443</span>
         </div>
-      </div>
+      </a>
 
-      <!-- Module 02 (Previously Inventory) -->
-      <div class="cyber-card blade-card">
+      <!-- Module 02 : Inventory -->
+      <a href="projects/inventory.html" class="cyber-card blade-card holo-sweep" data-tilt data-animate="up" data-delay="0.06">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// MODULE_02</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-blue">COMPILED // DORMANT</span>
+            <span class="status-chip chip-cyan">COMPILED // DORMANT</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-cyan-400 mb-2">INVENTORY TRACKING SYSTEM</h3>
+          <h3 class="text-lg font-bold tech-title text-cyan-400 mb-2">INVENTORY TRACKING SYSTEM</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            Automated, machine learning-driven inventory optimization utility using computer vision networks to identify and track global retail movements.
+            Flask + SQLAlchemy inventory management utility with CSV import/export, live sorting
+            and a responsive control interface.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/inventory.html" class="text-xs font-mono font-bold text-white hover:text-cyan-400 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; RUN_DIAGNOSTICS
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">PORT: 9000</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white transition-colors select-none">&gt;&gt; RUN_DIAGNOSTICS</span>
+          <span class="text-[9px] font-mono text-gray-600">PORT: 9000</span>
         </div>
-      </div>
+      </a>
 
-      <!-- Module 03 (Previously Maze Solver) -->
-      <div class="cyber-card blade-card">
+      <!-- Module 03 : Digit Classification -->
+      <a href="projects/digit.html" class="cyber-card blade-card holo-sweep" data-tilt data-animate="up" data-delay="0.12">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// MODULE_03</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-blue">STANDBY // COMPILED</span>
+            <span class="status-chip chip-green">ONLINE // HIGH_PERF</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-cyan-400 mb-2">MAZE SOLVER ALGORITHMS</h3>
+          <h3 class="text-lg font-bold tech-title text-cyan-400 mb-2">DIGIT CLASSIFICATION NETWORK</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            A comprehensive matrix of pathfinding solvers comparing Dijkstra, A*, and Q-learning efficiency models inside multi-dimensional structural spaces.
+            k-NN classifier tuned with cross-validation on MNIST pixel data, evaluated through
+            accuracy metrics and confusion matrix analysis.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/maze.html" class="text-xs font-mono font-bold text-white hover:text-cyan-400 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; RUN_DIAGNOSTICS
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">PORT: 3000</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white transition-colors select-none">&gt;&gt; RUN_DIAGNOSTICS</span>
+          <span class="text-[9px] font-mono text-gray-600">PORT: 5050</span>
         </div>
-      </div>
+      </a>
 
-      <!-- Module 04 (Previously Digit Classification) -->
-      <div class="cyber-card blade-card">
+      <!-- Module 04 : Intel Edge Solutions -->
+      <a href="projects/IESC.html" class="cyber-card blade-card holo-sweep" data-tilt data-animate="up" data-delay="0.18">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// MODULE_04</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-green">ONLINE // HIGH_PERF</span>
+            <span class="status-chip chip-green">ONLINE // ACCELERATED</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-cyan-400 mb-2">DIGIT CLASSIFICATION NETWORK</h3>
+          <h3 class="text-lg font-bold tech-title text-cyan-400 mb-2">INTEL EDGE SOLUTIONS</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            Deep convolutional neural network trained on MNIST metrics to perform highly parallelized handwritten digit classifications at the edge.
+            IoT smart-city framework leveraging OpenVINO to accelerate multi-stream computer
+            vision for adaptive traffic-light control.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/digit.html" class="text-xs font-mono font-bold text-white hover:text-cyan-400 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; RUN_DIAGNOSTICS
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">PORT: 5050</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white transition-colors select-none">&gt;&gt; RUN_DIAGNOSTICS</span>
+          <span class="text-[9px] font-mono text-gray-600">PORT: 8008</span>
         </div>
-      </div>
+      </a>
 
-      <!-- Module 05 (Previously Intel Edge Solutions) -->
-      <div class="cyber-card blade-card">
+      <!-- Module 05 : Cyber Tarot -->
+      <a href="projects/tarot.html" class="cyber-card blade-card holo-sweep" data-tilt data-animate="up" data-delay="0.24">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// MODULE_05</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-green">ONLINE // ACCELERATED</span>
+            <span class="status-chip chip-cyan">COMPILED // STABLE</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-cyan-400 mb-2">INTEL EDGE SOLUTIONS</h3>
+          <h3 class="text-lg font-bold tech-title text-cyan-400 mb-2">CYBER TAROT INTELLIGENCE</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            IoT smart infrastructure framework leveraging OpenVINO systems to accelerate multi-stream computer vision calculations across municipal networks.
+            A playful generative engine that parses tarot archetype algorithms to synthesize
+            creative personal readings in terminal-styled grids.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/IESC.html" class="text-xs font-mono font-bold text-white hover:text-cyan-400 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; RUN_DIAGNOSTICS
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">PORT: 8008</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white transition-colors select-none">&gt;&gt; RUN_DIAGNOSTICS</span>
+          <span class="text-[9px] font-mono text-gray-600">PORT: 4200</span>
         </div>
-      </div>
+      </a>
 
-      <!-- Module 06 (Previously Cyber Tarot) -->
-      <div class="cyber-card blade-card">
+      <!-- Module 06 : Heart Disease -->
+      <a href="projects/heart-disease.html" class="cyber-card blade-card holo-sweep" data-tilt data-animate="up" data-delay="0.3">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// MODULE_06</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-blue">COMPILED // STABLE</span>
+            <span class="status-chip chip-green">ONLINE // CLINICAL</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-cyan-400 mb-2">CYBER TAROT INTELLIGENCE</h3>
+          <h3 class="text-lg font-bold tech-title text-cyan-400 mb-2">HEART DISEASE PREDICTOR</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            A playful neural text generative engine that parses tarot archetype algorithms to synthesize highly creative personal readings in terminal styled grids.
+            Predictive model on the Cleveland dataset estimating heart-disease likelihood from
+            medical attributes and lifestyle factors.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/tarot.html" class="text-xs font-mono font-bold text-white hover:text-cyan-400 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; RUN_DIAGNOSTICS
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">PORT: 4200</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white transition-colors select-none">&gt;&gt; RUN_DIAGNOSTICS</span>
+          <span class="text-[9px] font-mono text-gray-600">PORT: 6060</span>
         </div>
-      </div>
+      </a>
 
     </div>
 
     <!-- Active Quantitative Pipelines Header -->
-    <div class="mb-10 text-center fade-in-up" style="animation-delay: 0.1s;">
-      <p class="tech-label">// ACTIVE STRATEGY CHANNELS // HFT DEPLOYMENTS</p>
-      <h3 class="tech-title text-2xl font-bold text-white glow-text-orange uppercase">STRATEGY PIPELINES</h3>
+    <div class="mb-10 text-center" data-animate="up">
+      <p class="tech-label">// ACTIVE STRATEGY CHANNELS // ALPHA DEPLOYMENTS</p>
+      <h3 class="tech-title text-2xl font-bold text-white glow-text-gold uppercase">STRATEGY PIPELINES</h3>
     </div>
 
-    <!-- Strategy Pipeline Cards (Orange/Gold Highlights) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-4xl mx-auto fade-in-up" style="animation-delay: 0.2s;">
-      
-      <!-- Channel 07 (Previously Quantitative Trading Engine) -->
-      <div class="cyber-card cyber-card-orange blade-card">
+    <!-- Strategy Pipeline Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+
+      <!-- Channel 07 : Quantitative Trading Engine -->
+      <a href="projects/invest.html" class="cyber-card cyber-card-gold blade-card holo-sweep" data-tilt data-animate="left">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// CHANNEL_07</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-orange">HFT // LIVE FEED</span>
+            <span class="status-chip chip-gold">HFT // LIVE FEED</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-orange-500 mb-2">QUANTITATIVE TRADING ENGINE</h3>
+          <h3 class="text-lg font-bold tech-title text-yellow-500 mb-2">QUANTITATIVE TRADING ENGINE</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            Machine learning-driven portfolio optimization strategies executing high-frequency mean reversion models across global assets.
+            Machine learning-driven portfolio optimization combining trend-similarity scoring
+            with LLM sentiment analysis across global assets.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/invest.html" class="text-xs font-mono font-bold text-white hover:text-orange-500 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; CONNECT_STRATEGY
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">ALPHA: 94.2%</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white transition-colors select-none">&gt;&gt; CONNECT_STRATEGY</span>
+          <span class="text-[9px] font-mono text-gray-600">ALPHA: 94.2%</span>
         </div>
-      </div>
+      </a>
 
-      <!-- Channel 08 (Previously Hull Tactical Model) -->
-      <div class="cyber-card cyber-card-orange blade-card">
+      <!-- Channel 08 : NEURAQUANT (formerly Hull Tactical Model) -->
+      <a href="projects/neuraquant.html" class="cyber-card cyber-card-gold blade-card holo-sweep" data-tilt data-animate="right">
+        <span class="sweep"></span>
         <div>
           <div class="flex justify-between items-center mb-3">
             <span class="text-[9px] font-mono text-gray-500">// CHANNEL_08</span>
-            <span class="text-[8px] font-mono border px-1.5 py-0.2 rounded blade-status-orange">KAGGLING // ANALYTICAL</span>
+            <span class="status-chip chip-gold">FLAGSHIP // DEMO_LIVE</span>
           </div>
-          <h3 class="text-lg font-bold font-cyber text-orange-500 mb-2">HULL TACTICAL MODEL</h3>
+          <h3 class="text-lg font-bold tech-title text-yellow-500 mb-2">NEURAQUANT</h3>
           <p class="text-xs text-gray-400 font-sans leading-relaxed mb-4">
-            Mathematical modeling of index arbitrage inefficiencies, mapping cyclical statistical correlations to extract persistent alpha capture.
+            Ensemble market-prediction engine — GBDT + GRU + Transformer stack mapping daily
+            S&amp;P 500 signals into dynamic 0–2x leverage positions. Includes live demo video.
           </p>
         </div>
-        <div>
-          <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
-            <a href="projects/hull.html" class="text-xs font-mono font-bold text-white hover:text-orange-500 transition-colors flex items-center gap-1 select-none">
-              &gt;&gt; CONNECT_STRATEGY
-            </a>
-            <span class="text-[9px] font-mono text-gray-600">CONF: 90.8%</span>
-          </div>
+        <div class="border-t border-white/5 pt-3 mt-4 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-white transition-colors select-none">&gt;&gt; WATCH_DEMO ▶</span>
+          <span class="text-[9px] font-mono text-gray-600">HULL SCORE: ~10</span>
         </div>
-      </div>
+      </a>
 
     </div>
   </main>
 
-  <script>
-  (() => {
-    const canvas = document.getElementById('techBgCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-
-    const HUB_COUNT = 6;
-    const PACKET_COUNT = 50;
-    const COLOR_BLUE = '0, 102, 255';
-    const COLOR_CYAN = '0, 240, 255';
-    const COLOR_ORANGE = '255, 85, 0';
-
-    let hubs = [];
-    let packets = [];
-
-    // Static Server processing cores
-    class CircuitHub {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 3 + 2;
-        this.pulseOffset = Math.random() * Math.PI * 2;
-      }
-      draw(t) {
-        const pulse = Math.sin(t * 0.05 + this.pulseOffset);
-        const size = this.size + pulse * 1.2;
-        const opacity = 0.4 + pulse * 0.25;
-
-        // Outer glow
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${COLOR_BLUE}, ${opacity * 0.1})`;
-        ctx.fill();
-
-        // Inner Core
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${COLOR_CYAN}, 0.85)`;
-        ctx.fill();
-      }
-    }
-
-    // Glowing data packets traveling along straight paths
-    class DataPacket {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        // Start at a random hub or screen edge
-        if (hubs.length > 0 && Math.random() > 0.4) {
-          const h = hubs[Math.floor(Math.random() * hubs.length)];
-          this.x = h.x;
-          this.y = h.y;
-        } else {
-          this.x = Math.random() * width;
-          this.y = Math.random() > 0.5 ? 0 : height;
-        }
-
-        // Set direction (highly organized straight path matching PCB circuits)
-        this.dir = Math.random() > 0.5 ? 'H' : 'V';
-        this.speed = (Math.random() * 1.5 + 1.0) * (Math.random() > 0.5 ? 1 : -1);
-        this.color = Math.random() > 0.35 ? COLOR_CYAN : COLOR_ORANGE;
-        this.life = Math.random() * 200 + 100;
-        this.trail = [];
-        this.trailLength = Math.floor(Math.random() * 8 + 6);
-      }
-      update() {
-        // Log trails
-        this.trail.unshift({ x: this.x, y: this.y });
-        if (this.trail.length > this.trailLength) {
-          this.trail.pop();
-        }
-
-        // Travel horizontally or vertically (Circuit trace)
-        if (this.dir === 'H') {
-          this.x += this.speed;
-        } else {
-          this.y += this.speed;
-        }
-
-        this.life--;
-        if (this.life <= 0 || this.x < -20 || this.x > width + 20 || this.y < -20 || this.y > height + 20) {
-          this.reset();
-        }
-      }
-      draw() {
-        if (this.trail.length < 2) return;
-
-        // Draw laser trails
-        ctx.lineWidth = 1.2;
-        for (let i = 0; i < this.trail.length - 1; i++) {
-          const opacity = (1 - i / this.trail.length) * 0.5;
-          ctx.strokeStyle = `rgba(${this.color}, ${opacity})`;
-          ctx.beginPath();
-          ctx.moveTo(this.trail[i].x, this.trail[i].y);
-          ctx.lineTo(this.trail[i+1].x, this.trail[i+1].y);
-          ctx.stroke();
-        }
-
-        // Pulse tip node
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
-        ctx.fill();
-      }
-    }
-
-    function init() {
-      hubs = [];
-      packets = [];
-      const numHubs = Math.min(HUB_COUNT, Math.floor((width * height) / 140000));
-      for (let i = 0; i < numHubs; i++) hubs.push(new CircuitHub());
-      
-      const numPackets = Math.min(PACKET_COUNT, Math.floor((width * height) / 25000));
-      for (let i = 0; i < numPackets; i++) packets.push(new DataPacket());
-    }
-
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      window.scaleCanvasForDPI(canvas, ctx, width, height);
-    }
-
-    let time = 0;
-    function drawFrame(timestamp, elapsed) {
-      ctx.fillStyle = '#020204';
-      ctx.fillRect(0, 0, width, height);
-      time++;
-
-      // 1. Draw structured linear circuit connections between hubs
-      ctx.lineWidth = 0.5;
-      ctx.strokeStyle = `rgba(${COLOR_BLUE}, 0.08)`;
-      for (let i = 0; i < hubs.length; i++) {
-        for (let j = i + 1; j < hubs.length; j++) {
-          const dx = hubs[i].x - hubs[j].x;
-          const dy = hubs[i].y - hubs[j].y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          
-          if (dist < 400) {
-            // Draw clean L-shaped straight lines instead of diagonal (futuristic PCB looks)
-            ctx.beginPath();
-            ctx.moveTo(hubs[i].x, hubs[i].y);
-            ctx.lineTo(hubs[j].x, hubs[i].y); // Right angle corner
-            ctx.lineTo(hubs[j].x, hubs[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // 2. Draw active circuit lines
-      packets.forEach(p => {
-        p.update();
-        p.draw();
-      });
-
-      // 3. Draw processing hubs
-      hubs.forEach(h => h.draw(time));
-    }
-
-    window.addEventListener('resize', () => {
-      resize();
-      init();
-    });
-
-    // Register canvas with performance Registry
-    window.CanvasRegistry.register('projectsCore', init, drawFrame, resize);
-
-  })();
-  </script>
 </body>
 </html>

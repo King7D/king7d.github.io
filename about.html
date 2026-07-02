@@ -5,415 +5,176 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xiaoxian Wang | About // Telemetry</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="stylesheet" href="global.css" />
   <script src="global.js"></script>
   <style>
-    .bento-container {
-      max-width: 1200px;
+    .about-photos img {
+      height: 240px;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .about-container {
+      max-width: 1150px;
       margin: 0 auto;
-      padding: 100px 20px 60px 20px;
-    }
-    #wqBgCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      pointer-events: none;
-    }
-    /* Cyber picture container with crosshair markers */
-    .cyber-photo-wrap {
+      padding: 150px 20px 80px;
       position: relative;
-      border: 1px solid rgba(0, 102, 255, 0.2);
-      padding: 6px;
-      background: rgba(4, 4, 8, 0.5);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .cyber-photo-wrap::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 8px; height: 8px;
-      border-top: 2px solid var(--cyber-orange);
-      border-left: 2px solid var(--cyber-orange);
-    }
-    .cyber-photo-wrap::after {
-      content: '';
-      position: absolute;
-      bottom: 0; right: 0; width: 8px; height: 8px;
-      border-bottom: 2px solid var(--cyber-orange);
-      border-right: 2px solid var(--cyber-orange);
-    }
-    .cyber-photo-wrap img {
-      filter: grayscale(40%) contrast(110%);
-      transition: all 0.5s ease;
-    }
-    .cyber-photo-wrap:hover img {
-      filter: grayscale(0%) contrast(100%);
-      transform: scale(1.03);
-    }
-    /* Active laser scanner line */
-    .laser-scanner {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: rgba(255, 85, 0, 0.7);
-      box-shadow: 0 0 8px var(--cyber-orange);
       z-index: 10;
-      pointer-events: none;
-      animation: laser-slide 3s linear infinite;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .cyber-photo-wrap:hover .laser-scanner {
-      opacity: 1;
-    }
-    @keyframes laser-slide {
-      0% { top: 0%; }
-      50% { top: 100%; }
-      100% { top: 0%; }
     }
   </style>
 </head>
-<body class="scanlines-overlay">
+<body class="scanlines-overlay" data-bg="globe" data-accent="cyan">
 
-  <canvas id="wqBgCanvas"></canvas>
-
-  <main class="bento-container">
-    <!-- Section Title -->
-    <div class="mb-12 text-center fade-in-up">
+  <main class="about-container">
+    <!-- Title -->
+    <div class="mb-12 text-center" data-animate="down">
       <p class="tech-label">// TELEMETRY IDENTITY PORTAL</p>
-      <h2 class="tech-title text-4xl md:text-5xl font-black text-white glow-text-cyan uppercase">ABOUT THE QUANT</h2>
+      <h2 class="tech-title text-4xl md:text-5xl font-black text-white glow-text-cyan uppercase" data-scramble>ABOUT THE QUANT</h2>
     </div>
 
-    <!-- Bento Grid Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <!-- Column 1: Photos and Identity Bio (5 cols) -->
-      <div class="lg:col-span-5 space-y-6 fade-in-up">
-        
-        <!-- Intel Summit Photo Widget -->
-        <div class="cyber-card p-4 flex flex-col items-center">
-          <div class="cyber-photo-wrap w-full max-w-sm mb-4">
-            <div class="laser-scanner"></div>
-            <img src="pictures/intel_summit.jpg" alt="Intel Summit" class="w-full h-auto object-cover rounded shadow-lg">
+    <!-- Identity block -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-12 items-start">
+      <div class="cyber-card holo-sweep lg:col-span-3" data-tilt data-animate="left">
+        <span class="sweep"></span>
+        <p class="text-[9px] font-mono text-gray-500 mb-4">// IDENTITY_METRIC // SUBJECT: WANG_X</p>
+        <h3 class="tech-title text-xl text-cyan-400 mb-4">IDENTITY MATRIX</h3>
+        <p class="text-sm text-gray-300 leading-relaxed mb-4">
+          I am <span class="text-white font-semibold">Xiaoxian Wang</span> — a machine learning developer,
+          quantitative strategist, and business analyst operating at the boundary where raw market
+          data meets neural computation.
+        </p>
+        <p class="text-sm text-gray-400 leading-relaxed mb-6">
+          Recognized as an Intel Edge AI Developer and a Prestige member of the Intel Partner
+          Alliance, I deploy optimized edge-intelligence systems to decode financial signals and
+          drive high-throughput execution.
+        </p>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="metric-block text-center">
+            <div class="metric-label">Focus</div>
+            <div class="metric-value text-cyan-400 text-sm">QUANT · ML</div>
           </div>
-          <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">// LOC // 2023 INTEL LOEM SUMMIT, MACAU</span>
-        </div>
-
-        <!-- Cybernetic Bio Profile -->
-        <div class="cyber-card">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
-            <h3 class="text-xl font-bold font-cyber text-cyan-400 uppercase tracking-tight">IDENTITY METRIC</h3>
+          <div class="metric-block text-center">
+            <div class="metric-label">Base</div>
+            <div class="metric-value text-white text-sm">VANCOUVER</div>
           </div>
-          <p class="text-gray-300 font-light leading-relaxed mb-4">
-            I am <strong class="text-white font-medium">Xiaoxian Wang</strong>, a machine learning developer, quantitative strategist, and business analyst working at the boundary where raw market data meets neural computation.
-          </p>
-          <p class="text-gray-300 font-light leading-relaxed">
-            Recognized as an Intel Edge AI Developer and a Prestige member of the Intel Partner Alliance, I deploy optimized edge intelligence systems to decrypt financial signals and optimize high-throughput executions.
-          </p>
-        </div>
-
-        <!-- Group Photo Widget -->
-        <div class="cyber-card p-4 flex flex-col items-center">
-          <div class="cyber-photo-wrap w-full max-w-sm mb-4">
-            <div class="laser-scanner"></div>
-            <img src="pictures/group_picture.jpg" alt="Intel Executive Meeting" class="w-full h-auto object-cover rounded shadow-lg">
+          <div class="metric-block text-center">
+            <div class="metric-label">Status</div>
+            <div class="metric-value text-green-400 text-sm">ACTIVE</div>
           </div>
-          <p class="text-[9px] font-mono text-center text-gray-500 leading-relaxed uppercase">
-            // TELEMETRY: WITH JOHN KALVIN (INTEL VP), DAVE GUZZI (INTEL VP), & YE ZONG (INTEL PRC GM)
-          </p>
         </div>
-
+        <div class="terminal-panel text-[11px] text-cyan-400/90 select-none">
+          <div class="terminal-head">
+            <span class="term-dot bg-red-500/60"></span>
+            <span class="term-dot bg-yellow-500/60"></span>
+            <span class="term-dot bg-green-500/60"></span>
+            <span class="text-[9px] text-gray-600 ml-2 font-mono">identity_scan.sh</span>
+          </div>
+          <div class="p-4 font-mono space-y-1">
+            <div>&gt; ROLE: ML_DEVELOPER · QUANT_STRATEGIST · BIZ_ANALYST</div>
+            <div>&gt; ALLIANCE: INTEL_PARTNER // PRESTIGE_TIER <span class="text-green-400">[VERIFIED]</span></div>
+            <div>&gt; PLATFORM: WORLDQUANT_BRAIN // GOLD_ALPHAS <span class="text-yellow-500">[TOP 10%]</span></div>
+            <div>&gt; SCAN COMPLETE: identity_confirmed <span class="animate-pulse">_</span></div>
+          </div>
+        </div>
       </div>
 
-      <!-- Column 2: Qualifications & Credentials (7 cols) -->
-      <div class="lg:col-span-7 space-y-6 fade-in-up" style="animation-delay: 0.15s;">
-        
-        <!-- Licenses & Accreditations Card -->
-        <div class="cyber-card cyber-card-orange">
-          <div class="flex items-center justify-between mb-6 border-b border-orange-500/20 pb-3">
-            <h4 class="text-xl font-bold font-cyber text-orange-500 uppercase tracking-tight">LICENSES &amp; ACCREDITATIONS</h4>
-            <span class="text-[9px] font-mono text-orange-500/60 border border-orange-500/20 px-2 py-0.5 rounded">SYS_CRED: VALID</span>
-          </div>
-          
-          <ul class="space-y-4 font-mono text-xs text-gray-300">
-            <li class="flex items-start gap-3 bg-white/5 p-3 rounded border border-white/5 hover:border-orange-500/20 transition-colors">
-              <span class="text-orange-500 font-bold">[★]</span>
-              <div>
-                <div class="text-white font-bold text-sm">WORLDQUANT BRAIN PLATFORM</div>
-                <div class="text-gray-400 mt-0.5">Gold Level Alphas Issuer &amp; Ranked Top 10% Globally</div>
-              </div>
-            </li>
-            <li class="flex items-start gap-3 bg-white/5 p-3 rounded border border-white/5 hover:border-orange-500/20 transition-colors">
-              <span class="text-orange-500 font-bold">[01]</span>
-              <div>
-                <div class="text-white font-bold text-sm">SHENZHEN STOCK EXCHANGE</div>
-                <div class="text-gray-400 mt-0.5">ETF Financial Strategist Qualification (Junior Level)</div>
-              </div>
-            </li>
-            <li class="flex items-start gap-3 bg-white/5 p-3 rounded border border-white/5 hover:border-orange-500/20 transition-colors">
-              <span class="text-orange-500 font-bold">[02]</span>
-              <div>
-                <div class="text-white font-bold text-sm">MICROSOFT CERTIFIED SYSTEMS</div>
-                <div class="text-gray-400 mt-0.5">Azure AI Fundamentals (AI-900 Accreditation)</div>
-              </div>
-            </li>
-            <li class="flex items-start gap-3 bg-white/5 p-3 rounded border border-white/5 hover:border-orange-500/20 transition-colors">
-              <span class="text-orange-500 font-bold">[03]</span>
-              <div>
-                <div class="text-white font-bold text-sm">INTEL EDGE AI DEVELOPER</div>
-                <div class="text-gray-400 mt-0.5">Edge Core Architecture Acceleration &amp; Inference Optimization</div>
-              </div>
-            </li>
-            <li class="flex items-start gap-3 bg-white/5 p-3 rounded border border-white/5 hover:border-orange-500/20 transition-colors">
-              <span class="text-orange-500 font-bold">[04]</span>
-              <div>
-                <div class="text-white font-bold text-sm">MICROSOFT OFFICE SPECIALIST</div>
-                <div class="text-gray-400 mt-0.5">Expert Certification (Microsoft 365 Apps Deployment)</div>
-              </div>
-            </li>
-            <li class="flex items-start gap-3 bg-white/5 p-3 rounded border border-white/5 hover:border-orange-500/20 transition-colors">
-              <span class="text-orange-500 font-bold">[05]</span>
-              <div>
-                <div class="text-white font-bold text-sm">GOOGLE ANALYTICS SUITE</div>
-                <div class="text-gray-400 mt-0.5">Advanced User and Data Operations Certification</div>
-              </div>
-            </li>
-          </ul>
+      <div class="flex flex-col gap-5 lg:col-span-2 about-photos" data-animate="right">
+        <div class="media-frame">
+          <span class="frame-tag">LOC // 2023 INTEL LOEM SUMMIT · MACAU</span>
+          <img src="pictures/intel_summit.jpg" alt="Intel LOEM Summit, Macau" loading="lazy" />
         </div>
-
-        <!-- Academic Matrix Card -->
-        <div class="cyber-card">
-          <div class="flex items-center justify-between mb-6 border-b border-cyan-500/20 pb-3">
-            <h4 class="text-xl font-bold font-cyber text-cyan-400 uppercase tracking-tight">ACADEMIC MATRIX</h4>
-            <span class="text-[9px] font-mono text-cyan-400/60 border border-cyan-400/20 px-2 py-0.5 rounded">EDU_TRACK: VERIFIED</span>
-          </div>
-
-          <div class="space-y-6 font-mono text-xs">
-            
-            <div class="relative pl-6 border-l-2 border-cyan-500/30 hover:border-cyan-400 transition-colors py-1">
-              <!-- Chronological bullet -->
-              <span class="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_var(--cyber-cyan)]"></span>
-              <div class="flex justify-between items-center text-sm font-bold text-white mb-1">
-                <span>CQF INSTITUTE, UK</span>
-                <span class="text-cyan-400 text-xs font-semibold">2026.1 - 2026.6</span>
-              </div>
-              <div class="text-gray-300 font-medium">Certificate in Quantitative Finance (CQF Candidate)</div>
-              <div class="text-gray-500 mt-1 italic">&gt;&gt; Award: Recipient of the CQF Learning Incentive Scholarship</div>
-            </div>
-
-            <div class="relative pl-6 border-l-2 border-cyan-500/30 hover:border-cyan-400 transition-colors py-1">
-              <span class="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_var(--cyber-cyan)]"></span>
-              <div class="flex justify-between items-center text-sm font-bold text-white mb-1">
-                <span>UNIVERSITY OF BRITISH COLUMBIA</span>
-                <span class="text-cyan-400 text-xs font-semibold">2025 - 2026</span>
-              </div>
-              <div class="text-gray-300 font-medium">Master of Business Analytics (MBAN)</div>
-              <div class="text-gray-500 mt-1 italic">&gt;&gt; Award: Recipient of the Accelerated Career Scholarship</div>
-            </div>
-
-            <div class="relative pl-6 border-l-2 border-cyan-500/30 hover:border-cyan-400 transition-colors py-1">
-              <span class="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_var(--cyber-cyan)]"></span>
-              <div class="flex justify-between items-center text-sm font-bold text-white mb-1">
-                <span>WORLDQUANT UNIVERSITY</span>
-                <span class="text-cyan-400 text-xs font-semibold">2025 - 2027</span>
-              </div>
-              <div class="text-gray-300 font-medium">MSc in Financial Engineering</div>
-              <div class="text-gray-500 mt-1">&gt;&gt; Program Focus: Continuous pricing models, risk analysis &amp; signal modeling</div>
-            </div>
-
-            <div class="relative pl-6 border-l-2 border-cyan-500/30 hover:border-cyan-400 transition-colors py-1">
-              <span class="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_var(--cyber-cyan)]"></span>
-              <div class="flex justify-between items-center text-sm font-bold text-white mb-1">
-                <span>UNIVERSITY OF BRITISH COLUMBIA</span>
-                <span class="text-cyan-400 text-xs font-semibold">2021 - 2025</span>
-              </div>
-              <div class="text-gray-300 font-medium">Bachelor of Arts in Economics (Distinction)</div>
-              <div class="text-gray-500 mt-1 italic">&gt;&gt; Award: Recipient of the International Student Scholarship</div>
-            </div>
-
-          </div>
+        <div class="media-frame">
+          <span class="frame-tag">TELEMETRY // WITH INTEL VPs J.KALVIN · D.GUZZI &amp; PRC GM YE ZONG</span>
+          <img src="pictures/group_picture.jpg" alt="Group picture with Intel executives" loading="lazy" />
         </div>
-
       </div>
+    </div>
 
+    <!-- Credentials -->
+    <div class="hud-divider" data-animate="up"><span>SYS_CRED // DECRYPTED</span></div>
+    <div class="cyber-card mb-12" data-animate="up">
+      <div class="flex justify-between items-center mb-6">
+        <h4 class="tech-title text-lg text-white">LICENSES &amp; ACCREDITATIONS</h4>
+        <span class="status-chip chip-green">SYS_CRED: VALID</span>
+      </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0 m-0 text-sm">
+        <li class="metric-block" data-animate="up" data-delay="0.05">
+          <span class="text-yellow-500 font-mono text-xs">[★] WORLDQUANT BRAIN PLATFORM</span>
+          <p class="text-gray-400 text-xs mt-1 mb-0">Gold Level Alphas Issuer &amp; Ranked Top 10% Globally</p>
+        </li>
+        <li class="metric-block" data-animate="up" data-delay="0.1">
+          <span class="text-cyan-400 font-mono text-xs">[01] SHENZHEN STOCK EXCHANGE</span>
+          <p class="text-gray-400 text-xs mt-1 mb-0">ETF Financial Strategist Qualification (Junior Level)</p>
+        </li>
+        <li class="metric-block" data-animate="up" data-delay="0.15">
+          <span class="text-cyan-400 font-mono text-xs">[02] MICROSOFT CERTIFIED SYSTEMS</span>
+          <p class="text-gray-400 text-xs mt-1 mb-0">Azure AI Fundamentals (AI-900 Accreditation)</p>
+        </li>
+        <li class="metric-block" data-animate="up" data-delay="0.2">
+          <span class="text-cyan-400 font-mono text-xs">[03] INTEL EDGE AI DEVELOPER</span>
+          <p class="text-gray-400 text-xs mt-1 mb-0">Edge Core Architecture Acceleration &amp; Inference Optimization</p>
+        </li>
+        <li class="metric-block" data-animate="up" data-delay="0.25">
+          <span class="text-cyan-400 font-mono text-xs">[04] MICROSOFT OFFICE SPECIALIST</span>
+          <p class="text-gray-400 text-xs mt-1 mb-0">Expert Certification (Microsoft 365 Apps Deployment)</p>
+        </li>
+        <li class="metric-block" data-animate="up" data-delay="0.3">
+          <span class="text-cyan-400 font-mono text-xs">[05] GOOGLE ANALYTICS SUITE</span>
+          <p class="text-gray-400 text-xs mt-1 mb-0">Advanced User and Data Operations Certification</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Education -->
+    <div class="hud-divider" data-animate="up"><span>EDU_TRACK // VERIFIED</span></div>
+    <div class="cyber-card" data-animate="up">
+      <div class="flex justify-between items-center mb-8">
+        <h4 class="tech-title text-lg text-white">ACADEMIC MATRIX</h4>
+        <span class="status-chip chip-cyan">EDU_TRACK: VERIFIED</span>
+      </div>
+      <div class="edu-timeline">
+        <div class="edu-node" data-animate="left" data-delay="0.05">
+          <div class="flex flex-wrap justify-between items-baseline gap-2">
+            <h5 class="text-sm text-cyan-400 m-0 tech-title">CQF INSTITUTE, UK</h5>
+            <span class="font-mono text-[10px] text-gray-500">2026.1 – 2026.6</span>
+          </div>
+          <p class="text-xs text-gray-300 mt-1 mb-1">Certificate in Quantitative Finance (CQF Candidate)</p>
+          <p class="text-[11px] font-mono text-yellow-500/80 m-0">&gt;&gt; Award: CQF Learning Incentive Scholarship</p>
+        </div>
+        <div class="edu-node" data-animate="left" data-delay="0.1">
+          <div class="flex flex-wrap justify-between items-baseline gap-2">
+            <h5 class="text-sm text-cyan-400 m-0 tech-title">UNIVERSITY OF BRITISH COLUMBIA</h5>
+            <span class="font-mono text-[10px] text-gray-500">2025 – 2026</span>
+          </div>
+          <p class="text-xs text-gray-300 mt-1 mb-1">Master of Business Analytics (MBAN)</p>
+          <p class="text-[11px] font-mono text-yellow-500/80 m-0">&gt;&gt; Award: Accelerated Career Scholarship</p>
+        </div>
+        <div class="edu-node" data-animate="left" data-delay="0.15">
+          <div class="flex flex-wrap justify-between items-baseline gap-2">
+            <h5 class="text-sm text-cyan-400 m-0 tech-title">WORLDQUANT UNIVERSITY</h5>
+            <span class="font-mono text-[10px] text-gray-500">2025 – 2027</span>
+          </div>
+          <p class="text-xs text-gray-300 mt-1 mb-1">MSc in Financial Engineering</p>
+          <p class="text-[11px] font-mono text-yellow-500/80 m-0">&gt;&gt; Focus: Continuous pricing models, risk analysis &amp; signal modeling</p>
+        </div>
+        <div class="edu-node" data-animate="left" data-delay="0.2">
+          <div class="flex flex-wrap justify-between items-baseline gap-2">
+            <h5 class="text-sm text-cyan-400 m-0 tech-title">UNIVERSITY OF BRITISH COLUMBIA</h5>
+            <span class="font-mono text-[10px] text-gray-500">2021 – 2025</span>
+          </div>
+          <p class="text-xs text-gray-300 mt-1 mb-1">Bachelor of Arts in Economics (Distinction)</p>
+          <p class="text-[11px] font-mono text-yellow-500/80 m-0">&gt;&gt; Award: International Student Scholarship</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-12" data-animate="up">
+      <a href="projects.html" class="cyber-btn">EXPLORE PROJECTS &gt;</a>
     </div>
   </main>
 
-  <script>
-  (() => {
-    const canvas = document.getElementById('wqBgCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    
-    // Performance configurations
-    const CONFIG = {
-      nodeCount: 180,
-      connectionDistance: 120,
-      baseSpeed: 0.15,
-      colors: {
-        node: '0, 102, 255',
-        specialNode: '255, 85, 0',
-        line: '0, 102, 255'
-      }
-    };
-
-    let nodes = [];
-    const mouse = { x: null, y: null, active: false };
-
-    // Telemetry node names to give the quant/mathematical vibe
-    const telemetryLabels = ['ALPHA', 'BETA', 'SIGMA', 'MU', 'VAR', 'COV', 'SHARPE', 'LSTM', 'HFT', 'RNN', 'SGD', 'CME', 'NYSE'];
-
-    class QuantNode {
-      constructor() {
-        this.reset();
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-      }
-
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * CONFIG.baseSpeed;
-        this.vy = (Math.random() - 0.5) * CONFIG.baseSpeed;
-        this.size = Math.random() * 2 + 1;
-        this.isSpecial = Math.random() > 0.95;
-        this.label = this.isSpecial ? telemetryLabels[Math.floor(Math.random() * telemetryLabels.length)] : '';
-        this.alpha = Math.random() * 0.4 + 0.2;
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // Interactive mouse repulsion
-        if (mouse.active && mouse.x !== null) {
-          const dx = this.x - mouse.x;
-          const dy = this.y - mouse.y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 100) {
-            const force = (100 - dist) / 100;
-            this.x += (dx / dist) * force * 1.2;
-            this.y += (dy / dist) * force * 1.2;
-          }
-        }
-
-        // Boundary checks
-        if (this.x < -10 || this.x > width + 10 || this.y < -10 || this.y > height + 10) {
-          this.reset();
-        }
-      }
-
-      draw() {
-        const color = this.isSpecial ? CONFIG.colors.specialNode : CONFIG.colors.node;
-        ctx.fillStyle = `rgba(${color}, ${this.alpha})`;
-        
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Glowing special nodes
-        if (this.isSpecial) {
-          ctx.shadowBlur = 6;
-          ctx.shadowColor = `rgba(${CONFIG.colors.specialNode}, 0.8)`;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size * 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${CONFIG.colors.specialNode}, ${this.alpha * 0.8})`;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-
-          // Technical monospace labels
-          ctx.font = '8px monospace';
-          ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha * 0.6})`;
-          ctx.fillText(this.label, this.x + 8, this.y + 3);
-        }
-      }
-    }
-
-    function init() {
-      nodes = [];
-      const area = width * height;
-      const targetCount = Math.min(CONFIG.nodeCount, Math.floor(area / 9000));
-      for (let i = 0; i < targetCount; i++) {
-        nodes.push(new QuantNode());
-      }
-    }
-
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      window.scaleCanvasForDPI(canvas, ctx, width, height);
-    }
-
-    function drawFrame(timestamp, elapsed) {
-      // Clear with obsidian background fade
-      ctx.fillStyle = '#020204';
-      ctx.fillRect(0, 0, width, height);
-
-      // 1. Draw grids coordinates in background
-      ctx.strokeStyle = 'rgba(0, 102, 255, 0.02)';
-      ctx.lineWidth = 0.5;
-      const step = 80;
-      for (let x = 0; x < width; x += step) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
-      }
-      for (let y = 0; y < height; y += step) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
-      }
-
-      // 2. Draw connections (correlated lines)
-      ctx.lineWidth = 0.5;
-      const length = nodes.length;
-      for (let i = 0; i < length; i++) {
-        const n1 = nodes[i];
-        for (let j = i + 1; j < length; j++) {
-          const n2 = nodes[j];
-          const dx = n1.x - n2.x;
-          const dy = n1.y - n2.y;
-          const distSq = dx*dx + dy*dy;
-          const maxDistSq = CONFIG.connectionDistance * CONFIG.connectionDistance;
-          
-          if (distSq < maxDistSq) {
-            const alpha = (1 - distSq / maxDistSq) * 0.15;
-            ctx.strokeStyle = `rgba(${CONFIG.colors.line}, ${alpha})`;
-            ctx.beginPath();
-            ctx.moveTo(n1.x, n1.y);
-            ctx.lineTo(n2.x, n2.y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // 3. Update and draw nodes
-      nodes.forEach(node => {
-        node.update();
-        node.draw();
-      });
-    }
-
-    window.addEventListener('resize', () => {
-      resize();
-      init();
-    });
-
-    window.addEventListener('pointermove', e => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      mouse.active = true;
-    });
-
-    window.addEventListener('pointerleave', () => {
-      mouse.active = false;
-    });
-
-    // Register with registry
-    window.CanvasRegistry.register('aboutStars', init, drawFrame, resize);
-  })();
-  </script>
 </body>
 </html>

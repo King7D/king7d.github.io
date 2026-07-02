@@ -1,271 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inventory Tracking System</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="../global.css" />
+  <script src="../global.js"></script>
   <style>
-    :root{
-      --bg-deep:#030712;        /* deep navy */
-      --node:#e5f4ff;           /* soft white/blue nodes */
-      --link-a:#22d3ee;         /* cyan */
-      --link-b:#60a5fa;         /* blue */
+    .proj-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 150px 20px 80px;
+      position: relative;
+      z-index: 10;
     }
-
-    /* Allow the page to extend and scroll */
-    html, body { height: auto; }
-
-    body{
-      font-family:'Roboto',sans-serif;
-      background:var(--bg-deep);
-      min-height:100vh;
-      margin:0;
-      padding:0;
-      color:white;
-      opacity:0;                 /* fade-in on load */
-      transition:opacity .5s ease-in-out;
-      overflow-x:hidden;         /* keep only horizontal overflow hidden */
+    .proj-list { list-style: none; padding: 0; margin: 0; }
+    .proj-list li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: .8rem;
+      font-size: .82rem;
+      color: #9ca3af;
+      line-height: 1.65;
     }
-
-    /* Full-screen animated background (behind everything) */
-    #bgCanvas{
-      position:fixed;
-      inset:0;
-      z-index:-2;
-      width:100%;
-      height:100%;
-      display:block;
-      pointer-events:none;
+    .proj-list li::before {
+      content: '';
+      position: absolute; left: 0; top: 9px;
+      width: 7px; height: 7px;
+      background: var(--q-cyan);
+      box-shadow: 0 0 7px rgba(0,240,255,.6);
+      transform: rotate(45deg);
     }
+    .proj-list li strong { color: #e5e7eb; }
 
-    /* Subtle dot texture + vignette for depth */
-    .texture{
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1.2px);
-      background-size:12px 12px;
-      mix-blend-mode:soft-light;
-      opacity:.9;
+    .back-fab {
+      position: fixed;
+      top: 104px; left: 18px;
+      z-index: 900;
+      padding: .5rem 1.1rem;
+      font-size: .66rem;
     }
-    .vignette{
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.35) 100%);
+    @media (max-width: 900px) {
+      .back-fab { top: auto; bottom: 18px; left: 18px; }
     }
-
-    .content{
-      position:relative;
-      z-index:1;
-      max-width:800px;
-      text-align:center;
-      padding:2rem;
-      margin:3rem auto 6rem; /* vertical breathing room so the page scrolls */
-    }
-
-    h1{font-size:3.5rem;font-weight:700;margin-bottom:1.5rem;}
-    h2{font-size:2rem;margin-top:1.5rem;}
-    p{font-size:1rem;line-height:1.8;margin-bottom:1.5rem;}
-
-    ul{list-style:none;padding-left:0;margin:0;}
-    ul li{margin-bottom:1rem;}
-
-    .back-button{
-      display:inline-block;margin-top:2rem;padding:10px 20px;
-      border:2px solid #f39c12;border-radius:5px;text-decoration:none;color:#f39c12;
-      transition:background-color .3s ease,color .3s ease;
-    }
-    .back-button:hover{background-color:#f39c12;color:white;}
-
-    img{display:block;margin:0 auto;}
   </style>
 </head>
+<body class="scanlines-overlay" data-bg="particles" data-accent="cyan">
 
-<body>
+  <main class="proj-container">
+  <a href="../projects.html" class="cyber-btn cyber-btn-gold back-fab">&lt; PROJECTS</a>
 
-  <!-- Background layers -->
-  <canvas id="bgCanvas" aria-hidden="true"></canvas>
-  <div class="texture" aria-hidden="true"></div>
-  <div class="vignette" aria-hidden="true"></div>
+    <div class="text-center mb-10" data-animate="down">
+      <p class="tech-label">// MODULE_02 // DATA OPERATIONS</p>
+      <h1 class="tech-title text-3xl md:text-5xl font-black text-white glow-text-cyan uppercase leading-tight" data-scramble>INVENTORY TRACKING SYSTEM</h1>
+      <p class="font-mono text-[10px] text-gray-500 tracking-widest uppercase mt-3">Flask + SQLAlchemy Inventory Management</p>
+    </div>
 
-  <div class="content">
-    <h1 style="font-size: 2.5rem">Inventory Tracking System</h1>
-    <p>This is a simple web-based inventory tracking system built using Flask and SQLAlchemy, designed to manage inventory items with the ability to import and export data using CSV files.</p>
+    <div class="cyber-card mb-6" data-animate="up">
+      <h2 class="tech-title text-lg text-cyan-400 mb-4">MISSION BRIEF</h2>
+      <p class="text-sm text-gray-300 leading-relaxed mb-3">A web-based inventory tracking system built with Flask and SQLAlchemy, designed to manage inventory items with full CSV import/export support.</p>
 
-    <img src="pictures/inventory1.png" alt="Inventory-Tracking-System Screenshot" class="rounded-lg" style="width: 1200px; height: auto;">
+    </div>
+    <div class="media-frame mb-6" data-animate="scale">
+      <span class="frame-tag">SYS_UI // INVENTORY DASHBOARD</span>
+      <img src="pictures/inventory1.png" alt="SYS_UI // INVENTORY DASHBOARD" loading="lazy" />
+    </div>
+    <div class="cyber-card mb-6" data-animate="up">
+      <h2 class="tech-title text-lg text-cyan-400 mb-4">KEY FEATURES</h2>
+      <ul class="proj-list">
+        <li><strong>CRUD operations:</strong> create, read, update, and delete inventory items.</li>
+        <li><strong>CSV Import/Export:</strong> export the inventory list to CSV and import inventory data from CSV, replacing old data.</li>
+        <li><strong>Sorting:</strong> sort items by date, name, ID, quantity, or price in ascending or descending order.</li>
+        <li><strong>Flash Messages:</strong> informative feedback displayed after each action.</li>
+        <li><strong>User-Friendly UI:</strong> responsive, intuitive design with action buttons that works across screen sizes and devices.</li>
+      </ul>
 
-    <h2 style="font-size: 2rem">Features</h2>
-    <ul>
-      <li>CRUD operations: Create, read, update, and delete inventory items.</li>
-      <li>CSV Import/Export: Easily export the inventory list to a CSV file and import inventory data from 
-        a CSV file, replacing old data.</li>
-      <li>Sorting: Sort inventory items by date, name, ID, quantity, or price in ascending or descending order.</li>
-      <li>Flash Messages: Informative messages displayed to the user after each action.</li>
-      <li>User-Friendly UI: Responsive, intuitive design with action buttons that works well on various screen sizes and devices.</li>
-    </ul>
+    </div>
+    <div class="cyber-card cyber-card-gold mb-6" data-animate="up">
+      <h2 class="tech-title text-lg text-yellow-500 mb-4">TECHNOLOGY STACK</h2>
+      <ul class="proj-list">
+        <li><strong>Backend:</strong> Flask (Python), SQLAlchemy (SQLite database)</li>
+        <li><strong>Frontend:</strong> HTML, CSS</li>
+        <li><strong>CSV Support:</strong> Python csv module for file handling</li>
+      </ul>
 
-    <img src="pictures/inventory2.png" alt="Inventory-Tracking-System Screenshot" class="rounded-lg" style="width: 1200px; height: auto;">
+    </div>
+    <div class="media-frame mb-6" data-animate="scale">
+      <span class="frame-tag">SYS_UI // ITEM MANAGEMENT VIEW</span>
+      <img src="pictures/inventory2.png" alt="SYS_UI // ITEM MANAGEMENT VIEW" loading="lazy" />
+    </div>
 
-    <h2 style="font-size: 2rem">Technology Stack:</h2>
-    <ul>
-      <li>Backend: Flask (Python), SQLAlchemy (SQLite database)</li>
-      <li>Frontend: HTML, CSS</li>
-      <li>CSV Support: Python csv module for handling CSV files</li>
-    </ul>
 
-    <p class="text-lg mt-4">
-      <a href="https://github.com/King7D/Inventory-Tracking-System" class="contact-button px-6 py-3 border rounded transition" target="_blank">Link to GitHub</a>
-    </p>
+    <div class="text-center mt-12 flex flex-wrap justify-center gap-4" data-animate="up">
+      <a href="https://github.com/King7D/Inventory-Tracking-System" target="_blank" rel="noopener" class="cyber-btn">&lt;/&gt; DECRYPT SOURCE // GITHUB</a>
+      <a href="../projects.html" class="cyber-btn cyber-btn-gold">&lt; BACK TO PROJECTS</a>
 
-    <a href="#" class="back-button mb-16" id="backToProjects">Back to Projects</a>
-  </div>
-
-  <script>
-    // Fade-in on load
-    window.addEventListener('load', () => { document.body.style.opacity = 1; });
-
-    // Fade-out on back
-    document.getElementById('backToProjects').addEventListener('click', function (e) {
-      e.preventDefault();
-      document.body.style.opacity = 0;
-      setTimeout(() => { window.location.href = "../projects.html"; }, 500);
-    });
-  </script>
-
-  <!-- Constellation/network background (distinct from WQ, similar feel) -->
-  <script>
-    (() => {
-      const canvas = document.getElementById('bgCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-
-      let width, height, dpr, rafId;
-      let points = [];
-      let t = 0;
-
-      function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const rect = canvas.getBoundingClientRect();
-        width = rect.width;
-        height = rect.height;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        spawnPoints();
-      }
-
-      function spawnPoints() {
-        const density = 0.00018; // points per pixel
-        const count = Math.max(80, Math.min(280, Math.floor(width * height * density)));
-        points = [];
-        for (let i = 0; i < count; i++) {
-          points.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.35,
-            vy: (Math.random() - 0.5) * 0.35,
-            r: 1 + Math.random() * 1.2,
-            a: 0.45 + Math.random() * 0.4 // node brightness
-          });
-        }
-      }
-
-      function step() {
-        // Clear
-        ctx.clearRect(0, 0, width, height);
-
-        // Update positions with gentle curl
-        t += 0.0025;
-        const curlAmp = 0.25;
-        for (const p of points) {
-          const ax = Math.sin((p.y + t * 700) * 0.002) * curlAmp;
-          const ay = Math.cos((p.x - t * 700) * 0.002) * curlAmp;
-          p.vx += ax * 0.002;
-          p.vy += ay * 0.002;
-
-          p.x += p.vx;
-          p.y += p.vy;
-
-          // Soft wrap
-          if (p.x < -10) p.x = width + 10;
-          if (p.x > width + 10) p.x = -10;
-          if (p.y < -10) p.y = height + 10;
-          if (p.y > height + 10) p.y = -10;
-        }
-
-        // Draw links between nearby nodes
-        const maxDist = Math.min(140, Math.max(90, Math.hypot(width, height) * 0.08));
-        const maxDist2 = maxDist * maxDist;
-
-        for (let i = 0; i < points.length; i++) {
-          const a = points[i];
-          let links = 0;
-          for (let j = i + 1; j < points.length; j++) {
-            const b = points[j];
-            const dx = a.x - b.x, dy = a.y - b.y;
-            const d2 = dx * dx + dy * dy;
-            if (d2 <= maxDist2) {
-              if (links++ > 4) continue; // limit per-node connections
-
-              const d = Math.sqrt(d2);
-              const alpha = 1 - d / maxDist; // closer => brighter
-
-              const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-              grad.addColorStop(0, `rgba(34, 211, 238, ${alpha * 0.55})`); // cyan
-              grad.addColorStop(1, `rgba(96, 165, 250, ${alpha * 0.55})`);  // blue
-
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.strokeStyle = grad;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
-          }
-        }
-
-        // Draw nodes (soft glow)
-        for (const p of points) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(229,244,255,${p.a})`;
-          ctx.shadowColor = 'rgba(180,220,255,0.35)';
-          ctx.shadowBlur = 6;
-          ctx.fill();
-        }
-        ctx.shadowBlur = 0;
-
-        rafId = requestAnimationFrame(step);
-      }
-
-      function start() {
-        cancelAnimationFrame(rafId);
-        resize();
-        step();
-      }
-
-      function renderStill() {
-        cancelAnimationFrame(rafId);
-        resize();
-        step();
-        cancelAnimationFrame(rafId);
-      }
-
-      window.addEventListener('resize', start, { passive: true });
-      const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-      function handleMotion() { mql.matches ? renderStill() : start(); }
-      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
-      else mql.addListener(handleMotion);
-
-      handleMotion();
-    })();
-  </script>
+    </div>
+  </main>
 
 </body>
 </html>

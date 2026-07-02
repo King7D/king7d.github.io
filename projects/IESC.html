@@ -1,311 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IESC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intel Edge Solutions Challenge | Smart Cities</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="../global.css" />
+  <script src="../global.js"></script>
   <style>
-    :root{
-      --bg-deep:#030712;        /* deep navy */
-      --node:#e5f4ff;           /* soft white/blue nodes */
-      --link-a:#22d3ee;         /* cyan */
-      --link-b:#60a5fa;         /* blue */
+    .proj-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 150px 20px 80px;
+      position: relative;
+      z-index: 10;
     }
-
-    /* Allow the page to extend and scroll */
-    html, body { height: auto; }
-
-    body{
-      font-family:'Roboto',sans-serif;
-      background:var(--bg-deep);
-      min-height:100vh;
-      margin:0;
-      padding:0;
-      /* removed flex centering so long pages can scroll */
-      color:white;
-      opacity:0;                 /* fade-in on load */
-      transition:opacity .5s ease-in-out;
-      overflow-x:hidden;         /* keep only horizontal overflow hidden */
+    .proj-list { list-style: none; padding: 0; margin: 0; }
+    .proj-list li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: .8rem;
+      font-size: .82rem;
+      color: #9ca3af;
+      line-height: 1.65;
     }
-
-    /* Full-screen animated background (behind everything) */
-    #bgCanvas{
-      position:fixed;
-      inset:0;
-      z-index:-2;
-      width:100%;
-      height:100%;
-      display:block;
-      pointer-events:none;
+    .proj-list li::before {
+      content: '';
+      position: absolute; left: 0; top: 9px;
+      width: 7px; height: 7px;
+      background: var(--q-cyan);
+      box-shadow: 0 0 7px rgba(0,240,255,.6);
+      transform: rotate(45deg);
     }
+    .proj-list li strong { color: #e5e7eb; }
 
-    /* Subtle dot texture + vignette for depth */
-    .texture{
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1.2px);
-      background-size:12px 12px;
-      mix-blend-mode:soft-light;
-      opacity:.9;
+    .back-fab {
+      position: fixed;
+      top: 104px; left: 18px;
+      z-index: 900;
+      padding: .5rem 1.1rem;
+      font-size: .66rem;
     }
-    .vignette{
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.35) 100%);
+    @media (max-width: 900px) {
+      .back-fab { top: auto; bottom: 18px; left: 18px; }
     }
-
-    .content{
-      position:relative;
-      z-index:1;
-      max-width:800px;
-      text-align:center;
-      padding:2rem;
-      margin:3rem auto 6rem; /* vertical breathing room so the page scrolls */
-    }
-
-    h1{font-size:3.5rem;font-weight:700;margin-bottom:1.5rem;}
-    h2{font-size:2rem;margin-top:1.5rem;}
-    p{font-size:1rem;line-height:1.8;margin-bottom:1.5rem;}
-
-    ul{list-style:none;padding-left:0;margin:0;}
-    ul li{margin-bottom:1rem;}
-
-    .back-button{
-      display:inline-block;margin-top:2rem;padding:10px 20px;
-      border:2px solid #f39c12;border-radius:5px;text-decoration:none;color:#f39c12;
-      transition:background-color .3s ease,color .3s ease;
-    }
-    .back-button:hover{background-color:#f39c12;color:white;}
-
-    img{display:block;margin:0 auto;}
   </style>
 </head>
+<body class="scanlines-overlay" data-bg="particles" data-accent="cyan">
 
-<body>
+  <main class="proj-container">
+  <a href="../projects.html" class="cyber-btn cyber-btn-gold back-fab">&lt; PROJECTS</a>
 
-  <!-- Background layers -->
-  <canvas id="bgCanvas" aria-hidden="true"></canvas>
-  <div class="texture" aria-hidden="true"></div>
-  <div class="vignette" aria-hidden="true"></div>
+    <div class="text-center mb-10" data-animate="down">
+      <p class="tech-label">// MODULE_04 // INTEL ECOSYSTEM DEPLOYMENT</p>
+      <h1 class="tech-title text-3xl md:text-5xl font-black text-white glow-text-cyan uppercase leading-tight" data-scramble>INTEL EDGE SOLUTIONS</h1>
+      <p class="font-mono text-[10px] text-gray-500 tracking-widest uppercase mt-3">Edge AI for Smart Cities &amp; Transportation</p>
+    </div>
 
-  <div class="content">
-    <h1 style="font-size: 2.5rem">Intel Edge Solutions Challenge: Edge AI for Smart Cities & Transportationy</h1>
-    <p>The Intel® Edge Solutions Challenge (IESC) is an ongoing series of time-bound campaigns designed to support
-      and award Intel® ecosystem partners as they develop and deploy optimized solutions based on Intel® 
-      architecture and ingredients.</p>
-    <p>Technical innovation is at the center of how societies build and manage cities, and new technology is 
-      critical to advancing the way populations move, organize, and evolve.
-    </p>
-    <img src="pictures/iesc1.png" alt="IESC Opening" class="mt-4 mx-auto rounded-lg" style="width: 800px; height: auto;">
-    <p class="text-md mb-4" style="font-size: 0.7rem;">IESC Meeting with Intel</p>
-    <h2 style="font-size: 2rem">Project: Traffic Light Controller System</h2>
+    <div class="cyber-card mb-6" data-animate="up">
+      <h2 class="tech-title text-lg text-cyan-400 mb-4">MISSION BRIEF</h2>
+      <p class="text-sm text-gray-300 leading-relaxed mb-3">The Intel® Edge Solutions Challenge (IESC) is an ongoing series of time-bound campaigns designed to support and award Intel® ecosystem partners as they develop and deploy optimized solutions based on Intel® architecture and ingredients.</p>
+      <p class="text-sm text-gray-300 leading-relaxed mb-3">Technical innovation is at the center of how societies build and manage cities — new technology is critical to advancing the way populations move, organize, and evolve.</p>
 
-    <h2 style="font-size: 1.5rem">Problem Statement</h2>
+    </div>
+    <div class="media-frame mb-6" data-animate="scale">
+      <span class="frame-tag">TELEMETRY // IESC MEETING WITH INTEL</span>
+      <img src="pictures/iesc1.png" alt="TELEMETRY // IESC MEETING WITH INTEL" loading="lazy" />
+    </div>
+    <div class="hud-divider" data-animate="up"><span>PROJECT // TRAFFIC LIGHT CONTROLLER SYSTEM</span></div>
+    <div class="cyber-card cyber-card-gold mb-6" data-animate="up">
+      <h2 class="tech-title text-lg text-yellow-500 mb-4">PROBLEM STATEMENT</h2>
+      <p class="text-sm text-gray-300 leading-relaxed mb-3">In urban areas, traffic congestion at intersections leads to increased travel times, higher vehicle emissions, and reduced efficiency of the transportation network. Traditional traffic light control systems are static and unable to adapt to varying traffic patterns throughout the day — some lights stay green too long with little traffic, or red too long during peak hours. The lack of real-time data analysis and adaptive response exacerbates traffic management challenges in densely populated cities where patterns are complex and dynamic.</p>
 
-    <p>In urban areas, traffic congestion at intersections is a significant issue that leads to increased travel
-      times, higher vehicle emissions, and reduced overall efficiency of the transportation network. Traditional
-      traffic light control systems are often static and unable to adapt to varying traffic patterns throughout
-      the day. This results in inefficient use of road capacity, with some traffic lights remaining green for 
-      too long when there is little traffic, or red for too long during peak hours, causing unnecessary delays
-      and traffic buildup. Moreover, the lack of real-time data analysis and adaptive response mechanisms 
-      exacerbates traffic management challenges, particularly in densely populated cities where traffic patterns
-      are complex and dynamic.</p>
+    </div>
+    <div class="media-frame mb-6" data-animate="scale">
+      <span class="frame-tag">TELEMETRY // IESC JUDGING PANEL</span>
+      <img src="pictures/iesc2.png" alt="TELEMETRY // IESC JUDGING PANEL" loading="lazy" />
+    </div>
+    <div class="cyber-card mb-6" data-animate="up">
+      <h2 class="tech-title text-lg text-cyan-400 mb-4">OUR SOLUTION</h2>
+      <p class="text-sm text-gray-300 leading-relaxed mb-3">An AI-Driven Traffic Light Controller System combining edge computing and artificial intelligence to dynamically manage traffic flow at intersections based on real-time data:</p>
+      <ul class="proj-list">
+        <li><strong>Real-time Traffic Data Collection:</strong> a network of high-resolution cameras at each intersection captures and analyzes vehicle counts and queue lengths during red-light phases.</li>
+        <li><strong>Intelligent Control Algorithm:</strong> an AI model processes collected data to predict traffic patterns and dynamically adjust light timings — minimizing wait times and maximizing road capacity.</li>
+        <li><strong>Edge Computing Infrastructure:</strong> data is processed locally at the intersection for immediate decision-making without cloud dependency or network latency.</li>
+        <li><strong>Customizable Adaptive Models:</strong> AI models adapt to specific traffic conditions and intersection geometries, continuously improving predictions and control strategies.</li>
+        <li><strong>Data Privacy &amp; Security:</strong> no personal data is collected or stored during monitoring; all data transmission is secured.</li>
+      </ul>
 
-    <img src="pictures/iesc2.png" alt="IESC Judges" class="mt-4 mx-auto rounded-lg" style="width: 800px; height: auto;">
-    <p class="text-md mb-4" style="font-size: 0.7rem;">IESC Judges</p>
+    </div>
+    <div class="media-frame mb-6" data-animate="scale">
+      <span class="frame-tag">SYS_CV // TRAINED TRAFFIC DETECTION MODEL</span>
+      <img src="pictures/camera.png" alt="SYS_CV // TRAINED TRAFFIC DETECTION MODEL" loading="lazy" />
+    </div>
+    <div class="cyber-card mb-6" data-animate="up">
+      <h2 class="tech-title text-lg text-green-400 mb-4">EXPECTED BENEFITS</h2>
+      <ul class="proj-list">
+        <li><strong>Reduced Congestion:</strong> dynamic light timing shortens travel times and uses road networks more efficiently.</li>
+        <li><strong>Lower Emissions:</strong> decreased idling reduces emissions, improving air quality and sustainability.</li>
+        <li><strong>Enhanced Safety:</strong> optimized traffic flow reduces the likelihood of accidents.</li>
+        <li><strong>Scalable &amp; Maintainable:</strong> designed for easy scaling to additional intersections with ongoing performance optimization and upgrade plans.</li>
+      </ul>
 
-    <h2 style="font-size: 1.5rem" class="mt-4">Our Solution</h2>
+    </div>
+    <div class="media-frame mb-6" data-animate="scale">
+      <span class="frame-tag">TELEMETRY // IESC CLOSING SESSION</span>
+      <img src="pictures/iesc3.png" alt="TELEMETRY // IESC CLOSING SESSION" loading="lazy" />
+    </div>
 
-    <p>To address the challenges posed by outdated traffic light control systems, we propose the development of an 
-      AI-Driven Traffic Light Controller System. This system will employ a combination of edge computing and artificial
-      intelligence to dynamically manage traffic flow at intersections based on real-time data</p>
-    
-    <ul>
-      <li><strong>Real-time Traffic Data Collection:</strong> Install a network of high-resolution cameras at each intersection to capture 
-        and analyze traffic data, including vehicle count and queue lengths during red light phases.</li>
-      <li><strong>Intelligent Traffic Light Control Algorithm:</strong> Develop an AI model that processes the collected data to predict traffic
-        patterns and dynamically adjust traffic light timings. The model will be designed to optimize traffic flow by minimizing
-        wait times and maximizing the use of road capacity</li>
-      <li><strong>Edge Computing Infrastructure:</strong> Utilize edge computing to process data locally at the intersection, enabling immediate
-        decision-making without relying on cloud connectivity. This ensures that traffic light adjustments are made in real-time
-        and are not affected by network latency.</li>
-      <li><strong>Customizable and Adaptive AI Models:</strong> Train AI models to adapt to specific traffic conditions and intersection geometries. 
-        These models will be capable of learning from traffic patterns and continuously improving their predictions and control strategies.</li>
-      <li><strong>Data Privacy and Security:</strong> Implement robust data privacy measures to ensure that no personal data is collected or stored during 
-        the traffic monitoring process, and that all data transmission is secure.</li>
-    </ul>
 
-    <img src="pictures/camera.png" alt="traffic detection" class="mt-4 mx-auto rounded-lg" style="width: 800px; height: auto;">
-    <p class="text-md mb-4" style="font-size: 0.7rem;">Trained model for traffic detection</p>
+    <div class="text-center mt-12 flex flex-wrap justify-center gap-4" data-animate="up">
+      <a href="../projects.html" class="cyber-btn cyber-btn-gold">&lt; BACK TO PROJECTS</a>
 
-    <h2 style="font-size: 1.5rem" class="mt-4">Expected Benefits of the Solution</h2>
-    <ul>
-      <li><strong>Reduced Congestion:</strong> By dynamically adjusting traffic light timings, the system will reduce traffic congestion, leading to shorter
-        travel times and a more efficient use of road networks.</li>
-      <li><strong>Lower Emissions:</strong> Decreased idling times for vehicles will result in lower emissions, contributing to improved air quality and 
-        environmental sustainability.</li>
-      <li><strong>Enhanced Safety:</strong> Optimized traffic flow can reduce the likelihood of accidents, improving overall road safety.</li>
-      <li><strong>Scalable and Maintainable:</strong> The system will be designed for easy scalability to additional intersections and will include a maintenance
-        plan for ongoing performance optimization and hardware/software upgrades.</li>
-    </ul>
-
-    <img src="pictures/iesc3.png" alt="IESC Ends" class="mt-4 mx-auto rounded-lg" style="width: 800px; height: auto;">
-    <p class="text-md mb-4" style="font-size: 0.7rem;">The End of IESC meeting</p>
-
-    <a href="#" class="back-button mb-16" id="backToProjects">Back to Projects</a>
-  </div>
-
-  <script>
-    // Add fade-in effect on page load
-    window.addEventListener('load', function () {
-      document.body.style.opacity = 1;
-    });
-
-    // Add fade-out effect on back button click
-    document.getElementById('backToProjects').addEventListener('click', function (e) {
-      e.preventDefault();
-      document.body.style.opacity = 0;
-      setTimeout(function () {
-        window.location.href = "../projects.html";
-      }, 500);
-    });
-  </script>
-
-  <!-- Constellation/network background (distinct from WQ, similar feel) -->
-  <script>
-    (() => {
-      const canvas = document.getElementById('bgCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-
-      let width, height, dpr, rafId;
-      let points = [];
-      let t = 0;
-
-      function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const rect = canvas.getBoundingClientRect();
-        width = rect.width;
-        height = rect.height;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        spawnPoints();
-      }
-
-      function spawnPoints() {
-        const density = 0.00018; // points per pixel
-        const count = Math.max(80, Math.min(280, Math.floor(width * height * density)));
-        points = [];
-        for (let i = 0; i < count; i++) {
-          points.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.35,
-            vy: (Math.random() - 0.5) * 0.35,
-            r: 1 + Math.random() * 1.2,
-            a: 0.45 + Math.random() * 0.4 // node brightness
-          });
-        }
-      }
-
-      function step() {
-        // Clear
-        ctx.clearRect(0, 0, width, height);
-
-        // Update positions with gentle curl
-        t += 0.0025;
-        const curlAmp = 0.25;
-        for (const p of points) {
-          const ax = Math.sin((p.y + t * 700) * 0.002) * curlAmp;
-          const ay = Math.cos((p.x - t * 700) * 0.002) * curlAmp;
-          p.vx += ax * 0.002;
-          p.vy += ay * 0.002;
-
-          p.x += p.vx;
-          p.y += p.vy;
-
-          // Soft wrap
-          if (p.x < -10) p.x = width + 10;
-          if (p.x > width + 10) p.x = -10;
-          if (p.y < -10) p.y = height + 10;
-          if (p.y > height + 10) p.y = -10;
-        }
-
-        // Draw links between nearby nodes
-        const maxDist = Math.min(140, Math.max(90, Math.hypot(width, height) * 0.08));
-        const maxDist2 = maxDist * maxDist;
-
-        for (let i = 0; i < points.length; i++) {
-          const a = points[i];
-          let links = 0;
-          for (let j = i + 1; j < points.length; j++) {
-            const b = points[j];
-            const dx = a.x - b.x, dy = a.y - b.y;
-            const d2 = dx * dx + dy * dy;
-            if (d2 <= maxDist2) {
-              if (links++ > 4) continue; // limit per-node connections
-
-              const d = Math.sqrt(d2);
-              const alpha = 1 - d / maxDist; // closer => brighter
-
-              const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-              grad.addColorStop(0, `rgba(34, 211, 238, ${alpha * 0.55})`); // cyan
-              grad.addColorStop(1, `rgba(96, 165, 250, ${alpha * 0.55})`);  // blue
-
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.strokeStyle = grad;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
-          }
-        }
-
-        // Draw nodes (soft glow)
-        for (const p of points) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(229,244,255,${p.a})`;
-          ctx.shadowColor = 'rgba(180,220,255,0.35)';
-          ctx.shadowBlur = 6;
-          ctx.fill();
-        }
-        ctx.shadowBlur = 0;
-
-        rafId = requestAnimationFrame(step);
-      }
-
-      function start() {
-        cancelAnimationFrame(rafId);
-        resize();
-        step();
-      }
-
-      function renderStill() {
-        cancelAnimationFrame(rafId);
-        resize();
-        step();
-        cancelAnimationFrame(rafId);
-      }
-
-      window.addEventListener('resize', start, { passive: true });
-      const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-      function handleMotion() { mql.matches ? renderStill() : start(); }
-      if (mql.addEventListener) mql.addEventListener('change', handleMotion);
-      else mql.addListener(handleMotion);
-
-      handleMotion();
-    })();
-  </script>
+    </div>
+  </main>
 
 </body>
 </html>

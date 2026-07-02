@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuraQuant | LLM-Driven Alpha Factor Mining Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="../global.css" />
+  <script src="../global.js"></script>
+  <style>
+    .nq-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 150px 20px 80px;
+      position: relative;
+      z-index: 10;
+    }
+    .pipeline-step {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+    .pipeline-step::before {
+      content: '';
+      position: absolute; left: 0; top: 8px;
+      width: 8px; height: 8px;
+      background: var(--q-gold);
+      box-shadow: 0 0 8px rgba(255, 170, 0, .7);
+      transform: rotate(45deg);
+    }
+    .tag-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--q-cyan);
+      border: 1px solid rgba(0, 240, 255, .25);
+      background: rgba(0, 240, 255, .05);
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: .08em;
+    }
+    .back-fab {
+      position: fixed;
+      top: 104px; left: 18px;
+      z-index: 900;
+      padding: .5rem 1.1rem;
+      font-size: .66rem;
+    }
+    @media (max-width: 900px) {
+      .back-fab { top: auto; bottom: 18px; left: 18px; }
+    }
+  </style>
+</head>
+<body class="scanlines-overlay" data-bg="surface" data-accent="gold">
+
+  <main class="nq-container">
+  <a href="../projects.html" class="cyber-btn cyber-btn-gold back-fab">&lt; PROJECTS</a>
+
+    <!-- Hero -->
+    <div class="text-center mb-12" data-animate="down">
+      <p class="tech-label">// CHANNEL_08 // FLAGSHIP STRATEGY DEPLOYMENT</p>
+      <h1 class="tech-title text-5xl md:text-6xl font-black text-yellow-500 glow-text-gold uppercase mb-4" data-scramble>NEURAQUANT</h1>
+      <p class="font-mono text-xs text-gray-400 tracking-widest uppercase mb-6">LLM-Driven Self-Evolving Alpha Factor Mining Engine</p>
+      <div class="flex flex-wrap justify-center gap-2">
+        <span class="tag-pill">BTC / USDT</span>
+        <span class="tag-pill">LLM AGENTS</span>
+        <span class="tag-pill">FACTOR MINING</span>
+        <span class="tag-pill">SELF-EVOLVING</span>
+        <span class="tag-pill">QLIB BACKTEST</span>
+        <span class="tag-pill">LOCAL LLM · OLLAMA</span>
+      </div>
+    </div>
+
+    <!-- Project fact sheet -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12" data-animate="up">
+      <div class="metric-block text-center">
+        <div class="metric-label">Market</div>
+        <div class="metric-value text-yellow-500 text-sm">BINANCE · BTC/USDT</div>
+      </div>
+      <div class="metric-block text-center">
+        <div class="metric-label">Method</div>
+        <div class="metric-value text-cyan-400 text-sm">LLM SELF-EVOLUTION</div>
+      </div>
+      <div class="metric-block text-center">
+        <div class="metric-label">Validation</div>
+        <div class="metric-value text-white text-sm">TIME-SERIES IC · QLIB</div>
+      </div>
+      <div class="metric-block text-center">
+        <div class="metric-label">Output</div>
+        <div class="metric-value text-green-400 text-sm">VALIDATED ALPHA LIBRARY</div>
+      </div>
+    </div>
+
+    <!-- Demo video -->
+    <div class="mb-12" data-animate="scale">
+      <div class="hud-divider"><span>LIVE_DEMO // VISUAL TELEMETRY</span></div>
+      <div class="media-frame">
+        <span class="frame-tag">▶ NEURAQUANT_DEMO // END-TO-END WORKFLOW</span>
+        <video controls preload="metadata" playsinline style="max-height: 70vh; margin: 0 auto;">
+          <source src="neuraquant-demo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <p class="text-center font-mono text-[10px] text-gray-500 mt-3">// DEMO: research direction → LLM factor mining → factor library → independent backtest, all inside the web dashboard</p>
+    </div>
+
+    <!-- Descriptive summary -->
+    <div class="cyber-card cyber-card-gold mb-8" data-animate="up">
+      <h2 class="tech-title text-xl text-yellow-500 mb-4">MISSION BRIEF</h2>
+      <p class="text-sm text-gray-300 leading-relaxed mb-3">
+        <span class="text-white font-semibold">NeuraQuant</span> automates the research loop of a quantitative
+        analyst. Describe a research direction in plain language — e.g. <span class="font-mono text-cyan-400 text-xs">"price-volume
+        factor mining"</span> — and a team of LLM agents plans diversified hypotheses, writes the factor code,
+        evolves it across trajectories, and validates every candidate with real backtests. The output is a
+        growing library of alpha factors, each shipped with its full performance record.
+      </p>
+      <p class="text-sm text-gray-400 leading-relaxed mb-0">
+        The engine is adapted end-to-end for <span class="text-white">single-asset crypto trading on Binance
+        BTC/USDT</span>: validation was redesigned around time-series information coefficients, cross-sectional
+        operators are disabled at the prompt and regulator level, and the whole stack runs on a
+        <span class="text-white">local LLM (Ollama · qwen3-coder 30B)</span> — no cloud API required.
+      </p>
+    </div>
+
+    <div class="cyber-card mb-8" data-animate="up">
+      <h2 class="tech-title text-xl text-cyan-400 mb-5">SYSTEM ARCHITECTURE</h2>
+      <div class="space-y-5 text-sm text-gray-300 leading-relaxed">
+        <div class="pipeline-step" data-animate="left" data-delay="0.05">
+          <h3 class="font-mono text-xs text-yellow-500 uppercase tracking-widest mb-1">01 // Diversified Planning</h3>
+          <p class="m-0 text-gray-400">
+            A natural-language research direction is expanded by LLM agents into multiple diversified factor
+            hypotheses, each paired with a structured hypothesis-to-code constraint so that generated factor
+            expressions stay faithful to their economic rationale.
+          </p>
+        </div>
+        <div class="pipeline-step" data-animate="left" data-delay="0.1">
+          <h3 class="font-mono text-xs text-yellow-500 uppercase tracking-widest mb-1">02 // Trajectory-Level Self-Evolution</h3>
+          <p class="m-0 text-gray-400">
+            Each hypothesis evolves along its own trajectory: generate factor code → execute on price-volume
+            data → score → mutate and retry. A factor regulator enforces hard constraints — any cross-sectional
+            operator (meaningless on a single asset) is rejected and regenerated with time-series operators
+            (TS_*) only.
+          </p>
+        </div>
+        <div class="pipeline-step" data-animate="left" data-delay="0.15">
+          <h3 class="font-mono text-xs text-yellow-500 uppercase tracking-widest mb-1">03 // Time-Series Validation</h3>
+          <p class="m-0 text-gray-400">
+            Because cross-sectional IC is mathematically undefined for one asset, NeuraQuant scores factors with
+            a custom time-series IC: monthly-bucketed correlation between factor values and forward BTC returns.
+            Every factor is automatically backfilled with IC, ICIR, Rank IC, annualized return, Sharpe ratio and
+            max drawdown before it enters the library.
+          </p>
+        </div>
+        <div class="pipeline-step" data-animate="left" data-delay="0.2">
+          <h3 class="font-mono text-xs text-yellow-500 uppercase tracking-widest mb-1">04 // Factor Library &amp; Independent Backtest</h3>
+          <p class="m-0 text-gray-400">
+            Validated factors accumulate in a JSON factor library that can be browsed, filtered and combined
+            from the web dashboard. Selected factors are then run through full-period Qlib backtests on
+            2019–2025 BTC data, with equity curves and risk metrics rendered visually.
+          </p>
+        </div>
+        <div class="pipeline-step" data-animate="left" data-delay="0.25">
+          <h3 class="font-mono text-xs text-yellow-500 uppercase tracking-widest mb-1">05 // One-Click Local Deployment</h3>
+          <p class="m-0 text-gray-400">
+            The entire system — mining backend, backtest engine, and React dashboard — launches with a single
+            command and streams real-time experiment logs to the browser. Inference runs fully offline through
+            Ollama, keeping research private and cost-free.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+      <div class="cyber-card" data-animate="left">
+        <h3 class="tech-title text-base text-white mb-3">WHY IT MATTERS</h3>
+        <p class="text-xs text-gray-400 leading-relaxed m-0">
+          Classical factor research is a slow human loop: hypothesize, code, backtest, discard, repeat.
+          NeuraQuant turns that loop into an autonomous factory — LLM agents generate and stress-test
+          hundreds of candidate alphas while the researcher only steers the direction. It is a working
+          prototype of self-evolving AI applied to systematic crypto trading.
+        </p>
+      </div>
+      <div class="cyber-card" data-animate="right">
+        <h3 class="tech-title text-base text-white mb-3">ENGINEERING HIGHLIGHTS</h3>
+        <ul class="text-xs text-gray-400 leading-relaxed m-0 pl-4 space-y-1">
+          <li>Re-architected an A-share cross-sectional pipeline into a single-asset BTC engine</li>
+          <li>Custom time-series IC / ICIR metrics replacing undefined cross-sectional statistics</li>
+          <li>Prompt + regulator double guardrails forcing valid TS_* factor expressions</li>
+          <li>Deterministic metric-backfill tool rebuilding factor stats straight from expressions</li>
+          <li>Full local stack: Ollama LLM, Qlib backtests, React dashboard, one-click launch</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-center" data-animate="up">
+      <a href="../projects.html" class="cyber-btn cyber-btn-gold">&lt; BACK TO PROJECTS</a>
+    </div>
+  </main>
+
+</body>
+</html>
