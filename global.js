@@ -476,6 +476,15 @@ function initWebGLBackground() {
   }
 }
 
+function resetWebGLBackground() {
+  window.CanvasRegistry.stop('webglBG');
+  window.CanvasRegistry.activeCanvases.delete('webglBG');
+  const canvas = document.getElementById('webgl-bg');
+  if (canvas) canvas.remove();
+  injectAtmosphere();
+  initWebGLBackground();
+}
+
 /* ------------------------------------------------------ GSAP */
 function initGSAP() {
   if (typeof gsap === 'undefined' || REDUCED_MOTION) {
@@ -488,6 +497,7 @@ function initGSAP() {
   document.querySelectorAll('[data-animate]').forEach((el) => {
     const type = el.dataset.animate || 'up';
     const delay = parseFloat(el.dataset.delay || 0);
+    const playNow = el.getBoundingClientRect().top < window.innerHeight * 0.95;
     const from = { opacity: 0 };
     if (type === 'up') from.y = 44;
     if (type === 'down') from.y = -44;
@@ -496,7 +506,7 @@ function initGSAP() {
     if (type === 'scale') { from.scale = 0.9; from.y = 20; }
     gsap.fromTo(el, from, {
       opacity: 1, x: 0, y: 0, scale: 1, duration: 1, ease: 'power3.out', delay,
-      scrollTrigger: typeof ScrollTrigger !== 'undefined'
+      scrollTrigger: !playNow && typeof ScrollTrigger !== 'undefined'
         ? { trigger: el, start: 'top 88%', toggleActions: 'play none none none' } : undefined
     });
   });
@@ -601,6 +611,7 @@ async function navigateTo(url, push = true) {
     document.body.classList.add('page-ready');
     document.body.dataset.bg = nextDoc.body.dataset.bg || '';
     document.body.dataset.accent = nextDoc.body.dataset.accent || '';
+    resetWebGLBackground();
     if (push) history.pushState({}, '', url.href);
 
     const importedPage = document.importNode(nextPage, true);
@@ -618,6 +629,7 @@ async function navigateTo(url, push = true) {
     initTilt();
     updateHUDActiveState();
     await runPageScripts(nextDoc);
+    showPageContent(insertedPage);
     requestAnimationFrame(() => { insertedPage.style.opacity = '1'; });
   } catch (e) {
     if (!swapped) {
@@ -630,6 +642,14 @@ async function navigateTo(url, push = true) {
   } finally {
     isNavigating = false;
   }
+}
+
+function showPageContent(root) {
+  root.querySelectorAll('[data-animate]').forEach((el) => {
+    if (typeof gsap !== 'undefined') gsap.killTweensOf(el);
+    el.style.opacity = '1';
+    el.style.transform = '';
+  });
 }
 
 function syncPageStyles(nextDoc) {
