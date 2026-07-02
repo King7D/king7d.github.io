@@ -629,6 +629,7 @@ async function navigateTo(url, push = true) {
     initTilt();
     updateHUDActiveState();
     await runPageScripts(nextDoc);
+    ensureInvestmentCharts();
     showPageContent(insertedPage);
     requestAnimationFrame(() => { insertedPage.style.opacity = '1'; });
   } catch (e) {
@@ -650,6 +651,60 @@ function showPageContent(root) {
     el.style.opacity = '1';
     el.style.transform = '';
   });
+}
+
+function ensureInvestmentCharts() {
+  if (!document.getElementById('cryptoChart') || !document.getElementById('stocksChart')) return;
+
+  const draw = () => {
+    if (document.querySelector('#cryptoChart svg') && document.querySelector('#stocksChart svg')) return;
+    if (typeof drawCharts === 'function') {
+      try { drawCharts(); } catch (e) {}
+    }
+    if (!document.querySelector('#cryptoChart svg')) {
+      drawAllocationFallback('cryptoChart', [
+        ['BNB', 82.18], ['BTC', 5.57], ['USDC', 4.71], ['WBETH', 3.1], ['BNSOL', 2.58], ['USDT', 1.86]
+      ], ['#0066ff', '#ffaa00', '#10b981', '#8b5cf6', '#ff5500', '#ec4899']);
+    }
+    if (!document.querySelector('#stocksChart svg')) {
+      drawAllocationFallback('stocksChart', [
+        ['Cash', 6.4], ['Fixed Income', 20.6], ['RY', 21.2], ['BAM', 8.9], ['DOL', 10.3], ['YINN', 12.0],
+        ['TD', 2.6], ['BMO', 2.6], ['BNS', 2.6], ['CM', 2.5], ['MSFT', 4.1], ['JPM', 3.2], ['CVX', 1.8], ['CSCO', 1.2]
+      ], ['#6366f1', '#10b981', '#ffaa00', '#ff5500', '#0066ff', '#8b5cf6', '#06b6d4', '#38bdf8', '#0ea5e9', '#0284c7', '#ec4899', '#d946ef', '#a855f7', '#c084fc']);
+    }
+  };
+
+  [300, 1200, 2800].forEach((ms) => setTimeout(draw, ms));
+}
+
+function drawAllocationFallback(id, rows, colors) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const total = rows.reduce((sum, [, value]) => sum + value, 0);
+  const size = 260, radius = 82, circumference = 2 * Math.PI * radius;
+  let offset = 0;
+  const circles = rows.map(([, value], i) => {
+    const length = (value / total) * circumference;
+    const circle = `<circle r="${radius}" cx="130" cy="130" fill="none" stroke="${colors[i % colors.length]}" stroke-width="34" stroke-dasharray="${length} ${circumference - length}" stroke-dashoffset="${-offset}" transform="rotate(-90 130 130)" />`;
+    offset += length;
+    return circle;
+  }).join('');
+  const legend = rows.map(([name, value], i) => `
+    <div style="display:flex;align-items:center;gap:7px;min-width:92px;">
+      <span style="width:9px;height:9px;background:${colors[i % colors.length]};display:inline-block;"></span>
+      <span>${name} ${value}%</span>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;gap:22px;height:100%;font-family:var(--font-mono);font-size:10px;color:#8a8f98;">
+      <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-label="Allocation chart">
+        ${circles}
+        <circle r="54" cx="130" cy="130" fill="rgba(0,0,0,.72)" />
+        <text x="130" y="126" text-anchor="middle" fill="#fff" font-size="18" font-family="Orbitron">ALLOC</text>
+        <text x="130" y="146" text-anchor="middle" fill="#8a8f98" font-size="10" font-family="JetBrains Mono">LOCAL RENDER</text>
+      </svg>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;max-width:260px;">${legend}</div>
+    </div>`;
 }
 
 function syncPageStyles(nextDoc) {
